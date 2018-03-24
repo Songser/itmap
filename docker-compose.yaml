@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+    postgres:
+        image: registry.docker-cn.com/library/postgres:10
+        ports:
+            - "127.0.0.1:5437:5432"
+        restart: always
+
+    redis:
+        image: registry.docker-cn.com/library/redis:4.0
+        ports:
+            - "127.0.0.1:6378:6379"
+        restart: always
+
