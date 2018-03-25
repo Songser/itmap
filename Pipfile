@@ -16,6 +16,7 @@ flask-admin = "*"
 flask-login = "*"
 sqlalchemy = "*"
 flask-sqlalchemy = "*"
+arrow = "*"
 
 
 [requires]
