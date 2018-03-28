@@ -1,15 +1,35 @@
 version: '2'
 
 services:
-    postgres:
-        image: registry.docker-cn.com/library/postgres:10
-        ports:
-            - "127.0.0.1:5437:5432"
-        restart: always
+  web:
+    build: 
+      context: web
+    volumes:
+      - "${PWD}/web:/web"
+    ports:
+      - "8020:8080"
+    environment:
+      HOST: '0.0.0.0'
+    networks:
+      - itmap-network
+    command: ["npm", "run", "dev"]
 
-    redis:
-        image: registry.docker-cn.com/library/redis:4.0
-        ports:
-            - "127.0.0.1:6378:6379"
-        restart: always
+  postgres:
+    image: registry.docker-cn.com/library/postgres:10
+    ports:
+      - "127.0.0.1:5437:5432"
+    restart: always
+    networks:
+      - itmap-network
 
+  redis:
+    image: registry.docker-cn.com/library/redis:4.0
+    ports:
+      - "127.0.0.1:6378:6379"
+    restart: always
+    networks:
+      - itmap-network
+
+networks:
+  itmap-network:
+    driver: bridge
