@@ -6,10 +6,13 @@ services:
       context: web
     volumes:
       - "${PWD}/web/src:/web/src"
+      - "${PWD}/web/build:/web/build"
+      - "${PWD}/web/package.json:/web/package.json"
     ports:
-      - "8020:8080"
+      - "8020:8020"
     environment:
       HOST: '0.0.0.0'
+      PORT: '8020'
     networks:
       - itmap-network
     command: ["npm", "run", "dev"]
