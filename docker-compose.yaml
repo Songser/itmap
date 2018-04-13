@@ -1,6 +1,19 @@
 version: '2'
 
 services:
+  server:
+    build:
+      context: itmap
+    volumes:
+      - "${PWD}/itmap:/server"
+    ports:
+      - "0.0.0.0:5000:5000"
+    networks:
+      - itmap-network
+    environment:
+      FLASK_APP: app.py
+    command: ["python", "-m", "flask", "run", "--host=0.0.0.0"]
+
   web:
     build: 
       context: web

@@ -3,3 +3,6 @@ flask-admin
 flask-login
 SQLAlchemy
 Flask-SQLAlchemy
+Flask-Mail
+Flask-Security
+Flask-Redis
