@@ -11,7 +11,6 @@ from flask_sqlalchemy import SQLAlchemy
 #app.config['SQLALCHEMY_DATABASE_URI'] = ''
 #app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 
-db = SQLAlchemy()
 mail = Mail()
 redis = FlaskRedis()
 login_manager = LoginManager()
