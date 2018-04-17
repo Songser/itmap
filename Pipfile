@@ -16,7 +16,11 @@ flask-admin = "*"
 flask-login = "*"
 sqlalchemy = "*"
 flask-sqlalchemy = "*"
+flask-mail = "*"
+flask-security = "*"
+flask-redis = "*"
 arrow = "*"
+ipython = "*"
 
 
 [requires]

@@ -5,7 +5,7 @@ services:
     build:
       context: itmap
     volumes:
-      - "${PWD}/itmap:/server"
+      - "${PWD}/itmap:/itmap"
     ports:
       - "0.0.0.0:5000:5000"
     networks:
