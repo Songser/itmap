@@ -12,7 +12,7 @@ services:
       - itmap-network
     environment:
       FLASK_APP: app.py
-    command: ["python", "-m", "flask", "run", "--host=0.0.0.0"]
+    command: ["flask", "run", "--host=0.0.0.0"]
 
   web:
     build: 

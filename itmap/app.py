@@ -1,7 +1,5 @@
 # coding=utf-8
 
-import sys
-print(sys.path)
 import click
 from flask import Flask
 from itmap.ext import db, mail, redis, login_manager
