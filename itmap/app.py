@@ -2,9 +2,15 @@
 
 import click
 import code
+from redis import Redis
 import sys
 from flask import Flask
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
+from flask_admin.contrib import rediscli
 from itmap.ext import db, mail, redis, login_manager
+from itmap.models.user import Role, User
+from itmap.models.graph import Graph
 import itmap.config as _config
 
 
@@ -18,6 +24,15 @@ def create_app():
     redis.init_app(app)
     login_manager.init_app(app)
 
+    admin = Admin(app, name='itmap', template_mode='bootstrap3')
+    admin.add_view(ModelView(User, db.session))
+    admin.add_view(ModelView(Role, db.session))
+    admin.add_view(ModelView(Graph, db.session))
+
+    redis_host = app.config['REDIS_HOST']
+    redis_port = app.config['REDIS_PORT']
+    redis_db = app.config['REDIS_DB']
+    admin.add_view(rediscli.RedisCli(Redis(host=redis_host, port=redis_port, db=redis_db)))
     return app
 
 
