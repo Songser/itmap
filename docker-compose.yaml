@@ -31,7 +31,7 @@ services:
     command: ["npm", "run", "dev"]
 
   postgres:
-    image: registry.docker-cn.com/library/postgres:10
+    image: postgres:10
     ports:
       - "127.0.0.1:5437:5432"
     restart: always
@@ -39,7 +39,7 @@ services:
       - itmap-network
 
   redis:
-    image: registry.docker-cn.com/library/redis:4.0
+    image: redis:4.0
     ports:
       - "127.0.0.1:6378:6379"
     restart: always
