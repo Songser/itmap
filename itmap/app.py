@@ -13,7 +13,6 @@ def create_app():
     app.config.from_object(_config)
 
     ####
-
     db.init_app(app)
     mail.init_app(app)
     redis.init_app(app)
