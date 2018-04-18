@@ -55,14 +55,16 @@ def ipython_shell(user_ns, banner):
 def shell_command(plain):
     from flask.globals import _app_ctx_stack
     app = _app_ctx_stack.top.app
-    banner = 'Python %s on %s\nApp: %s%s\nInstance: %s' % (
+    user_ns = app.make_shell_context()
+    user_ns.update({'db': db})
+    banner = 'Python %s on %s\nApp: %s%s\nInstance: %s\nuser_ns: %s' % (
         sys.version,
         sys.platform,
         app.import_name,
         app.debug and ' [debug]' or '',
         app.instance_path,
+        user_ns,
     )
-    user_ns = app.make_shell_context()
     use_plain_shell = not has_ipython or plain
     if use_plain_shell:
         plain_shell(user_ns, banner)
