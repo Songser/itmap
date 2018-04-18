@@ -29,6 +29,10 @@ def initdb():
     click.echo('Init the db')
     from itmap.models.user import Role, User
     from itmap.models.graph import Graph
+    # 必须在调用db.create_all之前导入具体的Model
+    # 原因是如User这种类是元类Model的实例（大体上是）
+    # 当导入时，实际上是创建了User类
+    # 在此过程中，会将User注册到db.metadata.tables中（具体怎么串起来的没找到）
     db.drop_all()
     db.create_all()
     Role.insert_roles()
