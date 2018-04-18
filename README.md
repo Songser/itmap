@@ -14,10 +14,6 @@ docker-compose build server
 docker-compose up -d
 ```
 
-### Access
-
-open http://localhost:5000
-
 ### INITIAL DATABASE
 
 ```
@@ -25,15 +21,17 @@ docker-compose exec server sh
 flask initdb
 ```
 
-### ADMIN
-
-open http://localhost:5000/admin/
-
 ### IPYTHON
 
 ```
 docker-compose exec server sh
 flask ipython
+```
+
+### ADMIN
+
+```
+open http://localhost:5000/admin/
 ```
 
 ## WEB
@@ -52,4 +50,6 @@ docker-compose up -d
 
 ### Access
 
+```
 open http://localhost:8020
+```
