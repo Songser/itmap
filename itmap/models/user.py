@@ -47,7 +47,7 @@ class Role(db.Model, RoleMixin):
             db.session.commit()
 
     def __repr__(self):
-        return '<Role {!r}'.format(self.name)
+        return '<Role {!r}>'.format(self.name)
 
 
 class User(db.Model, UserMixin):
@@ -79,7 +79,7 @@ class User(db.Model, UserMixin):
             if self.email in current_app.config['ITMAP_ADMINS']:
                 self.role = Role.query.filter_by(permissions=0xff).first()
             else:
-                self.role = Role.qeury.filter_by(default=True).first()
+                self.role = Role.query.filter_by(default=True).first()
 
     @property
     def url(self):

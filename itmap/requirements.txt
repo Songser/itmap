@@ -7,3 +7,4 @@ Flask-Mail
 Flask-Security
 Flask-Redis
 ipython
+psycopg2

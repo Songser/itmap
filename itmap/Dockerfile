@@ -1,4 +1,4 @@
-FROM python:3.6.5-alpine
+FROM cheewai/py3-psycopg2
 MAINTAINER songcser
 
 RUN mkdir /itmap

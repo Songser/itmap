@@ -5,6 +5,7 @@ from flask import url_for, current_app
 
 from itmap.ext import db
 
+
 class Graph(db.Model):
     __tablename__ = 'graphs'
 

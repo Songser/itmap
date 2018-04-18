@@ -21,6 +21,7 @@ flask-security = "*"
 flask-redis = "*"
 arrow = "*"
 ipython = "*"
+psycopg2 = "*"
 
 
 [requires]
