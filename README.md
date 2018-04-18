@@ -17,15 +17,13 @@ docker-compose up -d
 ### INITIAL DATABASE
 
 ```
-docker-compose exec server sh
-flask initdb
+docker-compose exec server flask initdb
 ```
 
 ### IPYTHON
 
 ```
-docker-compose exec server sh
-flask ipython
+docker-compose exec server flask ipython
 ```
 
 ### ADMIN
