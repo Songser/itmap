@@ -6,6 +6,6 @@ Flask-SQLAlchemy
 Flask-Mail
 Flask-Security
 Flask-Redis
+flask-restful
 ipython
 psycopg2
-redis

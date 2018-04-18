@@ -19,10 +19,10 @@ flask-sqlalchemy = "*"
 flask-mail = "*"
 flask-security = "*"
 flask-redis = "*"
+flask-restful = "*"
 arrow = "*"
 ipython = "*"
 psycopg2 = "*"
-redis = "*"
 
 
 [requires]

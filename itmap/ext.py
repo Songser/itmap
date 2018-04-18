@@ -9,5 +9,5 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 mail = Mail()
-redis = FlaskRedis()
+redis = FlaskRedis(strict=False)
 login_manager = LoginManager()

@@ -2,7 +2,6 @@
 
 import click
 import code
-from redis import Redis
 import sys
 from flask import Flask
 from flask_admin import Admin
@@ -29,10 +28,7 @@ def create_app():
     admin.add_view(ModelView(Role, db.session))
     admin.add_view(ModelView(Graph, db.session))
 
-    redis_host = app.config['REDIS_HOST']
-    redis_port = app.config['REDIS_PORT']
-    redis_db = app.config['REDIS_DB']
-    admin.add_view(rediscli.RedisCli(Redis(host=redis_host, port=redis_port, db=redis_db)))
+    admin.add_view(rediscli.RedisCli(redis._redis_client))
     return app
 
 
@@ -82,7 +78,7 @@ def shell_command(plain):
     #from flask.globals import _app_ctx_stack
     #app = _app_ctx_stack.top.app
     user_ns = app.make_shell_context()
-    user_ns.update({'db': db})
+    user_ns.update({'db': db, 'redis': redis})
     banner = 'Python %s on %s\nApp: %s%s\nInstance: %s\nuser_ns: %s' % (
         sys.version,
         sys.platform,
