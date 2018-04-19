@@ -8,14 +8,14 @@
         <span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-        <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="username" />
+        <el-input name="username" type="text" v-model="loginForm.username" autoComplete="on" placeholder="" />
       </el-form-item>
 
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
-        <el-input name="password" :type="passwordType" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on" placeholder="password" />
+        <el-input name="password" :type="passwordType" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on" placeholder="" />
         <span class="show-pwd" @click="showPwd">
           <svg-icon icon-class="eye" />
         </span>
@@ -27,14 +27,15 @@
 
 <script>
 import { isvalidUsername } from '@/utils/validate'
-import request from '@/utils/request'
+import http from '@/utils/request'
 
 function login(username, password){
-  return request({
-    url: '/users/login',
-    method: 'put',
-    data: { username, password}
-  })
+  return http.put('/users/login', {username, password})
+  // return request({
+  //   url: '/users/login',
+  //   method: 'put',
+  //   data: { username, password}
+  // })
 }
 
 export default {
@@ -56,8 +57,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '1111111'
+        username: '',
+        password: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -70,7 +71,12 @@ export default {
   },
   methods: {
     showPwd (){
-
+      console.log(this.passwordType)
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
+      } else {
+        this.passwordType = 'password'
+      }
     },
     handleLogin (){
       console.log('loging')
