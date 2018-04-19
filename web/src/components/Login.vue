@@ -29,7 +29,7 @@
 import { isvalidUsername } from '@/utils/validate'
 import http from '@/utils/request'
 
-function login(username, password){
+function login (username, password) {
   return http.put('/users/login', {username, password})
   // return request({
   //   url: '/users/login',
@@ -39,8 +39,8 @@ function login(username, password){
 }
 
 export default {
-  name: "Login",
-  data() {
+  name: 'Login',
+  data () {
     const validateUsername = (rule, value, callback) => {
       if (!isvalidUsername(value)) {
         callback(new Error('Please enter the correct user name'))
@@ -70,7 +70,7 @@ export default {
     }
   },
   methods: {
-    showPwd (){
+    showPwd () {
       console.log(this.passwordType)
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -78,7 +78,7 @@ export default {
         this.passwordType = 'password'
       }
     },
-    handleLogin (){
+    handleLogin () {
       console.log('loging')
       this.loading = true
       login(this.username, this.password).then(response => {
@@ -86,9 +86,9 @@ export default {
         this.loading = false
       })
     },
-    afterQRScan (){},
+    afterQRScan () {},
     created () {},
-    destroyed() {},
+    destroyed () {}
   }
 
 }

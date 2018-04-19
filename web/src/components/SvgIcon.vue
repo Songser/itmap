@@ -17,10 +17,10 @@ export default {
     }
   },
   computed: {
-    iconName() {
+    iconName () {
       return `#icon-${this.iconClass}`
     },
-    svgClass() {
+    svgClass () {
       if (this.className) {
         return 'svg-icon ' + this.className
       } else {

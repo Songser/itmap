@@ -17,7 +17,7 @@ export default {
   methods: {
     addNode () {
       this.$store.commit('addNode', this.nodeName)
-    },
+    }
   },
   computed: mapState({
     node: state => state.node

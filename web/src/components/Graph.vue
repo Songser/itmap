@@ -22,14 +22,14 @@ export default {
       let graph = this.graph
       let data = graph.series[0].data
       data.push({
-        name: "呵呵",
+        name: '呵呵',
         draggable: true
       })
       let link = graph.series[0].links
       link.push({
-        source: "徐贱云",
-        target: "呵呵",
-        value: "朋友"
+        source: '徐贱云',
+        target: '呵呵',
+        value: '朋友'
       })
     },
     clickNode (params) {
