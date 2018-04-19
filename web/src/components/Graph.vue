@@ -1,10 +1,22 @@
 <template>
-  <div>
+  <div class="main-graph">
     <chart :options="graph" @click="clickNode"/>
   </div>
 </template>
 
 <style scoped>
+.main-graph {
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+.echarts {
+  height: 95%;
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+}
 </style>
 
 <script>
@@ -33,7 +45,6 @@ export default {
       })
     },
     clickNode (params) {
-      console.log(params)
       this.$store.commit('setNode', params.name)
     }
   },

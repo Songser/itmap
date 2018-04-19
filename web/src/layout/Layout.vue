@@ -1,8 +1,6 @@
 <template>
-  <div>
    <div class="app-wrapper">
-      <div class="main-container">
-        <el-container>
+        <el-container class="main-container">
           <el-header>
             <nav-bar/>
           </el-header>
@@ -16,8 +14,6 @@
           </el-container>
         </el-container>
       </div>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -39,7 +35,10 @@ export default {
 @import "src/styles/mixin.scss";
 .app-wrapper {
   @include clearfix;
-  position: relative;
+  height: 100%;
+}
+.main-container {
+  position: fixed;
   height: 100%;
   width: 100%;
 }
@@ -52,11 +51,9 @@ export default {
   background-color: #E9EEF3;
   color: #333;
   text-align: center;
-  height: 700px;
 }
 .el-aside {
   background-color: #E9FEFF;
-  color: #333;
-
+  color: #333
 }
 </style>
