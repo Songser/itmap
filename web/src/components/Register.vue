@@ -36,26 +36,41 @@
           <svg-icon icon-class="eye" />
         </span>
       </el-form-item>
+      <el-col :span="17">
+      <el-form-item prop="verificationCode">
+        <span class="svg-container">
+          <svg-icon icon-class="code" />
+        </span>
+        <el-input type="number" name="verificationCode" v-model.number="loginForm.verificationCode" autoComplete="on" placeholder="验证码" />
+      </el-form-item>
+      </el-col>
+      <el-col :span="7">
+         <el-button type="success" class="send-code" @click="sendCode" :disabled="sendCodeDisabled">
+           <span v-show="!sendCodeDisabled">发送验证码</span>
+            <countTo v-show="sendCodeDisabled" ref="timer" :useEasing="false" :startVal='startVal' :autoplay='false' :endVal='_endVal' :duration='duration' v-on:callback="timerCallback"  :suffix="s"></countTo>
+         </el-button>
+      </el-col>
       <el-button type="primary" style="width:100%;margin-bottom:30px;" :loading="loading" @click.native.prevent="handleRegister('loginForm')">注册</el-button>
       </el-form>
   </div>
 </template>
 
 <script>
+import countTo from 'vue-count-to';
 import { isvalidateEmail } from '@/utils/validate'
 import http from '@/utils/request'
 
 function register (username, email, password, retrypassword) {
   return http.put('/users/login', {username, password})
-  // return request({
-  //   url: '/users/login',
-  //   method: 'put',
-  //   data: { username, password}
-  // })
+}
+
+function sendVerificationCode (email) {
+  return http.post('/users/sendVerificationCode', { email })
 }
 
 export default {
-  name: 'Login',
+  name: 'register',
+  components: {countTo},
   data () {
     const validateUsername = (rule, value, callback) => {
       if (value.length < 4) {
@@ -93,20 +108,39 @@ export default {
         username: '',
         email: '',
         password: '',
-        retrypassword: ''
+        retrypassword: '',
+        verificationCode: '',
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         email: [{ required: true, trigger: 'blur', validator: validateEmail }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }],
-        retrypassword: [{ required: true, trigger: 'blur', validator: validateRetryPassword }]
+        retrypassword: [{ required: true, trigger: 'blur', validator: validateRetryPassword }],
+        verificationCode: [
+          { required: true, message: '验证码不能为空'},
+          { type: 'number', message: '验证码必须为数字值'},
+          { min: 6, max: 6, message: '长度为6个字符', trigger: 'blur' }]
       },
       passwordType: 'password',
       loading: false,
-      showDialog: false
+      showDialog: false,
+      endVal: 0,
+      startVal: 60,
+      sendCodeDisabled: false,
+      duration: 60*1000,
+      s: "秒后重试"
+    }
+  },
+  computed: {
+    _endVal () {
+      console.log(this.endVal)
+      return this.endVal
     }
   },
   methods: {
+    timerCallback () {
+      this.sendCodeDisabled = false
+    },
     showPwd () {
       console.log(this.passwordType)
       if (this.passwordType === 'password') {
@@ -129,6 +163,16 @@ export default {
           return false
         }
       })
+    },
+    sendCode () {
+      this.sendCodeDisabled = true
+      this.$refs.timer.start()
+      console.log(this.loginForm.email)
+      if (this.loginForm.email.length > 0 && isvalidateEmail(this.loginForm.email)) {
+        sendVerificationCode(this.email).then(response => {
+          
+        })
+      }
     },
     afterQRScan () {},
     created () {},
@@ -185,7 +229,8 @@ $light_gray:#eee;
     right: 0;
     width: 520px;
     padding: 35px 35px 15px 35px;
-    margin: 60px auto;
+    margin: 30px auto;
+    text-align: left;
   }
   .tips {
     font-size: 14px;
@@ -198,13 +243,19 @@ $light_gray:#eee;
     }
   }
   .svg-container {
-    padding: 6px 5px 6px 15px;
+    padding: 5px 5px 5px 15px;
     color: $dark_gray;
     vertical-align: middle;
     width: 30px;
     display: inline-block;
+    border-right-style: dotted;
+    border-right-width: 1px;
     &_login {
       font-size: 20px;
+    };
+    .svg-icon {
+      width: 20px;
+      height: 20px;
     }
   }
   .title-container {
@@ -216,12 +267,6 @@ $light_gray:#eee;
       margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;
-    }
-    .set-language {
-      color: #fff;
-      position: absolute;
-      top: 5px;
-      right: 0px;
     }
   }
   .show-pwd {
@@ -237,6 +282,11 @@ $light_gray:#eee;
     position: absolute;
     right: 35px;
     bottom: 28px;
+  }
+
+  .send-code {
+    margin-top: 8px;
+    margin-left: 10px;
   }
 }
 </style>

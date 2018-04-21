@@ -21,12 +21,18 @@
         </span>
       </el-form-item>
       <el-button type="primary" style="width:100%;margin-bottom:30px;" :loading="loading" @click.native.prevent="handleLogin">登录</el-button>
+      <div class="tips">
+        <el-button type="text" @click="forget" >忘记密码</el-button>
+        <el-button type="text" @click="register">立即注册</el-button>
+      </div>
+      <social-sign />
       </el-form>
   </div>
 </template>
 
 <script>
 import { isvalidUsername } from '@/utils/validate'
+import SocialSign from '@/components/SocialSignin'
 import http from '@/utils/request'
 
 function login (username, password) {
@@ -39,6 +45,7 @@ function login (username, password) {
 }
 
 export default {
+  components: { SocialSign },
   name: 'Login',
   data () {
     const validateUsername = (rule, value, callback) => {
@@ -70,6 +77,12 @@ export default {
     }
   },
   methods: {
+    forget () {
+      this.$router.push("forget")
+    },
+    register () {
+      this.$router.push("register")
+    },
     showPwd () {
       console.log(this.passwordType)
       if (this.passwordType === 'password') {
@@ -122,6 +135,7 @@ $light_gray:#eee;
     background: rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     color: #454545;
+    text-align: left;
   }
 }
 </style>
@@ -141,24 +155,26 @@ $light_gray:#eee;
     right: 0;
     width: 520px;
     padding: 35px 35px 15px 35px;
-    margin: 120px auto;
+    margin: 60px auto;
   }
   .tips {
     font-size: 14px;
     color: #fff;
     margin-bottom: 10px;
-    span {
+    .el-button {
       &:first-of-type {
-        margin-right: 16px;
+        margin-right: 40px;
       }
     }
   }
   .svg-container {
-    padding: 6px 5px 6px 15px;
+    padding: 5px 5px 5px 15px;
     color: $dark_gray;
     vertical-align: middle;
     width: 30px;
     display: inline-block;
+    border-right-style: dotted;
+    border-right-width: 1px;
     &_login {
       font-size: 20px;
     }
