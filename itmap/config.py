@@ -5,6 +5,7 @@ DEBUG = False
 SECRET_KEY = '...'
 
 ITMAP_ADMINS = ['rujiazhang@foxmail.com', 'songjiyi2008@163.com']
+ITMAP_ADMIN_PASSWORD = 'Aa@123456?'
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_DATABASE_URI = "postgresql://postgres:postgres@postgres:5432/postgres"

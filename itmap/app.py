@@ -2,6 +2,7 @@
 
 import click
 import code
+from redis import Redis
 import sys
 from flask import Flask
 from flask_admin import Admin
@@ -9,7 +10,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib import rediscli
 from itmap.ext import db, mail, redis, login_manager
 from itmap.models.user import Role, User
-from itmap.models.graph import Graph
+from itmap.models.graph import GraphRelation, Graph
 import itmap.config as _config
 
 
@@ -26,6 +27,8 @@ def create_app():
     admin = Admin(app, name='itmap', template_mode='bootstrap3')
     admin.add_view(ModelView(User, db.session))
     admin.add_view(ModelView(Role, db.session))
+
+    admin.add_view(ModelView(GraphRelation, db.session))
     admin.add_view(ModelView(Graph, db.session))
 
     admin.add_view(rediscli.RedisCli(redis._redis_client))
@@ -39,7 +42,7 @@ app = create_app()
 def initdb():
     click.echo('Init the db')
     from itmap.models.user import Role, User
-    from itmap.models.graph import Graph
+    from itmap.models.graph import GraphRelation, Graph
     # 必须在调用db.create_all之前导入具体的Model
     # 原因是如User这种类是元类Model的实例（大体上是）
     # 当导入时，实际上是创建了User类
@@ -48,7 +51,7 @@ def initdb():
     db.create_all()
     Role.insert_roles()
     for index, email in enumerate(app.config['ITMAP_ADMINS']):
-        User.create_user(email=email, password='123456', username='admin{}'.format(index))
+        User.create_user(email=email, password=app.config['ITMAP_ADMIN_PASSWORD'], username='admin{}'.format(index))
     db.session.commit()
 
 
