@@ -39,8 +39,8 @@ def create_app():
 
 
 def register_blueprints(app):
-    from itmap.views import (api_1_0,)
-    for i in (api_1_0,):
+    from itmap.views import (api_1_0, auth)
+    for i in (api_1_0, auth):
         app.register_blueprint(i.bp)
 
 
