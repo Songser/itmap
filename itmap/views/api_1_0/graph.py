@@ -18,14 +18,15 @@ graph_fields = {
 
 
 graphlist_parser = reqparse.RequestParser()
-graphlist_parser.add_argument('ids', type=tuple)
+graphlist_parser.add_argument('ids', type=str)
 
 
 class GraphListApi(Resource):
     def get(self):
+        return None
         args = graphlist_parser.parse_args()
-        gids = args['ids']
-        graphs = Graph.query.filter_by(id in gids).all()
+        gids = tuple(args['ids'])
+        graphs = Graph.query.filter(Graph.id.in_(gids)).all()
         return OrderedDict(
             {'graphs': marshal(graphs, graph_fields)}
         )
@@ -40,7 +41,7 @@ class GraphApi(Resource):
     def get(self):
         args = graph_parser.parse_args()
         gid = args['id']
-        graph = Graph.query.filter_by(id=gid).first()
+        graph = Graph.query.get(gid)
         return graph
 
     def put(self):
