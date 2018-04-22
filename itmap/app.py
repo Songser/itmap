@@ -32,7 +32,16 @@ def create_app():
     admin.add_view(ModelView(Graph, db.session))
 
     admin.add_view(rediscli.RedisCli(redis._redis_client))
+
+    register_blueprints(app)
+
     return app
+
+
+def register_blueprints(app):
+    from itmap.views import (api_1_0,)
+    for i in (api_1_0,):
+        app.register_blueprint(i.bp)
 
 
 app = create_app()
