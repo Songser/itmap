@@ -1,14 +1,12 @@
 <template>
-  <div>
-    <el-input v-model="nodeName" placeholder="请输入内容"></el-input>
-    <el-button type="primary" @click="addNode">添加</el-button>
-    <div>{{node.name}}</div>
-  </div>
+    <graph-info />
 </template>
 <script>
 import { mapState } from 'vuex'
+import GraphInfo from '@/components/GraphInfo'
 export default {
   name: 'app-aside',
+  components: { GraphInfo },
   data: function () {
     return {
       nodeName: ''

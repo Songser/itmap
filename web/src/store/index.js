@@ -133,14 +133,14 @@ export default new Vuex.Store({
     setNode (state, val) {
       state.node.name = val
     },
-    addNode (state, name) {
+    addNode (state, graph) {
       state.nodes.push({
-        name,
+        name: graph.name,
         draggable: true
       })
       state.links.push({
         source: state.node.name,
-        target: name,
+        target: graph.name,
         value: '朋友'
       })
     }

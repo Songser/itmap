@@ -1,33 +1,26 @@
 <template>
+  <div>
   <el-menu class="navbar" mode="horizontal">
-
     <div class=logo-container>
       <img class="user-avatar" :src="avatar">
     </div>
     <div class="button-container">
       <el-row>
-      <el-card class="box-card">
-        <div>
           <el-col :span="4" class="text-center">
-            <router-link class="pan-btn blue-btn" to="/components/index">Components</router-link>
+            <a class="pan-btn blue-btn" @click="addNode">添加</a>
           </el-col>
           <el-col :span="4" class="text-center">
-            <router-link class="pan-btn light-blue-btn" to="/charts/index">Charts</router-link>
+            <a class="pan-btn light-blue-btn" @click="showResource">资源</a>
           </el-col>
           <el-col :span="4" class="text-center">
-            <router-link class="pan-btn pink-btn" to="/excel/download">Excel</router-link>
+            <a class="pan-btn pink-btn" @click="showArtical">文章</a>
           </el-col>
           <el-col :span="4" class="text-center">
-            <router-link class="pan-btn green-btn" to="/example/table/complex-table">Table</router-link>
+            <a class="pan-btn green-btn" @click="showQuestion">问答</a>
           </el-col>
           <el-col :span="4" class="text-center">
-            <router-link class="pan-btn tiffany-btn" to="/form/edit-form">Form</router-link>
+            <a class="pan-btn tiffany-btn" @click="showUser">用户</a>
           </el-col>
-          <el-col :span="4" class="text-center">
-            <router-link class="pan-btn yellow-btn" to="/theme/index">Theme</router-link>
-          </el-col>
-        </div>
-      </el-card>
       </el-row>
     </div>
     <div class="right-menu">
@@ -40,7 +33,7 @@
         <el-dropdown-menu slot="dropdown">
           <router-link to="/">
             <el-dropdown-item>
-              首页设置
+              个人设置
             </el-dropdown-item>
           </router-link>
           <a target='_blank' href="https://github.com/PanJiaChen/vue-element-admin/">
@@ -55,9 +48,69 @@
       </el-dropdown>
     </div>
   </el-menu>
+  <div class="components-container">
+    <el-dialog
+    :visible.sync="addNodeDialog"
+    width="80%"
+    :append-to-body=true>
+    <add-node @closeAddNodeDialog="addNodeClose"/>
+  </el-dialog>
+</div>
+  </div>
 </template>
-<style rel="stylesheet/scss" lang="scss" scoped>
 
+<script>
+import logo from '@/assets/logo.png'
+import PanThumb from '@/components/PanThumb'
+import AddNode from '@/components/AddNode'
+export default {
+  name: 'nav-bar',
+  components: {
+    PanThumb,
+    AddNode
+  },
+  data () {
+    return {
+      avatar: logo,
+      addNodeDialog: false,
+      showResourceDialog: false,
+      showArticalDialog: false,
+      showQuestionDialog: false,
+      showUserDialog: false,
+    }
+  },
+  computed: {
+  },
+  methods: {
+    logout () {
+
+    },
+    addNode () {
+      this.addNodeDialog = true
+    },
+    showResource () {
+
+    },
+    showArtical () {
+
+    },
+    showQuestion () {
+
+    },
+    showUser () {
+
+    },
+    addNodeClose () {
+      this.addNodeDialog = false
+    }
+  }
+}
+</script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+.el-dialog {
+  z-index: 200 !important;
+}
 .navbar {
   width: 100%;
   height: 100%;
@@ -74,8 +127,23 @@
   }
   .button-container {
     float: left;
-    margin-left: 60px;
-    margin-top: 20px;
+    margin-left: 5%;
+    width: 70%;
+    .el-row {
+      padding-top: 10px;
+      height: 100%;
+      background-color: #F0F8FF;
+      box-shadow: 0;
+      width: 100%;
+      .pan-btn {
+        font-size: 16px;
+        margin-right: 10px;
+        padding: 7px 10px;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+      }
+    }
   }
   .right-menu {
     float: right;
@@ -111,29 +179,5 @@
       }
     }
   }
-  
 }
 </style>
-
-<script>
-import logo from '@/assets/logo.png'
-import PanThumb from '@/components/PanThumb'
-export default {
-  name: 'nav-bar',
-  components: {
-    PanThumb
-  },
-  data () {
-    return {
-      avatar: logo
-    }
-  },
-  computed: {
-  },
-  methods: {
-    logout () {
-
-    }
-  }
-}
-</script>

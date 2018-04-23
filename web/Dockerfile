@@ -1,5 +1,4 @@
 FROM node:9.9.0-alpine
-MAINTAINER songcser
 
 RUN mkdir /web
 WORKDIR /web
