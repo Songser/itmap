@@ -8,6 +8,8 @@ import router from './router'
 import store from './store'
 import './icons'
 
+import '@/styles/index.scss'
+
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 
