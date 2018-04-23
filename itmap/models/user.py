@@ -157,6 +157,11 @@ class User(db.Model, UserMixin):
         return self.can(Permission.ADMINISTER)
 
 
+@login_manager.user_loader
+def load_user(uid):
+    return User.query.get(int(uid))
+
+
 class AnonymousUser(AnonymousUser):
 
     def can(self, permissions):
