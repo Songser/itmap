@@ -6,7 +6,7 @@
     <div style="position:relative;">
       <pan-thumb class="panThumb" :image="avatar"></pan-thumb>
       <div style="padding-top:35px;" class='progress-item'>
-        <span>{{name}}</span>
+        <h3>{{name}}</h3>
       </div>
       <div class='progress-item'>
         <span>创建人</span>
