@@ -1,12 +1,12 @@
 <template>
-    <graph-info />
+    <node-info />
 </template>
 <script>
 import { mapState } from 'vuex'
-import GraphInfo from '@/components/GraphInfo'
+import NodeInfo from '@/components/NodeInfo'
 export default {
   name: 'app-aside',
-  components: { GraphInfo },
+  components: { NodeInfo },
   data: function () {
     return {
       nodeName: ''

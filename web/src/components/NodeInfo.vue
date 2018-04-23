@@ -29,7 +29,7 @@ import logo from '@/assets/logo.png'
 import PanThumb from '@/components/PanThumb'
 import { mapState } from 'vuex'
 export default {
-  name: 'graph-info',
+  name: 'node-info',
   components: { PanThumb },
   data() {
     return {
