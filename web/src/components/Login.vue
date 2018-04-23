@@ -78,10 +78,10 @@ export default {
   },
   methods: {
     forget () {
-      this.$router.push("forget")
+      this.$router.push('forget')
     },
     register () {
-      this.$router.push("register")
+      this.$router.push('register')
     },
     showPwd () {
       console.log(this.passwordType)

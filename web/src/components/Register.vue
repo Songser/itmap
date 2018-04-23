@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import countTo from 'vue-count-to';
+import countTo from 'vue-count-to'
 import { isvalidateEmail } from '@/utils/validate'
 import http from '@/utils/request'
 
@@ -109,7 +109,7 @@ export default {
         email: '',
         password: '',
         retrypassword: '',
-        verificationCode: '',
+        verificationCode: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -117,8 +117,8 @@ export default {
         password: [{ required: true, trigger: 'blur', validator: validatePassword }],
         retrypassword: [{ required: true, trigger: 'blur', validator: validateRetryPassword }],
         verificationCode: [
-          { required: true, message: '验证码不能为空'},
-          { type: 'number', message: '验证码必须为数字值'},
+          { required: true, message: '验证码不能为空' },
+          { type: 'number', message: '验证码必须为数字值' },
           { min: 6, max: 6, message: '长度为6个字符', trigger: 'blur' }]
       },
       passwordType: 'password',
@@ -127,8 +127,8 @@ export default {
       endVal: 0,
       startVal: 60,
       sendCodeDisabled: false,
-      duration: 60*1000,
-      s: "秒后重试"
+      duration: 60 * 1000,
+      s: '秒后重试'
     }
   },
   computed: {
@@ -151,11 +151,9 @@ export default {
     },
     handleRegister (formName) {
       this.$refs[formName].validate(valid => {
-        console.log(valid)
         if (valid) {
           this.loading = true
           register(this.username, this.password).then(response => {
-            console.log(response)
             this.loading = false
           })
         } else {
@@ -170,7 +168,7 @@ export default {
       console.log(this.loginForm.email)
       if (this.loginForm.email.length > 0 && isvalidateEmail(this.loginForm.email)) {
         sendVerificationCode(this.email).then(response => {
-          
+
         })
       }
     },

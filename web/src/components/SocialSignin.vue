@@ -4,10 +4,10 @@
       <span class="wx-svg-container"><svg-icon icon-class="wechat" class="icon"></svg-icon></span>
     </div>
     <div class="sign-btn" @click="githubHandleClick('tencent')">
-      <span class="github-svg-container"><svg-icon icon-class="github" class="icon"></svg-icon></span> 
+      <span class="github-svg-container"><svg-icon icon-class="github" class="icon"></svg-icon></span>
     </div>
     <div class="sign-btn" @click="weiboHandleClick('tencent')">
-      <span class="weibo-svg-container"><svg-icon icon-class="weibo" class="icon"></svg-icon></span> 
+      <span class="weibo-svg-container"><svg-icon icon-class="weibo" class="icon"></svg-icon></span>
     </div>
   </div>
 </template>
@@ -17,25 +17,25 @@ import openWindow from '@/utils/openWindow'
 export default {
   name: 'social-signin',
   methods: {
-    wechatHandleClick(thirdpart) {
+    wechatHandleClick (thirdpart) {
       this.$store.commit('SET_AUTH_TYPE', thirdpart)
       const appid = 'xxxxx'
-      const redirect_uri = encodeURIComponent('xxx/redirect?redirect=' + window.location.origin + '/authredirect')
-      const url = 'https://open.weixin.qq.com/connect/qrconnect?appid=' + appid + '&redirect_uri=' + redirect_uri + '&response_type=code&scope=snsapi_login#wechat_redirect'
+      const redirectUri = encodeURIComponent('xxx/redirect?redirect=' + window.location.origin + '/authredirect')
+      const url = 'https://open.weixin.qq.com/connect/qrconnect?appid=' + appid + '&redirect_uri=' + redirectUri + '&response_type=code&scope=snsapi_login#wechat_redirect'
       openWindow(url, thirdpart, 540, 540)
     },
-    githubHandleClick(thirdpart) {
+    githubHandleClick (thirdpart) {
       this.$store.commit('SET_AUTH_TYPE', thirdpart)
-      const client_id = 'xxxxx'
-      const redirect_uri = encodeURIComponent('xxx/redirect?redirect=' + window.location.origin + '/authredirect')
-      const url = 'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=' + client_id + '&redirect_uri=' + redirect_uri
+      const clientId = 'xxxxx'
+      const redirectUri = encodeURIComponent('xxx/redirect?redirect=' + window.location.origin + '/authredirect')
+      const url = 'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=' + clientId + '&redirect_uri=' + redirectUri
       openWindow(url, thirdpart, 540, 540)
     },
-    weiboHandleClick(thirdpart) {
+    weiboHandleClick (thirdpart) {
       this.$store.commit('SET_AUTH_TYPE', thirdpart)
-      const client_id = 'xxxxx'
-      const redirect_uri = encodeURIComponent('xxx/redirect?redirect=' + window.location.origin + '/authredirect')
-      const url = 'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=' + client_id + '&redirect_uri=' + redirect_uri
+      const clientId = 'xxxxx'
+      const redirectUri = encodeURIComponent('xxx/redirect?redirect=' + window.location.origin + '/authredirect')
+      const url = 'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=' + clientId + '&redirect_uri=' + redirectUri
       openWindow(url, thirdpart, 540, 540)
     }
   }
