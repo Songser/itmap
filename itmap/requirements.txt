@@ -7,5 +7,6 @@ Flask-Mail
 Flask-Security
 Flask-Redis
 flask-restful
+flask-jwt-extended
 ipython
 psycopg2

@@ -23,7 +23,7 @@ flask-restful = "*"
 arrow = "*"
 ipython = "*"
 psycopg2 = "*"
-
+flask-jwt-extended = "*"
 
 [requires]
 

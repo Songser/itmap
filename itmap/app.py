@@ -8,7 +8,7 @@ from flask import Flask
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib import rediscli
-from itmap.ext import db, mail, redis, login_manager
+from itmap.ext import db, mail, redis, login_manager, jwt
 from itmap.models.user import Role, User
 from itmap.models.graph import GraphRelation, Graph
 import itmap.config as _config
@@ -18,11 +18,11 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(_config)
 
-    ####
     db.init_app(app)
     mail.init_app(app)
     redis.init_app(app)
     login_manager.init_app(app)
+    jwt.init_app(app)
 
     admin = Admin(app, name='itmap', template_mode='bootstrap3')
     admin.add_view(ModelView(User, db.session))

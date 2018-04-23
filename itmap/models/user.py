@@ -55,11 +55,12 @@ class User(db.Model, UserMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, index=True, nullable=True)
-    nickname = db.Column(db.String(80), unique=True, index=True, nullable=True)
+    #nickname = db.Column(db.String(80), unique=True, index=True, nullable=True)
     password = db.Column(db.String(255))
 
     #mobile = db.Column()
     email = db.Column(db.String(120), unique=True)
+    has_verified = db.Column(db.Boolean, default=False)
 
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
@@ -111,6 +112,7 @@ class User(db.Model, UserMixin):
         user = cls(name=username, password=password, email=email, **kwargs)
         db.session.add(user)
         db.session.commit()
+        return user
 
     def set_password(self, password):
         self.password = self.generate_password(password)
