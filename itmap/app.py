@@ -2,7 +2,6 @@
 
 import click
 import code
-from redis import Redis
 import sys
 from flask import Flask
 from flask_admin import Admin
@@ -10,7 +9,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib import rediscli
 from itmap.ext import db, mail, redis, login_manager, jwt
 from itmap.models.user import Role, User
-from itmap.models.graph import GraphRelation, Graph
+from itmap.models.graph import NodeRelation, Node, Graph
 import itmap.config as _config
 
 
@@ -28,7 +27,8 @@ def create_app():
     admin.add_view(ModelView(User, db.session))
     admin.add_view(ModelView(Role, db.session))
 
-    admin.add_view(ModelView(GraphRelation, db.session))
+    admin.add_view(ModelView(NodeRelation, db.session))
+    admin.add_view(ModelView(Node, db.session))
     admin.add_view(ModelView(Graph, db.session))
 
     admin.add_view(rediscli.RedisCli(redis._redis_client))
@@ -45,13 +45,14 @@ def register_blueprints(app):
 
 
 app = create_app()
+app.debug = True
 
 
 @app.cli.command(with_appcontext=True)
 def initdb():
     click.echo('Init the db')
     from itmap.models.user import Role, User
-    from itmap.models.graph import GraphRelation, Graph
+    from itmap.models.graph import NodeRelation, Node, Graph
     # 必须在调用db.create_all之前导入具体的Model
     # 原因是如User这种类是元类Model的实例（大体上是）
     # 当导入时，实际上是创建了User类
@@ -59,9 +60,35 @@ def initdb():
     db.drop_all()
     db.create_all()
     Role.insert_roles()
+    users = []
     for index, email in enumerate(app.config['ITMAP_ADMINS']):
-        User.create_user(email=email, password=app.config['ITMAP_ADMIN_PASSWORD'], username='admin{}'.format(index))
-    db.session.commit()
+        user = User.create_user(email=email, password=app.config['ITMAP_ADMIN_PASSWORD'], username='admin{}'.format(index))
+        users.append(user)
+    if app.debug == True:
+        user = users[0]
+
+        graph = Graph(name='test_graph', owner_id=user.id)
+        db.session.add(graph)
+        db.session.commit()
+
+        node_names = ['python', 'java', 'c++', u'鸡蛋']
+        nodes = []
+        for name in node_names:
+            node = Node(name=name, owner_id=user.id, graph_id=graph.id)
+            nodes.append(node)
+        db.session.add_all(nodes)
+        db.session.commit()
+
+        node_ids = [(1, 2), (1, 3), (2, 4), (2, 1), (2, 3)]
+        relations = []
+        for item in node_ids:
+            relation = NodeRelation(source_node_id=item[0],
+                                    target_node_id=item[1],
+                                    graph_id=graph.id,
+                                    owner_id=user.id)
+            relations.append(relation)
+        db.session.add_all(relations)
+        db.session.commit()
 
 
 @app.cli.command()
