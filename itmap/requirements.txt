@@ -11,3 +11,4 @@ flask-jwt-extended
 flasgger
 ipython
 psycopg2
+flask-cors

@@ -33,13 +33,14 @@
 <script>
 import { isvalidUsername } from '@/utils/validate'
 import SocialSign from '@/components/SocialSignin'
-import http from '@/utils/request'
+import request from '@/utils/request'
+import { setToken } from '@/utils/auth'
 
 function login (username, password) {
-  return http.put('/users/login', {username, password})
+  return request.post('/auth/login', {username, password})
   // return request({
-  //   url: '/users/login',
-  //   method: 'put',
+  //   url: '/auth/login',
+  //   method: 'post',
   //   data: { username, password}
   // })
 }
@@ -94,8 +95,10 @@ export default {
     handleLogin () {
       console.log('loging')
       this.loading = true
-      login(this.username, this.password).then(response => {
+      login(this.loginForm.username, this.loginForm.password).then(response => {
         console.log(response)
+        setToken(response.data.access_token)
+        this.$router.push('index')
         this.loading = false
       })
     },
@@ -169,13 +172,14 @@ $light_gray:#eee;
     }
   }
   .svg-container {
-    padding: 5px 5px 5px 15px;
+    padding: 5px 5px 5px 5px;
     color: $dark_gray;
     vertical-align: middle;
-    width: 30px;
+    width: 50px;
     display: inline-block;
     border-right-style: dotted;
     border-right-width: 1px;
+    text-align: center;
     &_login {
       font-size: 20px;
     }

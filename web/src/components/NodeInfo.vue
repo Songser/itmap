@@ -9,16 +9,16 @@
         <h3>{{name}}</h3>
       </div>
       <div class='progress-item'>
-        <span>创建人</span>
-        <el-progress :percentage="18"></el-progress>
+        <span>创建人:</span>
+        <span>{{user}}</span>
       </div>
       <div class='progress-item'>
-        <span>描述</span>
-        <el-progress :percentage="12"></el-progress>
+        <span>描述:</span>
+        <div>{{desc}}</div>
       </div>
        <div class='progress-item'>
-        <span>创建日期</span>
-        <el-progress :percentage="100" status="success"></el-progress>
+        <span>创建日期:</span>
+        <span>{{create_date}}</span>
       </div>
     </div>
   </el-card>
@@ -31,20 +31,23 @@ import { mapState } from 'vuex'
 export default {
   name: 'node-info',
   components: { PanThumb },
-  data() {
+  data () {
     return {
       statisticsData: {
         article_count: 1024,
         pageviews_count: 1024
       },
-      avatar: logo,
+      avatar: logo
     }
   },
   computed: mapState({
-      name: state => state.node.name
+    name: state => state.node.name,
+    user: state => state.node.user,
+    desc: state => state.node.desc,
+    create_date: state => state.node.create_date
   }),
   filters: {
-    statusFilter(status) {
+    statusFilter (status) {
       const statusMap = {
         success: 'success',
         pending: 'danger'

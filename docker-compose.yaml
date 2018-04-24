@@ -26,6 +26,7 @@ services:
     environment:
       HOST: '0.0.0.0'
       PORT: '8020'
+      BASE_API: 'http://localhost:5000'
     networks:
       - itmap-network
     command: ["npm", "run", "dev"]

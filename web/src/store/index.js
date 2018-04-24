@@ -7,7 +7,10 @@ export default new Vuex.Store({
   state: {
     avatar: '',
     node: {
-      name: 'test'
+      name: 'test',
+      user: '呵呵',
+      desc: 'fdafsafasfasdfa',
+      create_date: '2018-4-28'
     },
     nodes: [{
       name: '徐贱云',

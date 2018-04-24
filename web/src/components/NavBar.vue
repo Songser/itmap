@@ -51,7 +51,7 @@
   <div class="components-container">
     <el-dialog
     :visible.sync="addNodeDialog"
-    width="80%"
+    width="500px"
     :append-to-body=true>
     <add-node @closeAddNodeDialog="addNodeClose"/>
   </el-dialog>
@@ -76,7 +76,7 @@ export default {
       showResourceDialog: false,
       showArticalDialog: false,
       showQuestionDialog: false,
-      showUserDialog: false,
+      showUserDialog: false
     }
   },
   computed: {

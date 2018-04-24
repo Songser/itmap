@@ -7,6 +7,7 @@ from flask import Flask
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib import rediscli
+from flask_cors import CORS
 from itmap.ext import db, mail, redis, login_manager, jwt
 from itmap.models.user import Role, User
 from itmap.models.graph import NodeRelation, Node, Graph
@@ -45,6 +46,7 @@ def register_blueprints(app):
 
 
 app = create_app()
+CORS(app)
 app.debug = True
 
 

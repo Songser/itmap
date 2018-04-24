@@ -32,17 +32,17 @@ export default {
         user: '',
         desc: '',
         node: '',
-        relName: '',
+        relName: ''
       }
     }
   },
   methods: {
     onSubmit () {
       this.$store.commit('addNode', this.graph)
-      this.$emit("closeAddNodeDialog")
+      this.$emit('closeAddNodeDialog')
     },
     cancle () {
-        this.$emit("closeAddNodeDialog")
+      this.$emit('closeAddNodeDialog')
     }
   },
   computed: mapState({

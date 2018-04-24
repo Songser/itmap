@@ -36,7 +36,7 @@
           <svg-icon icon-class="eye" />
         </span>
       </el-form-item>
-      <el-col :span="17">
+      <!-- <el-col :span="17">
       <el-form-item prop="verificationCode">
         <span class="svg-container">
           <svg-icon icon-class="code" />
@@ -49,7 +49,7 @@
            <span v-show="!sendCodeDisabled">发送验证码</span>
             <countTo v-show="sendCodeDisabled" ref="timer" :useEasing="false" :startVal='startVal' :autoplay='false' :endVal='_endVal' :duration='duration' v-on:callback="timerCallback"  :suffix="s"></countTo>
          </el-button>
-      </el-col>
+      </el-col> -->
       <el-button type="primary" style="width:100%;margin-bottom:30px;" :loading="loading" @click.native.prevent="handleRegister('loginForm')">注册</el-button>
       </el-form>
   </div>
@@ -242,19 +242,20 @@ $light_gray:#eee;
     }
   }
   .svg-container {
-    padding: 5px 5px 5px 15px;
+    padding: 5px 5px 5px 5px;
     color: $dark_gray;
     vertical-align: middle;
-    width: 30px;
+    width: 50px;
     display: inline-block;
     border-right-style: dotted;
     border-right-width: 1px;
+    text-align: center;
     &_login {
       font-size: 20px;
     };
     .svg-icon {
-      width: 20px;
-      height: 20px;
+      width: 15px;
+      height: 15px;
     }
   }
   .title-container {
