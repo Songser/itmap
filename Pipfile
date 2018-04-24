@@ -20,10 +20,11 @@ flask-mail = "*"
 flask-security = "*"
 flask-redis = "*"
 flask-restful = "*"
+flask-jwt-extended = "*"
+flasgger = "*"
 arrow = "*"
 ipython = "*"
 psycopg2 = "*"
-flask-jwt-extended = "*"
 
 [requires]
 

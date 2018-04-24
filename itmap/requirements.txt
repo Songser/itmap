@@ -8,5 +8,6 @@ Flask-Security
 Flask-Redis
 flask-restful
 flask-jwt-extended
+flasgger
 ipython
 psycopg2
