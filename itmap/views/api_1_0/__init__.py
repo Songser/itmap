@@ -3,12 +3,13 @@
 from flask import Blueprint
 from flask_restful import Api
 
-from .graph import GraphListApi, GraphApi, GraphRelationApi
+from .graph import GraphListApi, GraphApi, NodeApi, NodeRelationApi
 from .user import UserApi
 
 bp = Blueprint('api', __name__, url_prefix='/api/v1_0')
 api = Api(bp)
 api.add_resource(GraphListApi, '/graphs')
-api.add_resource(GraphApi, '/graph')
-api.add_resource(GraphRelationApi, '/graph_rel')
+api.add_resource(GraphApi, '/graph/<int:gid>')
+api.add_resource(NodeApi, '/node/<int:nid>')
+api.add_resource(NodeRelationApi, '/node_rel/<int:rid>')
 api.add_resource(UserApi, '/user')

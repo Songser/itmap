@@ -11,13 +11,16 @@ from itmap.ext import db, redis, jwt
 from itmap.models.user import User
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
-# ACCESS_EXPIRES = current_app.config['JWT_ACCESS_TOKEN_EXPIRES']
-# REFRESH_EXPIRES = current_app.config['JWT_REFRESH_TOKEN_EXPIRES']
 
 
 @jwt.user_identity_loader
 def user_identity_lookup(user):
-    return user.name
+    return user.id
+
+
+@jwt.user_claims_loader
+def add_claims_to_access_token(user):
+    return {'role': user.role.name}
 
 
 @jwt.token_in_blacklist_loader
@@ -112,7 +115,8 @@ def register():
 @bp.route('/refresh', methods=['POST'])
 @jwt_refresh_token_required
 def refresh():
-    current_user = get_jwt_identity()
+    uid = get_jwt_identity()
+    current_user = User.query.get(uid)
     access_token = create_access_token(identity=current_user, fresh=False)
     access_jti = get_jti(encoded_token=access_token)
     redis.set(access_jti, 'false', current_app.config['JWT_ACCESS_TOKEN_EXPIRES'] * 1.2)
@@ -155,8 +159,66 @@ def modify_email():
     if email is None:
         return jsonify({"msg": "Missing email parameter"}), 400
 
-    current_user = get_jwt_identity()
+    uid = get_jwt_identity()
+    current_user = User.query.get(uid)
     current_user.email = email
     db.session.add(current_user)
     db.session.commit()
     return jsonify(user=current_user), 200
+
+
+@bp.route('/reset_password', methods=['GET'])
+@fresh_jwt_required
+def reset_password():
+    uid = get_jwt_identity()
+    current_user = User.query.get(uid)
+    result, msg = current_user.reset_password()
+    status_code = 200 if result else 400
+    return jsonify({"msg": msg}), status_code
+
+
+@bp.route('/change_password', methods=['POST'])
+@fresh_jwt_required
+def change_password():
+    if not request.is_json:
+        return jsonify({"msg": "Missing JSON in request"}), 400
+
+    token = request.json.get('token', None)
+    password = request.json.get('password', None)
+    if token is None:
+        return jsonify({"msg": "Missing token parameter"}), 400
+    if password is None:
+        return jsonify({"msg": "Missing password parameter"}), 400
+
+    uid = get_jwt_identity()
+    current_user = User.query.get(uid)
+    result, msg = current_user.change_password(password, token)
+    status_code = 200 if result else 400
+    return jsonify({"msg": msg}), status_code
+
+
+@bp.route('/verify_email', methods=['GET'])
+@fresh_jwt_required
+def send_verify_email():
+    uid = get_jwt_identity()
+    current_user = User.query.get(uid)
+    result, msg = current_user.send_verify_email()
+    status_code = 200 if result else 400
+    return jsonify({"msg": msg}), status_code
+
+
+@bp.route('/verified', methods=['POST'])
+@fresh_jwt_required
+def verified_by_email():
+    if not request.is_json:
+        return jsonify({"msg": "Missing JSON in request"}), 400
+
+    token = request.json.get('token', None)
+    if token is None:
+        return jsonify({"msg": "Missing token parameter"}), 400
+
+    uid = get_jwt_identity()
+    current_user = User.query.get(uid)
+    result, msg = current_user.verified_by_email(token)
+    status_code = 200 if result else 400
+    return jsonify({"msg": msg}), status_code
