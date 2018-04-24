@@ -1,24 +1,53 @@
 # coding=utf-8
 
 from datetime import datetime
-from flask import url_for, current_app
 
 from itmap.ext import db
 
 
-class GraphRelation(db.Model):
-    __tablename__ = 'graph_relations'
+class NodeRelation(db.Model):
+    __tablename__ = 'node_relations'
 
-    source_graph_id = db.Column(db.Integer, db.ForeignKey('graphs.id'),
-                                primary_key=True)
-    target_graph_id = db.Column(db.Integer, db.ForeignKey('graphs.id'),
-                                primary_key=True)
+    source_node_id = db.Column(db.Integer, db.ForeignKey('nodes.id'), primary_key=True)
+    target_node_id = db.Column(db.Integer, db.ForeignKey('nodes.id'), primary_key=True)
+    graph_id = db.Column(db.Integer, db.ForeignKey('graphs.id'))
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     info = db.Column(db.String(255))
     color = db.Column(db.String(255))
     is_dual_way = db.Column(db.Boolean, default=False)  # 是双向还是单向
     line_type = db.Column(db.String(255))  # 线的类型
+
+
+class Node(db.Model):
+    __tablename__ = 'nodes'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True, index=True, nullable=True)
+    relate_page_url = db.Column(db.String(64))
+
+    is_template = db.Column(db.Boolean, default=False)  # 是否作为模板
+
+    color = db.Column(db.String(255))
+    size = db.Column(db.String(255))  # 大小
+    shape = db.Column(db.String(255))  # 形状
+
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    graph_id = db.Column(db.Integer, db.ForeignKey('graphs.id'))
+    from_nodes = db.relationship('NodeRelation',
+                                  foreign_keys=[NodeRelation.target_node_id],
+                                  backref=db.backref('to_node', lazy='joined'),
+                                  lazy='dynamic',
+                                  cascade='all, delete-orphan')
+    to_nodes = db.relationship('NodeRelation',
+                                foreign_keys=[NodeRelation.source_node_id],
+                                backref=db.backref('from_node', lazy='joined'),
+                                lazy='dynamic',
+                                cascade='all, delete-orphan')
+
+    def __repr__(self):
+        return '<Node {!r}>'.format(self.name)
 
 
 class Graph(db.Model):
@@ -26,23 +55,16 @@ class Graph(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True, index=True, nullable=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    relate_page_url = db.Column(db.String(64))
+    owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    from_graphs = db.relationship('GraphRelation',
-                                  foreign_keys=[GraphRelation.target_graph_id],
-                                  backref=db.backref('to_graph', lazy='joined'),
-                                  lazy='dynamic',
-                                  cascade='all, delete-orphan')
-    to_graphs = db.relationship('GraphRelation',
-                                foreign_keys=[GraphRelation.source_graph_id],
-                                backref=db.backref('from_graph', lazy='joined'),
-                                lazy='dynamic',
-                                cascade='all, delete-orphan')
+    nodes = db.relationship('Node', backref='graph')
+    relations = db.relationship('NodeRelation', backref='graph')
 
-    color = db.Column(db.String(255))
-    size = db.Column(db.String(255))  # 大小
-    shape = db.Column(db.String(255))  # 形状
+    def __repr__(self):
+        return '<Graph {!r}>'.format(self.name)
 
-
-
+    def remove(self):
+        db.session.delete(self.relations)
+        db.session.delete(self.nodes)
+        db.session.delete(self)
+        db.session.commit()

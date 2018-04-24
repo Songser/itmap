@@ -1,14 +1,16 @@
 # coding=utf-8
 
-#import arrow
 from datetime import datetime
+import hashlib
+from threading import Thread
+from werkzeug import security
+
 from flask import url_for, current_app
 from flask_mail import Message
 from flask_security import UserMixin, RoleMixin, AnonymousUser
-import hashlib
-from werkzeug import security
 
-from itmap.ext import db, redis, mail, login_manager
+from itmap.ext import db, redis, login_manager, mail
+from itmap.utils import send_async_email
 
 
 class Permission(object):
@@ -55,14 +57,13 @@ class User(db.Model, UserMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, index=True, nullable=True)
-    #nickname = db.Column(db.String(80), unique=True, index=True, nullable=True)
     password = db.Column(db.String(255))
 
-    #mobile = db.Column()
     email = db.Column(db.String(120), unique=True)
     has_verified = db.Column(db.Boolean, default=False)
 
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    own_graphs = db.relationship('Graph', backref='owner')
 
     active = db.Column(db.Boolean, default=True)
     create_time = db.Column(db.DateTime, default=datetime.utcnow)
@@ -124,28 +125,60 @@ class User(db.Model, UserMixin):
         )
 
     def reset_password(self):
-        key = self.name + 'token'
-        redis.set(key, self.create_token())
+        if not self.has_verified:
+            return False, 'Should verify first'
+        key = self.name + 'change_password_token'
+        token = self.create_token()
+        redis.set(key, token)
         redis.expire(key, 3600)
-        msg = Message('Reset password',
-                      sender=current_app.config['MAIL_SENDER'],
+        msg = Message(subject=u'重设密码',
+                      body='http://127.0.0.1:5000/auth/change_password?token={}'.format(token),  # need modify
                       recipients=[self.email])
-        msg.body = 'link to check token callback'
+        # thread = Thread(target=send_async_email, args=[current_app, msg])
+        # thread.start()
+        # 虽然很多地方都给出了以上的用法，但这种方法会报错：RuntimeError: Working outside of application context.
+        # 大概原因是current_app是线程的本地对象，不能传给别的线程？
         mail.send(msg)
+        return True, 'Success'
 
     def change_password(self, password, token):
-        key = self.name + 'token'
+        key = self.name + 'change_password_token'
         if token != redis.get(key):
-            return False, 'token expired or wrong'
+            return False, 'Token expired or wrong'
         new_password = self.generate_password(password)
         if self.password == new_password:
-            return False, 'duplicate password'
+            return False, 'Duplicate password'
         else:
             self.password = new_password
             db.session.add(self)
             db.session.commit()
             redis.remove(key)
-            return True, 'success'
+            return True, 'Success'
+
+    def send_verify_email(self):
+        if self.has_verified:
+            return False, 'Already verified'
+        key = self.name + self.email + 'verify_email_token'
+        token = self.create_token()
+        redis.set(key, token)
+        redis.expire(key, 3600)
+        msg = Message(subject=u'验证邮箱',
+                      body='http://127.0.0.1:5000/auth/verified_by_email?token={}'.format(token),  # need modify
+                      recipients=[self.email])
+        # thread = Thread(target=send_async_email, args=[current_app, msg])
+        # thread.start()
+        mail.send(msg)
+        return True, 'Success'
+
+    def verified_by_email(self, token):
+        key = self.name + self.email + 'verify_email_token'
+        if token != redis.get(key):
+            return False, 'Token expired or wrong'
+        self.has_verified = True
+        db.session.add(self)
+        db.session.commit()
+        redis.remove(key)
+        return True, 'Success'
 
     @classmethod
     def by_email(cls, email):
