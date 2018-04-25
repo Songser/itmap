@@ -27,12 +27,15 @@
     <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
           <img class="user-avatar" :src="avatar">
-           <!-- <svg-icon icon-class="user" /> -->
-          <i class="el-icon-caret-bottom"></i>
         </div>
+        
         <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item >
+            <span v-if="!user.id" @click="login" style="display:block;">立即登陆</span>
+            <span v-if="user.id" style="display:block;">{{user.name}}</span>
+          </el-dropdown-item>
           <router-link to="/">
-            <el-dropdown-item>
+            <el-dropdown-item divided>
               个人设置
             </el-dropdown-item>
           </router-link>
@@ -60,9 +63,17 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import http from '@/utils/request'
+import store from '@/store'
 import logo from '@/assets/logo.png'
 import PanThumb from '@/components/PanThumb'
 import AddNode from '@/components/AddNode'
+
+function getUser () {
+  return http.get('/auth/current_user')
+}
+
 export default {
   name: 'nav-bar',
   components: {
@@ -76,14 +87,22 @@ export default {
       showResourceDialog: false,
       showArticalDialog: false,
       showQuestionDialog: false,
-      showUserDialog: false
+      showUserDialog: false,
+      user: {}
     }
   },
-  computed: {
+ 
+  created: () => {
+    getUser().then(response => {
+      console.log(response.data)
+    })
   },
   methods: {
     logout () {
 
+    },
+    login () {
+      this.$router.push('login')
     },
     addNode () {
       this.addNodeDialog = true
@@ -102,7 +121,7 @@ export default {
     },
     addNodeClose () {
       this.addNodeDialog = false
-    }
+    },
   }
 }
 </script>
@@ -160,15 +179,16 @@ export default {
     }
     .avatar-container {
       height: 50px;
-      margin-right: 30px;
+      margin-right: 10px;
       .avatar-wrapper {
         cursor: pointer;
-        margin-top: 5px;
+        margin-top: 10px;
         position: relative;
         .user-avatar {
           width: 40px;
           height: 40px;
-          border-radius: 10px;
+          border-radius: 50px;
+          background-color: aqua;
         }
         .el-icon-caret-bottom {
           position: absolute;

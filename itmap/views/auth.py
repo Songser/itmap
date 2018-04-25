@@ -97,7 +97,7 @@ def register():
     username = request.json.get('username', None)
     password = request.json.get('password', None)
     email = request.json.get('email', None)
-
+    current_app.logger.info(request.json)
     if username is None:
         return jsonify({"msg": "Missing username parameter"}), 400
     if password is None:
@@ -110,7 +110,7 @@ def register():
         return jsonify({"msg": "Already exists username"}), 400
     user = User.create_user(username=username, email=email, password=password)
 
-    return jsonify(username=username, password=password), 200
+    return jsonify(userid=user.id), 200
 
 
 @bp.route('/refresh', methods=['POST'])
@@ -143,11 +143,16 @@ def logout2():
 @bp.route('/current_user', methods=['GET'])
 @jwt_optional
 def current_user():
-    current_user = get_jwt_identity()
-    if current_user:
-        return jsonify(logged_in_as=current_user), 200
+    uid = get_jwt_identity()
+    user = User.query.get(uid)
+    if user:
+        return jsonify(
+            user_id=user.id,
+            name=user.name,
+            email=user.email,
+            active=user.active), 200
     else:
-        return jsonify(logged_in_as='anonymous user'), 200
+        return jsonify(user_id=0), 200
 
 
 @bp.route('/modify_email', methods=['POST'])

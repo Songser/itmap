@@ -35,14 +35,11 @@ import { isvalidUsername } from '@/utils/validate'
 import SocialSign from '@/components/SocialSignin'
 import request from '@/utils/request'
 import { setToken } from '@/utils/auth'
+import { sha256 } from 'js-sha256'
 
-function login (username, password) {
+function login (username, pwd) {
+  let password = sha256(pwd)
   return request.post('/auth/login', {username, password})
-  // return request({
-  //   url: '/auth/login',
-  //   method: 'post',
-  //   data: { username, password}
-  // })
 }
 
 export default {
@@ -93,11 +90,16 @@ export default {
       }
     },
     handleLogin () {
-      console.log('loging')
       this.loading = true
       login(this.loginForm.username, this.loginForm.password).then(response => {
-        console.log(response)
-        setToken(response.data.access_token)
+        let data = response.data
+        setToken(data.access_token)
+        this.$store.commit('setUser', 
+          {name: data.name,
+           id: data.user_id,
+           email: data.email,
+           active: data.active,
+           token: data.access_token})
         this.$router.push('index')
         this.loading = false
       })
@@ -106,7 +108,6 @@ export default {
     created () {},
     destroyed () {}
   }
-
 }
 </script>
 

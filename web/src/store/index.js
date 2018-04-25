@@ -1,10 +1,18 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+import http from '@/utils/request'
+import { getToken, setToken, removeToken } from '@/utils/auth'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    user: {
+      id: 0,
+      name: '',
+      email: '',
+      active: false,
+      token: getToken()
+    },
     avatar: '',
     node: {
       name: 'test',
@@ -146,6 +154,12 @@ export default new Vuex.Store({
         target: graph.name,
         value: '朋友'
       })
+    },
+    setUser (state, user) {
+      state.user = user
     }
-  }
+  },
+  getters: {
+    token: state => state.user.token
+  },
 })

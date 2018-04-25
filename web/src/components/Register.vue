@@ -56,21 +56,17 @@
 </template>
 
 <script>
-import countTo from 'vue-count-to'
 import { isvalidateEmail } from '@/utils/validate'
+import { sha256 } from 'js-sha256';
 import http from '@/utils/request'
 
-function register (username, email, password, retrypassword) {
-  return http.put('/users/login', {username, password})
-}
-
-function sendVerificationCode (email) {
-  return http.post('/users/sendVerificationCode', { email })
+function register (username, pwd, email) {
+  let password = sha256(pwd)
+  return http.post('/auth/register', {username, password, email})
 }
 
 export default {
   name: 'register',
-  components: {countTo},
   data () {
     const validateUsername = (rule, value, callback) => {
       if (value.length < 4) {
@@ -80,7 +76,6 @@ export default {
       }
     }
     var validatePassword = (rule, value, callback) => {
-      console.log('ddddddddd')
       if (value.length < 6) {
         callback(new Error('秘密不能小于6位'))
       } else {
@@ -95,40 +90,38 @@ export default {
       }
     }
     var validateRetryPassword = (rule, value, callback) => {
-      console.log('dddddddd')
       if (value !== this.loginForm.password) {
         callback(new Error('两次输入秘密不一致'))
       } else {
         callback()
       }
-      console.log('eeee')
     }
     return {
       loginForm: {
         username: '',
         email: '',
         password: '',
-        retrypassword: '',
-        verificationCode: ''
+        retrypassword: ''
+        // verificationCode: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         email: [{ required: true, trigger: 'blur', validator: validateEmail }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }],
-        retrypassword: [{ required: true, trigger: 'blur', validator: validateRetryPassword }],
-        verificationCode: [
-          { required: true, message: '验证码不能为空' },
-          { type: 'number', message: '验证码必须为数字值' },
-          { min: 6, max: 6, message: '长度为6个字符', trigger: 'blur' }]
+        retrypassword: [{ required: true, trigger: 'blur', validator: validateRetryPassword }]
+        // verificationCode: [
+        //   { required: true, message: '验证码不能为空' },
+        //   { type: 'number', message: '验证码必须为数字值' },
+        //   { min: 6, max: 6, message: '长度为6个字符', trigger: 'blur' }]
       },
       passwordType: 'password',
       loading: false,
-      showDialog: false,
-      endVal: 0,
-      startVal: 60,
-      sendCodeDisabled: false,
-      duration: 60 * 1000,
-      s: '秒后重试'
+      // showDialog: false,
+      // endVal: 0,
+      // startVal: 60,
+      // sendCodeDisabled: false,
+      // duration: 60 * 1000,
+      // s: '秒后重试'
     }
   },
   computed: {
@@ -138,11 +131,10 @@ export default {
     }
   },
   methods: {
-    timerCallback () {
-      this.sendCodeDisabled = false
-    },
+    // timerCallback () {
+    //   this.sendCodeDisabled = false
+    // },
     showPwd () {
-      console.log(this.passwordType)
       if (this.passwordType === 'password') {
         this.passwordType = ''
       } else {
@@ -153,8 +145,11 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.loading = true
-          register(this.username, this.password).then(response => {
+          register(this.loginForm.username, this.loginForm.password, this.loginForm.email)
+          .then(response => {
+            console.log(response)
             this.loading = false
+            this.$router.push('login')
           })
         } else {
           console.log('error submit!!')
@@ -162,17 +157,6 @@ export default {
         }
       })
     },
-    sendCode () {
-      this.sendCodeDisabled = true
-      this.$refs.timer.start()
-      console.log(this.loginForm.email)
-      if (this.loginForm.email.length > 0 && isvalidateEmail(this.loginForm.email)) {
-        sendVerificationCode(this.email).then(response => {
-
-        })
-      }
-    },
-    afterQRScan () {},
     created () {},
     destroyed () {}
   }
