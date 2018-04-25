@@ -13,6 +13,7 @@ from itmap.models.user import User
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 logger = logging.getLogger(__name__)
 
+
 @jwt.user_identity_loader
 def user_identity_lookup(user):
     return user.id
@@ -34,7 +35,6 @@ def check_if_token_is_revoked(decrypted_token):
 
 @bp.route('/login', methods=['POST'])
 def login():
-    
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 400
 

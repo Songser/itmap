@@ -130,10 +130,13 @@ class NodeRelationApi(Resource):
 
     method_decorators = [jwt_required]
 
-    def put(self, rid):
-        relation = NodeRelation.query.get(rid)
-        uid = get_jwt_identity()
+    def put(self):
         data = request.form
+        sid = data.pop('sid')
+        tid = data.pop('tid')
+        gid = data.pop('gid')
+        relation = NodeRelation.find_relation(sid, tid, gid)
+        uid = get_jwt_identity()
         if relation is None:
             relation = NodeRelation(**data)
         elif relation.owner_id != uid:
@@ -143,8 +146,12 @@ class NodeRelationApi(Resource):
         db.session.add(relation)
         db.session.commit()
 
-    def delete(self, rid):
-        relation = NodeRelation.query.get(rid)
+    def delete(self):
+        data = request.form
+        sid = data.pop('sid')
+        tid = data.pop('tid')
+        gid = data.pop('gid')
+        relation = NodeRelation.find_relation(sid, tid, gid)
         if relation is None:
             return {'msg': 'Invalid rid'}, 400
         db.session.delete(relation)

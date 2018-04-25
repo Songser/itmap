@@ -19,6 +19,22 @@ class NodeRelation(db.Model):
     is_dual_way = db.Column(db.Boolean, default=False)  # 是双向还是单向
     line_type = db.Column(db.String(255))  # 线的类型
 
+    def __repr__(self):
+        arch = '<->' if self.is_dual_way else '->'
+        return '<NodeRelation {!r}{}{!r}>'.format(self.from_node.name, arch, self.to_node.name)
+
+    @classmethod
+    def find_relation(cls, sid, tid, gid, oid=None):
+        kwargs = {
+            'source_node_id': sid,
+            'target_node_id': tid,
+            'graph_id': gid,
+        }
+        if oid is not None:
+            kwargs.update({'owner_id': oid})
+        rels = cls.query.filter_by(**kwargs).first()
+        return rels
+
 
 class Node(db.Model):
     __tablename__ = 'nodes'
