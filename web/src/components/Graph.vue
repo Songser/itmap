@@ -49,6 +49,7 @@ export default {
     }
   },
   data: function () {
+    console.log(this.$store.state.node.nodes)
     return {
       graph: {
         title: {
@@ -126,8 +127,8 @@ export default {
                 formatter: '{c}'
               }
             },
-            data: this.$store.state.nodes,
-            links: this.$store.state.links,
+            data: this.$store.state.node.nodes,
+            links: this.$store.state.node.links,
             lineStyle: {
               normal: {
                 opacity: 0.9,

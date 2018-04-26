@@ -57,7 +57,7 @@
 
 <script>
 import { isvalidateEmail } from '@/utils/validate'
-import { sha256 } from 'js-sha256';
+import { sha256 } from 'js-sha256'
 import http from '@/utils/request'
 
 function register (username, pwd, email) {
@@ -115,7 +115,7 @@ export default {
         //   { min: 6, max: 6, message: '长度为6个字符', trigger: 'blur' }]
       },
       passwordType: 'password',
-      loading: false,
+      loading: false
       // showDialog: false,
       // endVal: 0,
       // startVal: 60,
@@ -146,11 +146,11 @@ export default {
         if (valid) {
           this.loading = true
           register(this.loginForm.username, this.loginForm.password, this.loginForm.email)
-          .then(response => {
-            console.log(response)
-            this.loading = false
-            this.$router.push('login')
-          })
+            .then(response => {
+              console.log(response)
+              this.loading = false
+              this.$router.push('login')
+            })
         } else {
           console.log('error submit!!')
           return false

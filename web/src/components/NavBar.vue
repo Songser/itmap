@@ -28,11 +28,11 @@
         <div class="avatar-wrapper">
           <img class="user-avatar" :src="avatar">
         </div>
-        
+
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item >
-            <span v-if="!user.id" @click="login" style="display:block;">立即登陆</span>
-            <span v-if="user.id" style="display:block;">{{user.name}}</span>
+            <span v-if="!user_id" @click="login" style="display:block;">立即登陆</span>
+            <span v-if="user_id" style="display:block;">{{name}}</span>
           </el-dropdown-item>
           <router-link to="/">
             <el-dropdown-item divided>
@@ -65,7 +65,6 @@
 <script>
 import { mapState } from 'vuex'
 import http from '@/utils/request'
-import store from '@/store'
 import logo from '@/assets/logo.png'
 import PanThumb from '@/components/PanThumb'
 import AddNode from '@/components/AddNode'
@@ -87,14 +86,19 @@ export default {
       showResourceDialog: false,
       showArticalDialog: false,
       showQuestionDialog: false,
-      showUserDialog: false,
-      user: {}
+      showUserDialog: false
     }
   },
- 
-  created: () => {
+  computed: {
+    ...mapState({
+      user_id: state => state.user.id,
+      name: state => state.user.name
+    })
+  },
+  created () {
     getUser().then(response => {
       console.log(response.data)
+      this.$store.commit('setUser', response.data)
     })
   },
   methods: {
@@ -121,7 +125,7 @@ export default {
     },
     addNodeClose () {
       this.addNodeDialog = false
-    },
+    }
   }
 }
 </script>

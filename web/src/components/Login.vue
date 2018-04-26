@@ -94,12 +94,12 @@ export default {
       login(this.loginForm.username, this.loginForm.password).then(response => {
         let data = response.data
         setToken(data.access_token)
-        this.$store.commit('setUser', 
+        this.$store.commit('setUser',
           {name: data.name,
-           id: data.user_id,
-           email: data.email,
-           active: data.active,
-           token: data.access_token})
+            id: data.user_id,
+            email: data.email,
+            active: data.active,
+            token: data.access_token})
         this.$router.push('index')
         this.loading = false
       })
