@@ -70,17 +70,11 @@ class Graph(db.Model):
     __tablename__ = 'graphs'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), unique=True, index=True, nullable=True)
+    name = db.Column(db.String(64), index=True, nullable=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    nodes = db.relationship('Node', backref='graph')
-    relations = db.relationship('NodeRelation', backref='graph')
+    nodes = db.relationship('Node', backref='graph', cascade='all, delete-orphan')
+    relations = db.relationship('NodeRelation', backref='graph', cascade='all, delete-orphan')
 
     def __repr__(self):
         return '<Graph {!r}>'.format(self.name)
-
-    def remove(self):
-        db.session.delete(self.relations)
-        db.session.delete(self.nodes)
-        db.session.delete(self)
-        db.session.commit()

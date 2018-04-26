@@ -82,7 +82,8 @@ class GraphApi(Resource):
         graph = Graph.query.get(gid)
         if graph is None:
             return {'msg': 'Invalid gid'}, 400
-        graph.remove()
+        db.session.delete(graph)
+        db.session.commit()
         return '', 200
 
     def put(self, gid):
@@ -95,7 +96,7 @@ class GraphApi(Resource):
             return {'msg': 'Not allowed to put'}, 400
         else:
             graph.name = name
-        db.session.ad(graph)
+        db.session.add(graph)
         db.session.commit()
         return graph.id, 200
 
@@ -107,8 +108,14 @@ class NodeApi(Resource):
     def put(self, nid):
         node = Node.query.get(nid)
         uid = get_jwt_identity()
-        data = request.form
+        data = request.json
+        data = dict(data)
         if node is None:
+            if not (data.get('graph_id') and data.get('name')):
+                return {'msg': 'Invalid args'}, 400
+            data.update({
+                'owner_id': uid,
+            })
             node = Node(**data)
         elif node.owner_id != uid:
             return {'msg': 'Not allowed to put'}, 400
@@ -119,10 +126,11 @@ class NodeApi(Resource):
         return node.id, 200
 
     def delete(self, nid):
-        node = Graph.query.get(nid)
+        node = Node.query.get(nid)
         if node is None:
             return {'msg': 'Invalid nid'}, 400
         db.session.delete(node)
+        db.session.commit()
         return '', 200
 
 
@@ -131,13 +139,19 @@ class NodeRelationApi(Resource):
     method_decorators = [jwt_required]
 
     def put(self):
-        data = request.form
-        sid = data.pop('sid')
-        tid = data.pop('tid')
-        gid = data.pop('gid')
+        data = request.json
+        data = dict(data)
+        sid = data.get('source_node_id')
+        tid = data.get('target_node_id')
+        gid = data.get('graph_id')
+        if not (sid and tid and gid):
+            return {'msg': 'Invalid args'}, 400
         relation = NodeRelation.find_relation(sid, tid, gid)
         uid = get_jwt_identity()
         if relation is None:
+            data.update({
+                'owner_id': uid,
+            })
             relation = NodeRelation(**data)
         elif relation.owner_id != uid:
             return {'msg': 'Not allowed to put'}, 400
@@ -145,14 +159,19 @@ class NodeRelationApi(Resource):
             update(relation, data)
         db.session.add(relation)
         db.session.commit()
+        return '', 200
 
     def delete(self):
-        data = request.form
-        sid = data.pop('sid')
-        tid = data.pop('tid')
-        gid = data.pop('gid')
+        data = request.json
+        data = dict(data)
+        sid = data.get('source_node_id')
+        tid = data.get('target_node_id')
+        gid = data.get('graph_id')
+        if not (sid and tid and gid):
+            return {'msg': 'Invalid args'}, 400
         relation = NodeRelation.find_relation(sid, tid, gid)
         if relation is None:
-            return {'msg': 'Invalid rid'}, 400
+            return {'msg': 'Invalid args'}, 400
         db.session.delete(relation)
+        db.session.commit()
         return '', 200
