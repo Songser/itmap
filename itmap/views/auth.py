@@ -54,6 +54,7 @@ def login():
 
     access_token = create_access_token(identity=user, fresh=True)
     refresh_token = create_refresh_token(identity=user)
+    user.sign_stamp()
 
     access_jti = get_jti(encoded_token=access_token)
     refresh_jti = get_jti(encoded_token=refresh_token)
@@ -83,6 +84,7 @@ def refresh_login():
         return jsonify({"msg": "Invalid password"}), 400
 
     access_token = create_access_token(identity=user, fresh=True)
+    user.sign_stamp()
     access_jti = get_jti(encoded_token=access_token)
     redis.set(access_jti, 'false', current_app.config['JWT_ACCESS_TOKEN_EXPIRES'] * 1.2)
 
@@ -117,8 +119,9 @@ def register():
 @jwt_refresh_token_required
 def refresh():
     uid = get_jwt_identity()
-    current_user = User.query.get(uid)
-    access_token = create_access_token(identity=current_user, fresh=False)
+    user = User.query.get(uid)
+    access_token = create_access_token(identity=user, fresh=False)
+    user.sign_stamp()
     access_jti = get_jti(encoded_token=access_token)
     redis.set(access_jti, 'false', current_app.config['JWT_ACCESS_TOKEN_EXPIRES'] * 1.2)
     return jsonify(access_token=access_token), 200
@@ -150,7 +153,8 @@ def current_user():
             user_id=user.id,
             name=user.name,
             email=user.email,
-            active=user.active), 200
+            active=user.active,
+            verified=user.has_verified), 200
     else:
         return jsonify(user_id=0), 200
 

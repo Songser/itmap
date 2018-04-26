@@ -1,5 +1,6 @@
 # coding=utf-8
 
+import arrow
 from datetime import datetime
 import hashlib
 from threading import Thread
@@ -84,8 +85,21 @@ class User(db.Model, UserMixin):
                 self.role = Role.query.filter_by(default=True).first()
 
     @property
-    def url(self):
-        return url_for('user.detail', id=str(self.id))
+    def to_dict(self):
+        return {
+            'name': self.name,
+            'email': self.email,
+            'has_verified': self.has_verified,
+            'role': self.role.name,
+            'active': self.active,
+            'current_sign_in_time': arrow.get(self.current_sign_in_time).to('Asia/Shanghai').format('YYYY-MM-DD HH:mm:ss'),
+            'last_sign_in_time': arrow.get(self.last_sign_in_time).to('Asia/Shanghai').format('YYYY-MM-DD HH:mm:ss'),
+            'own_graphs': [{'id':g.id, 'name':g.name} for g in self.own_graphs],
+        }
+
+    #@property
+    #def url(self):
+    #    return url_for('user.detail', id=str(self.id))
 
     @property
     def email_md5(self):
@@ -190,6 +204,12 @@ class User(db.Model, UserMixin):
 
     def is_administrator(self):
         return self.can(Permission.ADMINISTER)
+
+    def sign_stamp(self):
+        self.last_sign_in_time = self.current_sign_in_time
+        self.current_sign_in_time = datetime.utcnow()
+        db.session.add(self)
+        db.session.commit()
 
 
 @login_manager.user_loader

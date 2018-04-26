@@ -9,6 +9,7 @@ Flask-Redis
 flask-restful
 flask-jwt-extended
 flasgger
+arrow
 ipython
 psycopg2
 flask-cors
