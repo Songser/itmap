@@ -127,7 +127,8 @@ const state = {
 
 const mutations = {
   setNode (state, val) {
-    state.node.name = val
+    console.log(val)
+    state.name = val.name
   },
   addNode (state, graph) {
     state.nodes.push({

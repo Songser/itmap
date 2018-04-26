@@ -62,9 +62,7 @@ class GraphListApi(Resource):
     def get(self):
         uid = get_jwt_identity()
         graphs = Graph.query.filter_by(owner_id=uid).all()
-        return {
-            'graphs': [g.id for g in graphs]
-        }
+        return [{'id': g.id, 'name': g.name, 'owner_id': g.owner_id} for g in graphs]
 
 
 class GraphApi(Resource):

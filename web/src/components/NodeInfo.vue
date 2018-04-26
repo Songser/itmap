@@ -9,6 +9,10 @@
         <h3>{{name}}</h3>
       </div>
       <div class='progress-item'>
+        <span>图谱:</span>
+        <span>{{graph}}</span>
+      </div>
+      <div class='progress-item'>
         <span>创建人:</span>
         <span>{{user}}</span>
       </div>
@@ -44,7 +48,8 @@ export default {
     name: state => state.node.name,
     user: state => state.node.user,
     desc: state => state.node.desc,
-    create_date: state => state.node.create_date
+    create_date: state => state.node.create_date,
+    graph: state => state.graph.name
   }),
   filters: {
     statusFilter (status) {
