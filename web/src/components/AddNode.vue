@@ -27,9 +27,9 @@ export default {
   name: 'add-node',
   data: function () {
     return {
-        name: '',
-        desc: '',
-        relName: ''
+      name: '',
+      desc: '',
+      relName: ''
     }
   },
   methods: {

@@ -45,15 +45,13 @@ export default {
       })
     },
     clickNode (params) {
-      console.log(params.name)
       this.$store.commit('setNode', params)
     }
   },
-  created (){
+  created () {
     this.$store.dispatch('getGraph')
   },
   data: function () {
-    console.log(this.$store.state.node.nodes)
     return {
       graph: {
         title: {

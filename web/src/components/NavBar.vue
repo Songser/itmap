@@ -97,7 +97,6 @@ export default {
   },
   created () {
     getUser().then(response => {
-      console.log(response.data)
       this.$store.commit('setUser', response.data)
     })
   },

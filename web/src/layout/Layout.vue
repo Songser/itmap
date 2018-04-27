@@ -1,30 +1,37 @@
 <template>
    <div class="app-wrapper">
         <el-container class="main-container">
+        <el-container>
           <el-header>
             <nav-bar/>
           </el-header>
           <el-container>
+           <el-aside class="left-aside">
+              <app-side-bar />
+            </el-aside>
             <el-main>
               <app-main/>
             </el-main>
-            <el-aside width="300px">
+            <el-aside  class="right-aside">
               <app-aside/>
             </el-aside>
+          </el-container>
           </el-container>
         </el-container>
       </div>
 </template>
 
 <script>
-import NavBar from '../components/NavBar'
-import AppMain from '../components/AppMain'
-import AppAside from '../components/AppAside'
+import NavBar from '@/components/NavBar'
+import AppMain from '@/components/AppMain'
+import AppAside from '@/components/AppAside'
+import AppSideBar from '@/components/AppSidebar'
 
 export default {
   name: 'layout',
   components: {
     NavBar,
+    AppSideBar,
     AppMain,
     AppAside
   }
@@ -55,5 +62,11 @@ export default {
 .el-aside {
   background-color: #E9FEFF;
   color: #333
+}
+.left-aside {
+  max-width: 200px;
+}
+.right-aside {
+  max-width: 300px;
 }
 </style>
