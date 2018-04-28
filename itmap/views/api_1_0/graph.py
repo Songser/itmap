@@ -64,6 +64,16 @@ class GraphListApi(Resource):
         graphs = Graph.query.filter_by(owner_id=uid).all()
         return [{'id': g.id, 'name': g.name, 'owner_id': g.owner_id} for g in graphs]
 
+    @jwt_required
+    def post(self):
+        uid = get_jwt_identity()
+        data = request.json
+        data = dict(data)
+        graph = Graph(name=data['name'], owner_id=uid)
+        db.session.add(graph)
+        db.session.commit()
+        return graph.id, 200
+
 
 class GraphApi(Resource):
 
@@ -98,6 +108,7 @@ class GraphApi(Resource):
         db.session.commit()
         return graph.id, 200
 
+    
 
 class NodeApi(Resource):
 

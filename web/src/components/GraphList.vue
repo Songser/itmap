@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="buttons">
-      <el-button type="primary" icon="el-icon-news" circle @click="addGraph"></el-button>
+      <el-button type="primary" icon="el-icon-news" circle @click="showAddGraphDialog"></el-button>
       <el-button type="primary" icon="el-icon-edit" circle @click="editGraph"></el-button>
       <el-button type="primary" icon="el-icon-delete" circle @click="deleteGraph"></el-button>
     </div>
@@ -13,26 +13,60 @@
       active-text-color="#409EFF"
     >
      <el-menu-item index="2">
-        <i class="el-icon-menu"></i>
         <span slot="title">主图谱</span>
       </el-menu-item>
+      <el-menu-item :index="'graph.index'" v-for="graph in graphList" :key="graph.id">
+        <span slot="title">{{graph.name}}</span>
+    </el-menu-item>
     </el-menu>
-    
+    <el-dialog
+    title="添加图谱"
+    :visible.sync="dialogVisible"
+    width="50%" :append-to-body=true>
+
+  <el-input v-model="newGraphName"></el-input>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="addNewGraph">确 定</el-button>
+  </span>
+    </el-dialog>
   </div>
 </template>
 <script>
+import http from '@/utils/request'
 
-function getGraphs(){
-
+function getGraphList(){
+    return http.get('/api/v1_0/graphs')
+}
+function addGraph(name) {
+    return http.post('/api/v1_0/graphs', {name})
 }
 export default {
   name: 'graph-list',
+  data () {
+      return {
+          graphList: [],
+          dialogVisible: false,
+          newGraphName: '',
+      }
+  },
   created () {
-
+      getGraphList().then((response)=>{
+          console.log(response.data)
+          this.graphList = response.data
+      })
   },
   methods: {
-      addGraph (){
-        
+      showAddGraphDialog (){
+        this.dialogVisible = true
+      },
+      addNewGraph () {
+        addGraph(this.newGraphName).then((response) => {
+            console.log(response.data)
+            this.graphList.push({id: response.data, name: this.newGraphName})
+            this.newGraphName = ''
+            this.dialogVisible = false
+        })
       },
       editGraph () {
 
@@ -47,6 +81,8 @@ export default {
 <style scoped>
 .buttons {
   margin: 10px;
-  text-align: left;
+}
+.el-dialog {
+    text-align: left;
 }
 </style>
