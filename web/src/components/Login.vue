@@ -82,7 +82,6 @@ export default {
       this.$router.push('register')
     },
     showPwd () {
-      console.log(this.passwordType)
       if (this.passwordType === 'password') {
         this.passwordType = ''
       } else {
@@ -94,6 +93,7 @@ export default {
       login(this.loginForm.username, this.loginForm.password).then(response => {
         let data = response.data
         setToken(data.access_token)
+        this.$store.commit('SET_LOGIN')
         this.$store.commit('setUser',
           {name: data.name,
             id: data.user_id,
@@ -104,7 +104,6 @@ export default {
         this.loading = false
       })
     },
-    afterQRScan () {},
     created () {},
     destroyed () {}
   }

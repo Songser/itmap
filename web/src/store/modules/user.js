@@ -10,11 +10,11 @@ const state = {
 }
 
 const mutations = {
-  setUser (state, {userId, name, email, active}) {
-    state.id = userId
-    state.name = name
-    state.email = email
-    state.active = active
+  setUser (state, data) {
+    state.id = data.user_id
+    state.name = data.name
+    state.email = data.email
+    state.active = data.active
   }
 }
 

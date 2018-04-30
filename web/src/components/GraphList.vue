@@ -35,45 +35,46 @@
 <script>
 import http from '@/utils/request'
 
-function getGraphList(){
-    return http.get('/api/v1_0/graphs')
+function getGraphList () {
+  return http.get('/api/v1_0/graphs')
 }
-function addGraph(name) {
-    return http.post('/api/v1_0/graphs', {name})
+function addGraph (name) {
+  return http.post('/api/v1_0/graphs', {name})
 }
 export default {
   name: 'graph-list',
   data () {
-      return {
-          graphList: [],
-          dialogVisible: false,
-          newGraphName: '',
-      }
+    return {
+      graphList: [],
+      dialogVisible: false,
+      newGraphName: ''
+    }
   },
   created () {
-      getGraphList().then((response)=>{
-          console.log(response.data)
-          this.graphList = response.data
+    if (this.$store.state.user.id) {
+      getGraphList().then((response) => {
+        console.log(response.data)
+        this.graphList = response.data
       })
+    }
   },
   methods: {
-      showAddGraphDialog (){
-        this.dialogVisible = true
-      },
-      addNewGraph () {
-        addGraph(this.newGraphName).then((response) => {
-            console.log(response.data)
-            this.graphList.push({id: response.data, name: this.newGraphName})
-            this.newGraphName = ''
-            this.dialogVisible = false
-        })
-      },
-      editGraph () {
+    showAddGraphDialog () {
+      this.dialogVisible = true
+    },
+    addNewGraph () {
+      addGraph(this.newGraphName).then((response) => {
+        this.graphList.push({id: response.data, name: this.newGraphName})
+        this.newGraphName = ''
+        this.dialogVisible = false
+      })
+    },
+    editGraph () {
 
-      },
-      deleteGraph () {
+    },
+    deleteGraph () {
 
-      }
+    }
   }
 }
 </script>

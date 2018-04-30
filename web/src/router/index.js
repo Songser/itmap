@@ -1,13 +1,15 @@
 import Vue from 'vue'
-import Router from 'vue-router'
+import VueRouter from 'vue-router'
+import http from '@/utils/request'
+import store from '@/store'
 import Graph from '@/components/Graph'
 import Layout from '@/layout/Layout'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
 
-Vue.use(Router)
+Vue.use(VueRouter)
 
-export default new Router({
+const router = new VueRouter({
   routes: [
     {
       path: '/',
@@ -36,3 +38,23 @@ export default new Router({
     }
   ]
 })
+
+function getUser () {
+  return http.get('/auth/current_user')
+}
+
+router.beforeResolve((to, from, next) => {
+  console.log(store.state.user.id)
+  if (!store.state.user.id) {
+    getUser().then(response => {
+      store.commit('setUser', response.data)
+      next()
+    }, response => {
+      return true
+    })
+  } else {
+    next()
+  }
+})
+
+export default router

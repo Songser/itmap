@@ -6,14 +6,14 @@ function getMainGraph () {
 const state = {
   id: 0,
   name: '',
-  owner_id: 0
+  ownerId: 0
 }
 
 const mutations = {
-  getGraph (state, {id, name, owner_id}) {
+  getGraph (state, {id, name, ownerId}) {
     state.id = id
     state.name = name
-    state.owner_id = owner_id
+    state.ownerId = ownerId
   }
 }
 

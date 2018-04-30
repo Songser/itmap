@@ -64,14 +64,9 @@
 
 <script>
 import { mapState } from 'vuex'
-import http from '@/utils/request'
 import logo from '@/assets/logo.png'
 import PanThumb from '@/components/PanThumb'
 import AddNode from '@/components/AddNode'
-
-function getUser () {
-  return http.get('/auth/current_user')
-}
 
 export default {
   name: 'nav-bar',
@@ -96,9 +91,7 @@ export default {
     })
   },
   created () {
-    getUser().then(response => {
-      this.$store.commit('setUser', response.data)
-    })
+
   },
   methods: {
     logout () {

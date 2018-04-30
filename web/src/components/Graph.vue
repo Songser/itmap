@@ -49,7 +49,9 @@ export default {
     }
   },
   created () {
-    this.$store.dispatch('getGraph')
+    if (this.$store.state.user.id) {
+      this.$store.dispatch('getGraph')
+    }
   },
   data: function () {
     return {
