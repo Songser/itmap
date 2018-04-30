@@ -1,4 +1,5 @@
 <template>
+<div>
   <el-card class="box-card-component" style="margin-left:8px;">
     <div slot="header" class="box-card-header">
       <img src='https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png'>
@@ -24,24 +25,36 @@
         <span>创建日期:</span>
         <span>{{create_date}}</span>
       </div>
+      <div>
+        <el-button type="primary" icon="el-icon-circle-plus-outline"  circle @click="showAddNodeDialog"></el-button>
+      </div>
     </div>
   </el-card>
+  <el-dialog
+    :visible.sync="addNodeDialog"
+    width="500px"
+    :append-to-body=true>
+    <add-node @closeAddNodeDialog="addNodeClose"/>
+  </el-dialog>
+</div>
 </template>
 
 <script>
 import logo from '@/assets/logo.png'
 import PanThumb from '@/components/PanThumb'
+import AddNode from '@/components/AddNode'
 import { mapState } from 'vuex'
 export default {
   name: 'node-info',
-  components: { PanThumb },
+  components: { PanThumb, AddNode },
   data () {
     return {
       statisticsData: {
         article_count: 1024,
         pageviews_count: 1024
       },
-      avatar: logo
+      avatar: logo,
+      addNodeDialog: false
     }
   },
   computed: mapState({
@@ -51,13 +64,12 @@ export default {
     create_date: state => state.node.create_date,
     graph: state => state.graph.name
   }),
-  filters: {
-    statusFilter (status) {
-      const statusMap = {
-        success: 'success',
-        pending: 'danger'
-      }
-      return statusMap[status]
+  methods: {
+    showAddNodeDialog () {
+      this.addNodeDialog = true
+    },
+    addNodeClose () {
+      this.addNodeDialog = false
     }
   }
 }

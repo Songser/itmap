@@ -184,3 +184,16 @@ class NodeRelationApi(Resource):
         db.session.delete(relation)
         db.session.commit()
         return '', 200
+
+class GraphNodeRelationApi(Resource):
+
+    def get(self, gid):
+        graph = Graph.query.get(gid)
+        nodes = Node.query.filter_by(graph_id=gid).all()
+        relations = NodeRelation.query.filter_by(graph_id=gid).all()
+        nodes = [{"name": node.name} for node in nodes]
+        links = [{
+            "source": Node.query.get(rel.source_node_id).name,
+            "target": Node.query.get(rel.target_node_id).name, 
+            } for rel in relations]
+        return {'nodes': nodes, 'links': links}

@@ -12,10 +12,12 @@
       text-color="#bfcbd9"
       active-text-color="#409EFF"
     >
-     <el-menu-item index="2">
-        <span slot="title">主图谱</span>
+     <el-menu-item index="2" >
+        <span slot="title">
+            <a @click="clickGraph(1)">主图谱</a>
+        </span>
       </el-menu-item>
-      <el-menu-item :index="'graph.index'" v-for="graph in graphList" :key="graph.id">
+      <el-menu-item :index="'graph.id'" v-for="graph in graphList" :key="graph.id">
         <span slot="title">{{graph.name}}</span>
     </el-menu-item>
     </el-menu>
@@ -53,8 +55,10 @@ export default {
   created () {
     if (this.$store.state.user.id) {
       getGraphList().then((response) => {
-        console.log(response.data)
         this.graphList = response.data
+        if (this.graphList.length > 0){
+            this.$store.dispatch('getNodesByGraph', {gid: this.graphList[0].id})
+        }
       })
     }
   },
@@ -74,6 +78,9 @@ export default {
     },
     deleteGraph () {
 
+    },
+    clickGraph(gid) {
+        this.$store.dispatch('getNodesByGraph', {gid: gid})
     }
   }
 }

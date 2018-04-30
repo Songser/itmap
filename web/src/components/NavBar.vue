@@ -7,9 +7,6 @@
     <div class="button-container">
       <el-row>
           <el-col :span="4" class="text-center">
-            <a class="pan-btn blue-btn" @click="addNode">添加</a>
-          </el-col>
-          <el-col :span="4" class="text-center">
             <a class="pan-btn light-blue-btn" @click="showResource">资源</a>
           </el-col>
           <el-col :span="4" class="text-center">
@@ -52,12 +49,7 @@
     </div>
   </el-menu>
   <div class="components-container">
-    <el-dialog
-    :visible.sync="addNodeDialog"
-    width="500px"
-    :append-to-body=true>
-    <add-node @closeAddNodeDialog="addNodeClose"/>
-  </el-dialog>
+    
 </div>
   </div>
 </template>
@@ -66,13 +58,11 @@
 import { mapState } from 'vuex'
 import logo from '@/assets/logo.png'
 import PanThumb from '@/components/PanThumb'
-import AddNode from '@/components/AddNode'
 
 export default {
   name: 'nav-bar',
   components: {
-    PanThumb,
-    AddNode
+    PanThumb
   },
   data () {
     return {

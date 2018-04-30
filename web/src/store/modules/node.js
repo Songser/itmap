@@ -1,148 +1,73 @@
+import http from '@/utils/request'
+
+function getNodes (gid) {
+  return http.get('/api/v1_0/graphs/' + gid + '/nodes')
+}
 const state = {
   name: 'test',
   user: '呵呵',
   desc: 'fdafsafasfasdfa',
   create_date: '2018-4-28',
-  nodes: [
-    {
-      name: '徐贱云',
-      draggable: true
-    }, {
-      name: '冯可梁',
-      category: 1,
-      draggable: true
-    }, {
-      name: '邓志荣',
-      category: 1,
-      draggable: true
-    }, {
-      name: '李荣庆',
-      category: 1,
-      draggable: true
-    }, {
-      name: '郑志勇',
-      category: 1,
-      draggable: true
-    }, {
-      name: '赵英杰',
-      category: 1,
-      draggable: true
-    }, {
-      name: '王承军',
-      category: 1,
-      draggable: true
-    }, {
-      name: '陈卫东',
-      category: 1,
-      draggable: true
-    }, {
-      name: '邹劲松',
-      category: 1,
-      draggable: true
-    }, {
-      name: '赵成',
-      category: 1,
-      draggable: true
-    }, {
-      name: '陈现忠',
-      category: 1,
-      draggable: true
-    }, {
-      name: '陶泳',
-      category: 1,
-      draggable: true
-    }, {
-      name: '王德福',
-      category: 1,
-      draggable: true
-    }],
-  links: [{
-    source: 0,
-    target: 1,
-    category: 0,
-    value: '朋友'
-  }, {
-    source: 0,
-    target: 2,
-    value: '战友'
-  }, {
-    source: 0,
-    target: 3,
-    value: '房东'
-  }, {
-    source: 0,
-    target: 4,
-    value: '朋友'
-  }, {
-    source: 1,
-    target: 2,
-    value: '表亲'
-  }, {
-    source: 0,
-    target: 5,
-    value: '朋友'
-  }, {
-    source: 4,
-    target: 5,
-    value: '姑姑'
-  }, {
-    source: 2,
-    target: 8,
-    value: '叔叔'
-  }, {
-    source: 0,
-    target: 12,
-    value: '朋友'
-  }, {
-    source: 6,
-    target: 11,
-    value: '爱人'
-  }, {
-    source: 6,
-    target: 3,
-    value: '朋友'
-  }, {
-    source: 7,
-    target: 5,
-    value: '朋友'
-  }, {
-    source: 9,
-    target: 10,
-    value: '朋友'
-  }, {
-    source: 3,
-    target: 10,
-    value: '朋友'
-  }, {
-    source: 2,
-    target: 11,
-    value: '同学'
-  }, {
-    source: 2,
-    target: 13,
-    value: '同学'
-  }
-  ]
+  nodes: [],
+  links: [],
 }
 
 const mutations = {
+  setNodes (state, val) {
+    console.log(state.nodes)
+    console.log(val)
+    state.nodes = val
+    console.log(state.nodes)
+  },
+  setLinks (state, val) {
+    console.log(val)
+    state.links = val
+  },
   setNode (state, val) {
     state.name = val.name
   },
-  addNode (state, graph) {
+  addNodes (state, graph) {
     state.nodes.push({
-      name: graph.name,
-      draggable: true
+      name: graph.name
     })
     state.links.push({
       source: state.node.name,
       target: graph.name,
       value: graph.name
     })
+  },
+  addNode (state, name) {
+    state.nodes.push({
+      name
+    })
+   
+  },
+  addLink (state, {source, target}) {
+    state.links.push({
+      source,
+      target,
+      value: ''
+    })
+  }
+}
+
+const actions = {
+  getNodesByGraph ( {commit}, {gid}){
+    getNodes(gid).then(response => {
+      const data = response.data
+      console.log(response.data)
+      data.nodes.forEach((value, index, array) => {
+          commit('addNode', value.name)
+      });
+      data.links.forEach((value, index, array) => {
+          commit('addLink', {source: value.source, target: value.target})
+      })
+    })
   }
 }
 
 export default {
   state,
-  mutations
+  mutations,
+  actions
 }

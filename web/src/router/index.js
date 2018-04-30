@@ -50,7 +50,7 @@ router.beforeResolve((to, from, next) => {
       store.commit('setUser', response.data)
       next()
     }, response => {
-      return true
+      next()
     })
   } else {
     next()

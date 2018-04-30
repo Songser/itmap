@@ -88,6 +88,7 @@ export default {
             symbolSize: 45,
             focusNodeAdjacency: true,
             roam: true,
+            draggable: true,
             categories: [{
               name: '朋友',
               itemStyle: {
