@@ -16,6 +16,8 @@ from itmap.utils import update
 relation_fields = {
     'sid': fields.Integer(attribute='source_node_id'),
     'tid': fields.Integer(attribute='target_node_id'),
+    'source': fields.String(attribute='from_node.name'),
+    'target': fields.String(attribute='to_node.name'),
     'gid': fields.Integer(attribute='graph_id'),
     'timestamp': fields.DateTime,
     'info': fields.String,
@@ -108,7 +110,6 @@ class GraphApi(Resource):
         db.session.commit()
         return graph.id, 200
 
-    
 
 class NodeApi(Resource):
 
@@ -194,6 +195,6 @@ class GraphNodeRelationApi(Resource):
         nodes = [{"name": node.name} for node in nodes]
         links = [{
             "source": Node.query.get(rel.source_node_id).name,
-            "target": Node.query.get(rel.target_node_id).name, 
+            "target": Node.query.get(rel.target_node_id).name,
             } for rel in relations]
         return {'nodes': nodes, 'links': links}

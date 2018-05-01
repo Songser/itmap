@@ -40,7 +40,7 @@ class Node(db.Model):
     __tablename__ = 'nodes'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), unique=True, index=True, nullable=True)
+    name = db.Column(db.String(64), index=True, nullable=True)
     relate_page_url = db.Column(db.String(64))
 
     is_template = db.Column(db.Boolean, default=False)  # 是否作为模板
@@ -72,6 +72,7 @@ class Graph(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True, nullable=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    graph_type = db.Column(db.String(64))
 
     nodes = db.relationship('Node', backref='graph', cascade='all, delete-orphan')
     relations = db.relationship('NodeRelation', backref='graph', cascade='all, delete-orphan')
