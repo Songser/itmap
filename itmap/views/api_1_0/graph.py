@@ -9,8 +9,7 @@ from flask_jwt_extended import (
 )
 
 from itmap.ext import db
-from itmap.models.graph import NodeRelation, Node, Graph
-from itmap.utils import update
+from itmap.models.graph import Graph
 
 
 relation_fields = {
@@ -109,92 +108,3 @@ class GraphApi(Resource):
         db.session.add(graph)
         db.session.commit()
         return graph.id, 200
-
-
-class NodeApi(Resource):
-
-    method_decorators = [jwt_required]
-
-    def put(self, nid):
-        node = Node.query.get(nid)
-        uid = get_jwt_identity()
-        data = request.json
-        data = dict(data)
-        if node is None:
-            if not (data.get('graph_id') and data.get('name')):
-                return {'msg': 'Invalid args'}, 400
-            data.update({
-                'owner_id': uid,
-            })
-            node = Node(**data)
-        elif node.owner_id != uid:
-            return {'msg': 'Not allowed to put'}, 400
-        else:
-            update(node, data)
-        db.session.add(node)
-        db.session.commit()
-        return node.id, 200
-
-    def delete(self, nid):
-        node = Node.query.get(nid)
-        if node is None:
-            return {'msg': 'Invalid nid'}, 400
-        db.session.delete(node)
-        db.session.commit()
-        return '', 200
-
-
-class NodeRelationApi(Resource):
-
-    method_decorators = [jwt_required]
-
-    def put(self):
-        data = request.json
-        data = dict(data)
-        sid = data.get('source_node_id')
-        tid = data.get('target_node_id')
-        gid = data.get('graph_id')
-        if not (sid and tid and gid):
-            return {'msg': 'Invalid args'}, 400
-        relation = NodeRelation.find_relation(sid, tid, gid)
-        uid = get_jwt_identity()
-        if relation is None:
-            data.update({
-                'owner_id': uid,
-            })
-            relation = NodeRelation(**data)
-        elif relation.owner_id != uid:
-            return {'msg': 'Not allowed to put'}, 400
-        else:
-            update(relation, data)
-        db.session.add(relation)
-        db.session.commit()
-        return '', 200
-
-    def delete(self):
-        data = request.json
-        data = dict(data)
-        sid = data.get('source_node_id')
-        tid = data.get('target_node_id')
-        gid = data.get('graph_id')
-        if not (sid and tid and gid):
-            return {'msg': 'Invalid args'}, 400
-        relation = NodeRelation.find_relation(sid, tid, gid)
-        if relation is None:
-            return {'msg': 'Invalid args'}, 400
-        db.session.delete(relation)
-        db.session.commit()
-        return '', 200
-
-class GraphNodeRelationApi(Resource):
-
-    def get(self, gid):
-        graph = Graph.query.get(gid)
-        nodes = Node.query.filter_by(graph_id=gid).all()
-        relations = NodeRelation.query.filter_by(graph_id=gid).all()
-        nodes = [{"name": node.name} for node in nodes]
-        links = [{
-            "source": Node.query.get(rel.source_node_id).name,
-            "target": Node.query.get(rel.target_node_id).name,
-            } for rel in relations]
-        return {'nodes': nodes, 'links': links}
