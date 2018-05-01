@@ -36,12 +36,13 @@
 </template>
 <script>
 import http from '@/utils/request'
+import { mapState } from 'vuex'
 
-function getGraphList () {
-  return http.get('/api/v1_0/graphs')
+function getGraphList (uid) {
+  return http.get('/api/v1_0/users/' + uid + '/graphs')
 }
-function addGraph (name) {
-  return http.post('/api/v1_0/graphs', {name})
+function addGraph (uid, name) {
+  return http.post('/api/v1_0/users/'+ uid +'/graphs', {name})
 }
 export default {
   name: 'graph-list',
@@ -52,13 +53,18 @@ export default {
       newGraphName: ''
     }
   },
+  computed:  {
+      ...mapState({
+      user_id: state => state.user.id
+    })
+  },
   created () {
-    if (this.$store.state.user.id) {
-      getGraphList().then((response) => {
+    if (this.user_id) {
+      getGraphList(this.user_id).then((response) => {
         this.graphList = response.data
-        if (this.graphList.length > 0){
-            this.$store.dispatch('getNodesByGraph', {gid: this.graphList[0].id})
-        }
+        // if (this.graphList.length > 0){
+        //     this.$store.dispatch('getNodesByGraph', {gid: this.graphList[0].id})
+        // }
       })
     }
   },
@@ -67,7 +73,7 @@ export default {
       this.dialogVisible = true
     },
     addNewGraph () {
-      addGraph(this.newGraphName).then((response) => {
+      addGraph(this.user_id, this.newGraphName).then((response) => {
         this.graphList.push({id: response.data, name: this.newGraphName})
         this.newGraphName = ''
         this.dialogVisible = false

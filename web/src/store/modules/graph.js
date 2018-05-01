@@ -1,7 +1,7 @@
 import http from '@/utils/request'
 
-function getMainGraph () {
-  return http.get('/api/v1_0/graphs')
+function getGraphApi (uid) {
+  return http.get('/api/v1_0/users/' + uid + '/graphs')
 }
 const state = {
   id: 0,
@@ -18,8 +18,8 @@ const mutations = {
 }
 
 const actions = {
-  getGraph ({commit}) {
-    getMainGraph().then((response) => {
+  getGraph ({commit}, uid) {
+    getGraphApi(uid).then((response) => {
       commit('getGraph', response.data[0])
     })
   }

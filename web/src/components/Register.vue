@@ -126,7 +126,6 @@ export default {
   },
   computed: {
     _endVal () {
-      console.log(this.endVal)
       return this.endVal
     }
   },
@@ -147,12 +146,10 @@ export default {
           this.loading = true
           register(this.loginForm.username, this.loginForm.password, this.loginForm.email)
             .then(response => {
-              console.log(response)
               this.loading = false
               this.$router.push('login')
             })
         } else {
-          console.log('error submit!!')
           return false
         }
       })

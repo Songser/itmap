@@ -20,6 +20,7 @@
 </style>
 
 <script>
+import { mapState } from 'vuex'
 import ECharts from 'vue-echarts/components/ECharts'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/chart/graph'
@@ -28,6 +29,12 @@ import 'echarts/lib/component/tooltip'
 export default {
   components: {
     chart: ECharts
+  },
+  computed: {
+    ...mapState({
+      nodes: state => state.node.nodes,
+      links: state => state.node.links,
+    })
   },
   methods: {
     addNode () {
@@ -46,11 +53,6 @@ export default {
     },
     clickNode (params) {
       this.$store.commit('setNode', params)
-    }
-  },
-  created () {
-    if (this.$store.state.user.id) {
-      this.$store.dispatch('getGraph')
     }
   },
   data: function () {
@@ -89,28 +91,7 @@ export default {
             focusNodeAdjacency: true,
             roam: true,
             draggable: true,
-            categories: [{
-              name: '朋友',
-              itemStyle: {
-                normal: {
-                  color: '#009800'
-                }
-              }
-            }, {
-              name: '战友',
-              itemStyle: {
-                normal: {
-                  color: '#4592ff'
-                }
-              }
-            }, {
-              name: '亲戚',
-              itemStyle: {
-                normal: {
-                  color: '#3592ff'
-                }
-              }
-            }],
+            categories: [],
             label: {
               normal: {
                 show: true,

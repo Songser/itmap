@@ -1,26 +1,26 @@
 import http from '@/utils/request'
 
 function getNodes (gid) {
-  return http.get('/api/v1_0/graphs/' + gid + '/nodes')
+  return http.get('/api/v1_0/graphs/' + gid)
 }
 const state = {
-  name: 'test',
-  user: '呵呵',
-  desc: 'fdafsafasfasdfa',
-  create_date: '2018-4-28',
+  name: '',
+  user: '',
+  desc: '',
+  create_date: '',
   nodes: [],
   links: [],
 }
 
 const mutations = {
+  cleanNodes (state) {
+    state.nodes = []
+    state.links = []
+  },
   setNodes (state, val) {
-    console.log(state.nodes)
-    console.log(val)
     state.nodes = val
-    console.log(state.nodes)
   },
   setLinks (state, val) {
-    console.log(val)
     state.links = val
   },
   setNode (state, val) {
@@ -55,11 +55,11 @@ const actions = {
   getNodesByGraph ( {commit}, {gid}){
     getNodes(gid).then(response => {
       const data = response.data
-      console.log(response.data)
+      // commit('cleanNodes')
       data.nodes.forEach((value, index, array) => {
           commit('addNode', value.name)
       });
-      data.links.forEach((value, index, array) => {
+      data.relations.forEach((value, index, array) => {
           commit('addLink', {source: value.source, target: value.target})
       })
     })

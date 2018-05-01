@@ -44,7 +44,6 @@ function getUser () {
 }
 
 router.beforeResolve((to, from, next) => {
-  console.log(store.state.user.id)
   if (!store.state.user.id) {
     getUser().then(response => {
       store.commit('setUser', response.data)
