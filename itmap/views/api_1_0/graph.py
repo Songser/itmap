@@ -5,7 +5,7 @@ from flask_jwt_extended import (
     jwt_required, get_jwt_identity,
 )
 
-from itmap.ext import db
+from itmap.ext import db, redis
 from itmap.models.graph import Graph
 from itmap.utils import update
 
@@ -88,6 +88,17 @@ class GraphListApi(Resource):
         db.session.add(graph)
         db.session.commit()
         return graph.id, 201
+
+
+class GraphFashionApi(Resource):
+
+    method_decorators = [jwt_required]
+
+    def get(self):
+        gids = redis.smembers('graphs_fashion')
+        gids = [int(item) for item in gids]
+        graphs = Graph.query.filter(Graph.id.in_(gids)).all()
+        return [{'id': g.id, 'name': g.name, 'owner_id': g.owner_id} for g in graphs]
 
 
 class GraphApi(Resource):
