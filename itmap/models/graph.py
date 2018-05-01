@@ -73,6 +73,7 @@ class Graph(db.Model):
     name = db.Column(db.String(64), index=True, nullable=True)
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     graph_type = db.Column(db.String(64))
+    is_private = db.Column(db.Boolean, default=False)  # 是否仅自己可见
 
     nodes = db.relationship('Node', backref='graph', cascade='all, delete-orphan')
     relations = db.relationship('NodeRelation', backref='graph', cascade='all, delete-orphan')

@@ -1,15 +1,13 @@
 # coding=utf-8
 
-from collections import OrderedDict
-
-from flask import request
-from flask_restful import Resource, fields, marshal, marshal_with, reqparse
+from flask_restful import Resource, fields, marshal_with, reqparse
 from flask_jwt_extended import (
     jwt_required, get_jwt_identity,
 )
 
 from itmap.ext import db
 from itmap.models.graph import Graph
+from itmap.utils import update
 
 
 relation_fields = {
@@ -25,15 +23,18 @@ relation_fields = {
     'line_type': fields.String,
 }
 
+
 class FromNodeField(fields.Raw):
     def format(self, value):
         nodes = value.all()
         return [n.source_node_id for n in nodes]
 
+
 class ToNodeField(fields.Raw):
     def format(self, value):
         nodes = value.all()
         return [n.target_node_id for n in nodes]
+
 
 node_fields = {
     'id': fields.Integer,
@@ -57,23 +58,36 @@ graph_fields = {
 }
 
 
+parser = reqparse.RequestParser()
+parser.add_argument('name', trim=True)
+parser.add_argument('graph_type')
+parser.add_argument('is_private', type=bool)
+
+
 class GraphListApi(Resource):
 
-    @jwt_required
-    def get(self):
-        uid = get_jwt_identity()
-        graphs = Graph.query.filter_by(owner_id=uid).all()
+    method_decorators = [jwt_required]
+
+    def get(self, uid):
+        current_uid = get_jwt_identity()
+        if uid == current_uid:
+            graphs = Graph.query.filter_by(owner_id=uid).all()
+        else:
+            graphs = Graph.query.filter_by(owner_id=uid, is_private=False).all()
         return [{'id': g.id, 'name': g.name, 'owner_id': g.owner_id} for g in graphs]
 
-    @jwt_required
-    def post(self):
-        uid = get_jwt_identity()
-        data = request.json
-        data = dict(data)
-        graph = Graph(name=data['name'], owner_id=uid)
+    def post(self, uid):
+        current_uid = get_jwt_identity()
+        if uid != current_uid:
+            return {'msg': 'Not Allowed to post'}, 400
+        vals = dict(parser.parse_args())
+        vals.update({
+            'owner_id': uid,
+        })
+        graph = Graph(**vals)
         db.session.add(graph)
         db.session.commit()
-        return graph.id, 200
+        return graph.id, 201
 
 
 class GraphApi(Resource):
@@ -93,18 +107,17 @@ class GraphApi(Resource):
             return {'msg': 'Invalid gid'}, 400
         db.session.delete(graph)
         db.session.commit()
-        return '', 200
+        return '', 204
 
     def put(self, gid):
         graph = Graph.query.get(gid)
         uid = get_jwt_identity()
-        name = request.form['name']
         if graph is None:
-            graph = Graph(name=name, owner_id=uid)
+            return {'msg': 'Invalid gid'}, 400
         elif graph.owner_id != uid:
             return {'msg': 'Not allowed to put'}, 400
         else:
-            graph.name = name
-        db.session.add(graph)
-        db.session.commit()
-        return graph.id, 200
+            update(graph, dict(parser.parse_args()))
+            db.session.add(graph)
+            db.session.commit()
+            return graph.id, 201

@@ -1,16 +1,41 @@
 # coding=utf-8
 
-from collections import OrderedDict
-
-from flask import request
-from flask_restful import Resource, fields, marshal, marshal_with, reqparse
+from flask_restful import Resource, reqparse
 from flask_jwt_extended import (
     jwt_required, get_jwt_identity,
 )
 
 from itmap.ext import db
-from itmap.models.graph import Node
+from itmap.models.graph import Node, Graph
 from itmap.utils import update
+
+parser = reqparse.RequestParser(bundle_errors=True)
+parser.add_argument('name', trim=True)
+parser.add_argument('relate_page_url')
+parser.add_argument('is_template', type=bool)
+parser.add_argument('color', choices=('red', 'green', 'yellow', 'blue'), help='Bad choice: {error_msg}')
+parser.add_argument('size', choices=('S', 'M', 'L'), help='Bad choice: {error_msg}')
+parser.add_argument('shape', choices=('circle', 'square', 'rectangle'), help='Bad choice: {error_msg}')
+parser.add_argument('graph_id', type=int, required=True)
+
+
+class NodePostApi(Resource):
+
+    method_decorators = [jwt_required]
+
+    def post(self):
+        uid = get_jwt_identity()
+        vals = dict(parser.parse_args())
+        graph = Graph.query.get(vals['graph_id'])
+        if not (graph and graph.owner_id == uid):
+            return {'msg': 'Not allowed to post'}, 400
+        vals.update({
+            'owner_id': uid,
+        })
+        node = Node(**vals)
+        db.session.add(node)
+        db.session.commit()
+        return node.id, 201
 
 
 class NodeApi(Resource):
@@ -20,22 +45,17 @@ class NodeApi(Resource):
     def put(self, nid):
         node = Node.query.get(nid)
         uid = get_jwt_identity()
-        data = request.json
-        data = dict(data)
         if node is None:
-            if not (data.get('graph_id') and data.get('name')):
-                return {'msg': 'Invalid args'}, 400
-            data.update({
-                'owner_id': uid,
-            })
-            node = Node(**data)
+            return {'msg': 'Invalid nid'}, 400
         elif node.owner_id != uid:
             return {'msg': 'Not allowed to put'}, 400
         else:
+            data = dict(parser.parse_args())
+            data.pop('graph_id')  # 不应该允许修改graph_id
             update(node, data)
-        db.session.add(node)
-        db.session.commit()
-        return node.id, 200
+            db.session.add(node)
+            db.session.commit()
+            return node.id, 201
 
     def delete(self, nid):
         node = Node.query.get(nid)
@@ -43,4 +63,4 @@ class NodeApi(Resource):
             return {'msg': 'Invalid nid'}, 400
         db.session.delete(node)
         db.session.commit()
-        return '', 200
+        return '', 204

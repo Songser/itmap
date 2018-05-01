@@ -8,7 +8,7 @@ def send_async_email(app, msg):
         mail.send(msg)
 
 
-def update(model, data):
+def update(instance, data):
     for key, value in data.items():
-        if hasattr(model, key):
-            setattr(model, key, value)
+        if hasattr(instance, key) and value is not None:
+            setattr(instance, key, value)
