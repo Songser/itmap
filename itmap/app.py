@@ -3,11 +3,14 @@
 import click
 import code
 import sys
+
 from flask import Flask
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib import rediscli
 from flask_cors import CORS
+from flask_migrate import Migrate
+
 from itmap.ext import db, mail, redis, login_manager, jwt
 from itmap.models.user import Role, User
 from itmap.models.graph import NodeRelation, Node, Graph
@@ -23,6 +26,8 @@ def create_app():
     redis.init_app(app)
     login_manager.init_app(app)
     jwt.init_app(app)
+
+    migrate = Migrate(app, db)
 
     admin = Admin(app, name='itmap', template_mode='bootstrap3')
     admin.add_view(ModelView(User, db.session))

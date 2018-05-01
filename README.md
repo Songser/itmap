@@ -17,7 +17,14 @@ docker-compose up -d
 ### INITIAL DATABASE
 
 ```
-docker-compose exec server flask initdb
+TEST ENV:
+ - docker-compose exec server flask initdb
+PRODUCT ENV:
+ just the third step is always need.
+ - docker-compose exec server flask db init
+ - docker-compose exec server flask db migrate
+ - docker-compose exec server flask db upgrade
+
 ```
 
 ### IPYTHON
