@@ -8,8 +8,9 @@ Flask-Security
 Flask-Redis
 flask-restful
 flask-jwt-extended
+flask-cors
+Flask-Migrate
 flasgger
 arrow
 ipython
 psycopg2
-flask-cors
