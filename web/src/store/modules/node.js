@@ -18,10 +18,20 @@ const mutations = {
     state.links = []
   },
   setNodes (state, val) {
-    state.nodes = val
+    state.nodes = []
+    val.forEach((value, index, array) => {
+      state.nodes.push({'name': value.name})
+    })
   },
   setLinks (state, val) {
-    state.links = val
+    state.links = []
+    val.forEach((value, index, array) => {
+      state.links.push({
+        source: value.source,
+        target: value.target,
+        value: '',
+      })
+    })
   },
   setNode (state, val) {
     state.name = val.name
@@ -55,13 +65,16 @@ const actions = {
   getNodesByGraph ( {commit}, {gid}){
     getNodes(gid).then(response => {
       const data = response.data
+
+      commit('setLinks', data.relations)
+      commit('setNodes', data.nodes)
       // commit('cleanNodes')
-      data.nodes.forEach((value, index, array) => {
-          commit('addNode', value.name)
-      });
-      data.relations.forEach((value, index, array) => {
-          commit('addLink', {source: value.source, target: value.target})
-      })
+      // data.nodes.forEach((value, index, array) => {
+      //     commit('addNode', value.name)
+      // });
+      // data.relations.forEach((value, index, array) => {
+      //     commit('addLink', {source: value.source, target: value.target})
+      // })
     })
   }
 }

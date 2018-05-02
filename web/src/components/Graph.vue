@@ -1,6 +1,6 @@
 <template>
   <div class="main-graph">
-    <chart :options="graph" @click="clickNode"/>
+    <chart ref="graph" :options="graph" @click="clickNode"/>
   </div>
 </template>
 
@@ -35,6 +35,27 @@ export default {
       nodes: state => state.node.nodes,
       links: state => state.node.links,
     })
+  },
+  created () {
+    
+  },
+  watch: {
+    nodes (value) {
+      console.log(value)
+      let graph = this.$refs.graph
+      let options = graph.options
+      options.series[0].data = this.nodes
+      options.series[0].links = this.links
+      graph.mergeOptions(options)
+    },
+    // links (value) {
+    //   console.log(value)
+    //   let graph = this.$refs.graph
+    //   let options = graph.options
+    //   options.series[0].data = this.nodes
+    //   options.series[0].links = this.links
+    //   graph.mergeOptions(options)
+    // }
   },
   methods: {
     addNode () {

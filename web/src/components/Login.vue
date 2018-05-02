@@ -33,14 +33,8 @@
 <script>
 import { isvalidUsername } from '@/utils/validate'
 import SocialSign from '@/components/SocialSignin'
-import request from '@/utils/request'
 import { setToken } from '@/utils/auth'
-import { sha256 } from 'js-sha256'
-
-function login (username, pwd) {
-  let password = sha256(pwd)
-  return request.post('/auth/login', {username, password})
-}
+import { login } from '@/api/user'
 
 export default {
   components: { SocialSign },

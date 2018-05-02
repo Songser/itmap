@@ -12,13 +12,15 @@
       text-color="#bfcbd9"
       active-text-color="#409EFF"
     >
-     <el-menu-item index="2" >
+     <el-menu-item index="'graph.id'" v-for="graph in fashionList" :key="graph.name" >
         <span slot="title">
-            <a @click="clickGraph(1)">主图谱</a>
+            <a @click="clickGraph(graph.id)">{{graph.name}}</a>
         </span>
       </el-menu-item>
       <el-menu-item :index="'graph.id'" v-for="graph in graphList" :key="graph.id">
-        <span slot="title">{{graph.name}}</span>
+        <span slot="title">
+            <a @click="clickGraph(graph.id)">{{graph.name}}</a>
+        </span>
     </el-menu-item>
     </el-menu>
     <el-dialog
@@ -38,16 +40,17 @@
 import http from '@/utils/request'
 import { mapState } from 'vuex'
 
-function getGraphList (uid) {
-  return http.get('/api/v1_0/users/' + uid + '/graphs')
-}
-function addGraph (uid, name) {
-  return http.post('/api/v1_0/users/'+ uid +'/graphs', {name})
-}
+import { 
+    getFashionGraphs,
+    getGraphList,
+    addGraph
+} from '@/api/graph'
+
 export default {
   name: 'graph-list',
   data () {
     return {
+      fashionList: [],
       graphList: [],
       dialogVisible: false,
       newGraphName: ''
@@ -59,6 +62,9 @@ export default {
     })
   },
   created () {
+    getFashionGraphs().then((response) => {
+        this.fashionList = response.data
+    })
     if (this.user_id) {
       getGraphList(this.user_id).then((response) => {
         this.graphList = response.data

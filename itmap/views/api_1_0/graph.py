@@ -92,8 +92,6 @@ class GraphListApi(Resource):
 
 class GraphFashionApi(Resource):
 
-    method_decorators = [jwt_required]
-
     def get(self):
         gids = redis.smembers('graphs_fashion')
         gids = [int(item) for item in gids]

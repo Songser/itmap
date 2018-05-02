@@ -57,13 +57,7 @@
 
 <script>
 import { isvalidateEmail } from '@/utils/validate'
-import { sha256 } from 'js-sha256'
-import http from '@/utils/request'
-
-function register (username, pwd, email) {
-  let password = sha256(pwd)
-  return http.post('/auth/register', {username, password, email})
-}
+import { register } from '@/api/user'
 
 export default {
   name: 'register',
