@@ -17,7 +17,7 @@ relation_fields = {
     'target': fields.String(attribute='to_node.name'),
     'gid': fields.Integer(attribute='graph_id'),
     'timestamp': fields.DateTime,
-    'info': fields.String,
+    'value': fields.String(attribute='info'),
     'color': fields.String,
     'is_dual_way': fields.Boolean,
     'line_type': fields.String,
@@ -53,6 +53,7 @@ graph_fields = {
     'id': fields.Integer,
     'name': fields.String,
     'owner_id': fields.Integer,
+    'owner_name': fields.String(attribute='owner.name'),
     'nodes': fields.List(fields.Nested(node_fields)),
     'relations': fields.List(fields.Nested(relation_fields)),
 }
