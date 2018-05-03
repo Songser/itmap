@@ -71,7 +71,8 @@ def initdb():
     for index, email in enumerate(app.config['ITMAP_ADMINS']):
         user = User.create_user(email=email, password=app.config['ITMAP_ADMIN_PASSWORD'], username='admin{}'.format(index))
         users.append(user)
-    if app.debug == True:
+    #if app.debug == True:
+    if True:
         user = users[0]
 
         graph = Graph(name='test_graph', owner_id=user.id)
