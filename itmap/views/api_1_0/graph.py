@@ -44,6 +44,7 @@ node_fields = {
     'color': fields.String,
     'size': fields.String,
     'shape': fields.String,
+    'description': fields.String,
     'gid': fields.Integer,
     'from_nodes': FromNodeField,
     'to_nodes': ToNodeField,

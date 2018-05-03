@@ -17,6 +17,7 @@ parser.add_argument('color', choices=('red', 'green', 'yellow', 'blue'), help='B
 parser.add_argument('size', choices=('S', 'M', 'L'), help='Bad choice: {error_msg}')
 parser.add_argument('shape', choices=('circle', 'square', 'rectangle'), help='Bad choice: {error_msg}')
 parser.add_argument('graph_id', type=int, required=True)
+parser.add_argument('description')
 
 
 class NodePostApi(Resource):

@@ -48,6 +48,7 @@ class Node(db.Model):
     color = db.Column(db.String(255))
     size = db.Column(db.String(255))  # 大小
     shape = db.Column(db.String(255))  # 形状
+    description = db.Column(db.String(255))
 
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     graph_id = db.Column(db.Integer, db.ForeignKey('graphs.id'))
