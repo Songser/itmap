@@ -49,7 +49,7 @@
     </div>
   </el-menu>
   <div class="components-container">
-    
+
 </div>
   </div>
 </template>

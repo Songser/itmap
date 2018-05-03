@@ -14,12 +14,12 @@
     >
      <el-menu-item index="'graph.id'" v-for="graph in fashionList" :key="graph.name" >
         <span slot="title">
-            <a @click="clickGraph(graph.id)">{{graph.name}}</a>
+            <a @click="clickGraph(graph.id, graph.name)">{{graph.name}}</a>
         </span>
       </el-menu-item>
       <el-menu-item :index="'graph.id'" v-for="graph in graphList" :key="graph.id">
         <span slot="title">
-            <a @click="clickGraph(graph.id)">{{graph.name}}</a>
+            <a @click="clickGraph(graph.id, graph.name)">{{graph.name}}</a>
         </span>
     </el-menu-item>
     </el-menu>
@@ -40,10 +40,10 @@
 import http from '@/utils/request'
 import { mapState } from 'vuex'
 
-import { 
-    getFashionGraphs,
-    getGraphList,
-    addGraph
+import {
+  getFashionGraphs,
+  getGraphList,
+  addGraph
 } from '@/api/graph'
 
 export default {
@@ -56,21 +56,24 @@ export default {
       newGraphName: ''
     }
   },
-  computed:  {
-      ...mapState({
-      user_id: state => state.user.id
+  computed: {
+    ...mapState({
+      user_id: state => state.user.id,
+      name: state => state.graph.name
     })
   },
   created () {
     getFashionGraphs().then((response) => {
-        this.fashionList = response.data
+      this.fashionList = response.data
+      if (this.fashionList.length > 0) {
+        this.$store.commit('setGraphName', this.fashionList[0].name)
+        this.$store.dispatch('getNodesByGraph', {gid: this.fashionList[0].id})
+      }
     })
     if (this.user_id) {
       getGraphList(this.user_id).then((response) => {
         this.graphList = response.data
-        // if (this.graphList.length > 0){
-        //     this.$store.dispatch('getNodesByGraph', {gid: this.graphList[0].id})
-        // }
+        console.log(this.graphList)
       })
     }
   },
@@ -91,8 +94,9 @@ export default {
     deleteGraph () {
 
     },
-    clickGraph(gid) {
-        this.$store.dispatch('getNodesByGraph', {gid: gid})
+    clickGraph (gid, name) {
+      this.$store.commit('setGraph', {id: gid, name})
+      this.$store.dispatch('getNodesByGraph', {gid: gid})
     }
   }
 }

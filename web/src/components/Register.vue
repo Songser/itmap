@@ -139,7 +139,7 @@ export default {
         if (valid) {
           this.loading = true
           register(this.loginForm.username, this.loginForm.password, this.loginForm.email)
-            .then(response => {
+            .then((response) => {
               this.loading = false
               this.$router.push('login')
             })

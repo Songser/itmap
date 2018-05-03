@@ -9,8 +9,11 @@
   <el-form-item label="名称">
     <el-input v-model="name"></el-input>
   </el-form-item>
-  <el-form-item label="关系名">
-    <el-input v-model="relName"></el-input>
+  <el-form-item label="关系">
+    <el-input v-model="info"></el-input>
+  </el-form-item>
+  <el-form-item label="颜色">
+    <el-color-picker v-model="color"></el-color-picker>
   </el-form-item>
   <el-form-item label="描述">
     <el-input type="textarea" v-model="desc"></el-input>
@@ -29,12 +32,19 @@ export default {
     return {
       name: '',
       desc: '',
-      relName: ''
+      info: '',
+      color: ''
     }
   },
   methods: {
     onSubmit () {
-      this.$store.commit('addNode', {})
+      console.log(this.color)
+      this.$store.dispatch('addNode', {
+        name: this.name,
+        desc: this.desc,
+        color: this.color,
+        graphId: this.$store.state.graph.id
+      })
       this.$emit('closeAddNodeDialog')
     },
     cancle () {

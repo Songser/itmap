@@ -1,15 +1,15 @@
 import http from '@/utils/request'
+import { addNodeApi } from '@/api/graph'
 
 function getNodes (gid) {
   return http.get('/api/v1_0/graphs/' + gid)
 }
 const state = {
   name: '',
-  user: '',
   desc: '',
   create_date: '',
   nodes: [],
-  links: [],
+  links: []
 }
 
 const mutations = {
@@ -18,20 +18,16 @@ const mutations = {
     state.links = []
   },
   setNodes (state, val) {
-    state.nodes = []
+    let nodes = []
+    console.log(val)
     val.forEach((value, index, array) => {
-      state.nodes.push({'name': value.name})
+      nodes.push({'name': value.name})
     })
+    state.nodes = nodes
   },
   setLinks (state, val) {
-    state.links = []
-    val.forEach((value, index, array) => {
-      state.links.push({
-        source: value.source,
-        target: value.target,
-        value: '',
-      })
-    })
+    let links = []
+    state.links = val
   },
   setNode (state, val) {
     state.name = val.name
@@ -50,7 +46,6 @@ const mutations = {
     state.nodes.push({
       name
     })
-   
   },
   addLink (state, {source, target}) {
     state.links.push({
@@ -62,19 +57,16 @@ const mutations = {
 }
 
 const actions = {
-  getNodesByGraph ( {commit}, {gid}){
+  getNodesByGraph ({commit}, {gid}) {
     getNodes(gid).then(response => {
       const data = response.data
-
       commit('setLinks', data.relations)
       commit('setNodes', data.nodes)
-      // commit('cleanNodes')
-      // data.nodes.forEach((value, index, array) => {
-      //     commit('addNode', value.name)
-      // });
-      // data.relations.forEach((value, index, array) => {
-      //     commit('addLink', {source: value.source, target: value.target})
-      // })
+    })
+  },
+  addNode ({commit}, data) {
+    addNodeApi(data).then(response => {
+      console.log('dddddd')
     })
   }
 }

@@ -6,14 +6,18 @@ function getGraphApi (uid) {
 const state = {
   id: 0,
   name: '',
-  ownerId: 0
+  ownerId: 0,
+  ownerName: ''
 }
 
 const mutations = {
-  getGraph (state, {id, name, ownerId}) {
+  setGraph (state, {id, name, ownerId}) {
     state.id = id
     state.name = name
     state.ownerId = ownerId
+  },
+  setGraphName (state, name) {
+    state.name = name
   }
 }
 
