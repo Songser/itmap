@@ -4,7 +4,7 @@
     <el-input v-model="graph.name" disabled></el-input>
   </el-form-item>
   <el-form-item label="相关节点">
-    <el-input v-model="node" disabled></el-input>
+    <el-input v-model="node.name" disabled></el-input>
   </el-form-item>
   <el-form-item label="名称">
     <el-input v-model="name"></el-input>
@@ -14,6 +14,17 @@
   </el-form-item>
   <el-form-item label="颜色">
     <el-color-picker v-model="color"></el-color-picker>
+  </el-form-item>
+  <el-form-item label="大小">
+    <el-radio v-model="size" label="S">小</el-radio>
+    <el-radio v-model="size" label="M">中</el-radio>
+    <el-radio v-model="size" label="L">大</el-radio>
+  </el-form-item>
+  <el-form-item label="形状">
+    <el-radio v-model="shape" label="circle">圆形</el-radio>
+    <el-radio v-model="shape" label="roundRect">矩形</el-radio>
+    <el-radio v-model="shape" label="triangle">三角形</el-radio>
+    <el-radio v-model="shape" label="diamond">棱形</el-radio>
   </el-form-item>
   <el-form-item label="描述">
     <el-input type="textarea" v-model="desc"></el-input>
@@ -33,17 +44,23 @@ export default {
       name: '',
       desc: '',
       info: '',
-      color: ''
+      color: '#c23531',
+      size: 'M',
+      shape: 'circle'
     }
   },
   methods: {
     onSubmit () {
-      console.log(this.color)
       this.$store.dispatch('addNode', {
+        graphId: this.graph.id,
         name: this.name,
-        desc: this.desc,
         color: this.color,
-        graphId: this.$store.state.graph.id
+        shape: this.shape,
+        size: this.size,
+        source_id: this.node.id,
+        source: this.node.name,
+        target: this.name,
+        value: this.info
       })
       this.$emit('closeAddNodeDialog')
     },
@@ -52,8 +69,8 @@ export default {
     }
   },
   computed: mapState({
-    node: state => state.node.name,
-    user: state => state.user.name,
+    node: state => state.node,
+    user: state => state.user,
     graph: state => state.graph
   })
 }

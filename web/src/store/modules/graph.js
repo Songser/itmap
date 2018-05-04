@@ -11,10 +11,11 @@ const state = {
 }
 
 const mutations = {
-  setGraph (state, {id, name, ownerId}) {
-    state.id = id
-    state.name = name
-    state.ownerId = ownerId
+  setGraph (state, graph) {
+    state.id = graph.id
+    state.name = graph.name
+    state.ownerId = graph.ownerId
+    state.ownerName = graph.ownerName
   },
   setGraphName (state, name) {
     state.name = name

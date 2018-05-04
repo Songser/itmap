@@ -13,11 +13,21 @@ export function addGraph (uid, name) {
 }
 
 export function addNodeApi (data) {
-  console.log(data)
   return request.post('/api/v1_0/nodes', {
     graph_id: data.graphId,
     name: data.name,
     color: data.color,
-    description: data.desc
+    description: data.desc,
+    size: data.size,
+    shape: data.shape
+  })
+}
+
+export function addLinkApi (data) {
+  return request.post('/api/v1_0/node_rels', {
+    source_node_id: data.source_id,
+    target_node_id: data.target_id,
+    graph_id: data.graphId,
+    info: data.value
   })
 }

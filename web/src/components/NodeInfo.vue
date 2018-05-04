@@ -59,7 +59,7 @@ export default {
   },
   computed: mapState({
     name: state => state.node.name,
-    user: state => state.node.user,
+    user: state => state.graph.ownerName,
     desc: state => state.node.desc,
     create_date: state => state.node.create_date,
     graph: state => state.graph.name

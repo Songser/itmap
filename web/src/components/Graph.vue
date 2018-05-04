@@ -41,7 +41,6 @@ export default {
   },
   watch: {
     nodes (value) {
-      console.log(value)
       let graph = this.$refs.graph
       let options = graph.options
       options.series[0].data = this.nodes
@@ -50,22 +49,14 @@ export default {
     }
   },
   methods: {
-    addNode () {
-      let graph = this.graph
-      let data = graph.series[0].data
-      data.push({
-        name: '呵呵',
-        draggable: true
-      })
-      let link = graph.series[0].links
-      link.push({
-        source: '徐贱云',
-        target: '呵呵',
-        value: '朋友'
-      })
-    },
     clickNode (params) {
-      this.$store.commit('setNode', params)
+      let data = params.data
+      this.$store.commit('setNode', {
+        id: data.nid,
+        name: data.name,
+        desc: data.desc,
+        create_date: data.create_date
+      })
     }
   },
   data: function () {

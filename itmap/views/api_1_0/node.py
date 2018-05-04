@@ -15,7 +15,7 @@ parser.add_argument('relate_page_url')
 parser.add_argument('is_template', type=bool)
 parser.add_argument('color')
 parser.add_argument('size', choices=('S', 'M', 'L'), help='Bad choice: {error_msg}')
-parser.add_argument('shape', choices=('circle', 'square', 'rectangle'), help='Bad choice: {error_msg}')
+parser.add_argument('shape', choices=('circle', 'triangle', 'roundRect', 'diamond'), help='Bad choice: {error_msg}')
 parser.add_argument('graph_id', type=int, required=True)
 parser.add_argument('description')
 

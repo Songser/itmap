@@ -14,12 +14,12 @@
     >
      <el-menu-item index="'graph.id'" v-for="graph in fashionList" :key="graph.name" >
         <span slot="title">
-            <a @click="clickGraph(graph.id, graph.name)">{{graph.name}}</a>
+            <a @click="clickGraph(graph)">{{graph.name}}</a>
         </span>
       </el-menu-item>
       <el-menu-item :index="'graph.id'" v-for="graph in graphList" :key="graph.id">
         <span slot="title">
-            <a @click="clickGraph(graph.id, graph.name)">{{graph.name}}</a>
+            <a @click="clickGraph(graph)">{{graph.name}}</a>
         </span>
     </el-menu-item>
     </el-menu>
@@ -66,14 +66,13 @@ export default {
     getFashionGraphs().then((response) => {
       this.fashionList = response.data
       if (this.fashionList.length > 0) {
-        this.$store.commit('setGraphName', this.fashionList[0].name)
+        this.$store.commit('setGraph', this.fashionList[0])
         this.$store.dispatch('getNodesByGraph', {gid: this.fashionList[0].id})
       }
     })
     if (this.user_id) {
       getGraphList(this.user_id).then((response) => {
         this.graphList = response.data
-        console.log(this.graphList)
       })
     }
   },
@@ -94,9 +93,9 @@ export default {
     deleteGraph () {
 
     },
-    clickGraph (gid, name) {
-      this.$store.commit('setGraph', {id: gid, name})
-      this.$store.dispatch('getNodesByGraph', {gid: gid})
+    clickGraph (graph) {
+      this.$store.commit('setGraph', {graph})
+      this.$store.dispatch('getNodesByGraph', {gid: graph.id})
     }
   }
 }
