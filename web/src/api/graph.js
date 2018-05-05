@@ -31,3 +31,11 @@ export function addLinkApi (data) {
     info: data.value
   })
 }
+
+export function getNodesApi (gid) {
+  return request.get('/api/v1_0/graphs/' + gid)
+}
+
+export function delNodeApi (id) {
+  return request.delete('/api/v1_0/nodes/' + id)
+}

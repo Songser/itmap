@@ -74,6 +74,7 @@ export default {
         tooltip: {},
         animationDurationUpdate: 1500,
         animationEasingUpdate: 'quinticInOut',
+        edgeSymbol: ['circle', 'arrow'],
         label: {
           normal: {
             show: true,

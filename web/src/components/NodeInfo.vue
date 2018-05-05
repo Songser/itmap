@@ -7,7 +7,7 @@
     <div style="position:relative;">
       <pan-thumb class="panThumb" :image="avatar"></pan-thumb>
       <div style="padding-top:35px;" class='progress-item'>
-        <h3>{{name}}</h3>
+        <h3>节点: {{name}}</h3>
       </div>
       <div class='progress-item'>
         <span>图谱:</span>
@@ -26,15 +26,28 @@
         <span>{{create_date}}</span>
       </div>
       <div>
-        <el-button type="primary" icon="el-icon-circle-plus-outline"  circle @click="showAddNodeDialog"></el-button>
+        <el-button type="success" icon="el-icon-circle-plus-outline"  circle @click="showAddNodeDialog"></el-button>
+        <el-button type="success" icon="el-icon-remove-outline"  circle @click="showDeleteNodeDialog"></el-button>
       </div>
     </div>
   </el-card>
   <el-dialog
+    title="添加节点"
     :visible.sync="addNodeDialog"
     width="500px"
     :append-to-body=true>
     <add-node @closeAddNodeDialog="addNodeClose"/>
+  </el-dialog>
+  <el-dialog
+    title="删除节点"
+    :visible.sync="delNodeDialog"
+    width="500px"
+    :append-to-body=true>
+    <span>删除节点{{name}}</span>
+    <span slot="footer" class="dialog-footer">
+    <el-button @click="delNodeDialog = false">取 消</el-button>
+    <el-button type="primary" @click="delNodeClose">确 定</el-button>
+  </span>
   </el-dialog>
 </div>
 </template>
@@ -54,10 +67,12 @@ export default {
         pageviews_count: 1024
       },
       avatar: logo,
-      addNodeDialog: false
+      addNodeDialog: false,
+      delNodeDialog: false
     }
   },
   computed: mapState({
+    id: state => state.node.id,
     name: state => state.node.name,
     user: state => state.graph.ownerName,
     desc: state => state.node.desc,
@@ -70,6 +85,13 @@ export default {
     },
     addNodeClose () {
       this.addNodeDialog = false
+    },
+    showDeleteNodeDialog () {
+      this.delNodeDialog = true
+    },
+    delNodeClose () {
+      this.delNodeDialog = false
+      this.$store.dispatch('delNode', {id: this.id, name: this.name})
     }
   }
 }

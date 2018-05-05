@@ -37,7 +37,6 @@
   </div>
 </template>
 <script>
-import http from '@/utils/request'
 import { mapState } from 'vuex'
 
 import {

@@ -1,9 +1,10 @@
-import http from '@/utils/request'
-import { addNodeApi, addLinkApi } from '@/api/graph'
+import {
+  addNodeApi,
+  addLinkApi,
+  getNodesApi,
+  delNodeApi
+} from '@/api/graph'
 
-function getNodes (gid) {
-  return http.get('/api/v1_0/graphs/' + gid)
-}
 const state = {
   id: 0,
   name: '',
@@ -14,10 +15,6 @@ const state = {
 }
 
 const mutations = {
-  cleanNodes (state) {
-    state.nodes = []
-    state.links = []
-  },
   setNodes (state, val) {
     let nodes = []
     val.forEach((value, index, array) => {
@@ -53,18 +50,13 @@ const mutations = {
     state.desc = val.description
     state.create_date = val.create_date
   },
-  addNodes (state, graph) {
-    state.nodes.push({
-      name: graph.name
-    })
-    state.links.push({
-      source: state.node.name,
-      target: graph.name,
-      value: graph.name
-    })
-  },
   addNode (state, value) {
-    let node = {name: value.name}
+    let node = {
+      nid: value.target_id,
+      name: value.name,
+      desc: value.desc,
+      create_date: value.create_date
+    }
     if (value.color) {
       node['itemStyle'] = { 'color': value.color }
     }
@@ -86,12 +78,28 @@ const mutations = {
       target,
       value
     })
+  },
+  delNode (state, name) {
+    let nodes = []
+    let links = []
+    for (let n of state.nodes) {
+      if (name !== n.name) {
+        nodes.push(n)
+      }
+    }
+    for (let l of state.links) {
+      if (name !== l.source || name !== l.target) {
+        links.push(l)
+      }
+    }
+    state.nodes = nodes
+    state.links = links
   }
 }
 
 const actions = {
   getNodesByGraph ({commit}, {gid}) {
-    getNodes(gid).then(response => {
+    getNodesApi(gid).then(response => {
       const data = response.data
       commit('setGraph', {id: data.id,
         name: data.name,
@@ -100,20 +108,36 @@ const actions = {
       })
       commit('setLinks', data.relations)
       commit('setNodes', data.nodes)
-      commit('setNode', data.nodes[0])
+      if (data.nodes.length > 0) {
+        commit('setNode', data.nodes[0])
+      } else {
+        commit('setNode', {
+          id: 0,
+          name: '',
+          desc: '',
+          create_date: ''
+        })
+      }
     })
   },
   addNode ({commit}, data) {
     addNodeApi(data).then(response => {
-      commit('addNode', data)
       data['target_id'] = response.data
-      addLinkApi(data).then(response => {
-        commit('addLink', {
-          source: data.source,
-          target: data.target,
-          value: data.value
+      commit('addNode', data)
+      if (data.source && data.target) {
+        addLinkApi(data).then(response => {
+          commit('addLink', {
+            source: data.source,
+            target: data.target,
+            value: data.value
+          })
         })
-      })
+      }
+    })
+  },
+  delNode ({commit}, {id, name}) {
+    delNodeApi(id).then(response => {
+      commit('delNode', name)
     })
   }
 }
