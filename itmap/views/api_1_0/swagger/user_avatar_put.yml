@@ -1,16 +1,16 @@
-node
-create node
+user avatar
+update user avatar (avatar文件放入request的body中)
 ---
 tags:
-  - node
+  - user_avatar
 parameters:
-- name: nid
+- name: uid
   in: path
   type: integer
-  description: node id
+  description: user id
   required: true
 responses:
-  204:
+  201:
     description: null
   400:
     description: 默认错误返回

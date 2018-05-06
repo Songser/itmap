@@ -1,6 +1,8 @@
 # coding=utf-8
 
-from collections import OrderedDict
+import os
+
+from flask import request
 from flask_restful import Resource, fields, marshal, marshal_with, reqparse
 from flask_jwt_extended import (
     jwt_required, get_jwt_identity,
@@ -21,3 +23,49 @@ class UserApi(Resource):
         if not user:
             return {'msg': 'Invalid args'}, 400
         return user.to_dict, 200
+
+
+class UserAvatarApi(Resource):
+
+    method_decorators = [jwt_required]
+
+    def get(self, uid):
+        """
+        file: swagger/user_avatar_get.yml
+        """
+        user = User.query.get(uid)
+        if not user:
+            return {'msg': 'Invalid args'}, 400
+        path = user.avatar
+        if not os.path.isfile(path):
+            return {'msg': 'Upload Avatar first'}, 400
+        res = None
+        with open(path, 'rb') as fp:
+            res = fp.read()
+        return {'avatar': res.hex()}, 200
+
+    def put(self, uid):
+        """
+        file: swagger/user_avatar_put.yml
+        """
+        user = User.query.get(uid)
+        if not user:
+            return {'msg': 'Invalid args'}, 400
+        path = user.avatar
+        print(os.path.exists('/itmap/avatars/'))
+        with open(path, 'wb') as fp:
+            fp.write(request.get_data())
+        return '', 201
+
+    def delete(self, uid):
+        """
+        file: swagger/user_avatar_delete.yml
+        """
+        user = User.query.get(uid)
+        if not user:
+            return {'msg': 'Invalid args'}, 400
+        path = user.avatar
+        if not os.path.isfile(path):
+            return {'msg': 'Upload Avatar first'}, 400
+        os.remove(path)
+        return '', 204

@@ -108,8 +108,9 @@ class User(db.Model, UserMixin):
             email = email.encode('utf-8')
         return hashlib.md5(email).hexdigest()
 
+    @property
     def avatar(self):
-        return '{}{}.jpg'.format(current_app.config['AVATAR_BASE_URL'], self.email_md5)
+        return '{}{}.jpg'.format(current_app.config['AVATAR_DIR'], self.email_md5)
 
     @staticmethod
     def generate_password(password):

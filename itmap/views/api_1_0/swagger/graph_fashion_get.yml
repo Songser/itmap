@@ -10,6 +10,10 @@ responses:
       type: array
       items:
         $ref: '#/definitions/FashionGraph'
+  400:
+    description: 默认错误返回
+    schema:
+      $ref: '#/definitions/GeneralError'
 definitions:
   FashionGraph:
     type: object

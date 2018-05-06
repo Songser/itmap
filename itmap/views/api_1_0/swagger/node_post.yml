@@ -44,3 +44,7 @@ responses:
     schema:
         type: integer
         title: node id
+  400:
+    description: 默认错误返回
+    schema:
+      $ref: '#/definitions/GeneralError'

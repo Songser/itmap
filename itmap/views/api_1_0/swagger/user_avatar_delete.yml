@@ -1,13 +1,13 @@
-node
-create node
+user avatar
+delete user avatar
 ---
 tags:
-  - node
+  - user_avatar
 parameters:
-- name: nid
+- name: uid
   in: path
   type: integer
-  description: node id
+  description: user id
   required: true
 responses:
   204:

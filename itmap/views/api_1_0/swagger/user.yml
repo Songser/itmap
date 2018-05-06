@@ -50,9 +50,20 @@ definitions:
       owner_id:
         type: integer
         title: 拥有者id
+  GeneralError:
+    type: object
+    properties:
+      msg:
+        type: string
+        title: 消息
 responses:
   200:
     description: user detail info
     schema:
       $ref: '#/definitions/User'
+  400:
+    description: 默认错误返回
+    schema:
+      $ref: '#/definitions/GeneralError'
+
 

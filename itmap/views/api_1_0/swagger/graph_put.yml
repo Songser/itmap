@@ -27,3 +27,7 @@ responses:
     schema:
         type: integer
         title: graph id
+  400:
+    description: 默认错误返回
+    schema:
+      $ref: '#/definitions/GeneralError'

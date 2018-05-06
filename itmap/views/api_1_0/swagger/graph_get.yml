@@ -14,6 +14,10 @@ responses:
     description: graph detail info
     schema:
       $ref: '#/definitions/GraphDetail'
+  400:
+    description: 默认错误返回
+    schema:
+      $ref: '#/definitions/GeneralError'
 definitions:
   GraphDetail:
     type: object

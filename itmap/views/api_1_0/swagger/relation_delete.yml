@@ -38,3 +38,7 @@ parameters:
 responses:
   204:
     description: null
+  400:
+    description: 默认错误返回
+    schema:
+      $ref: '#/definitions/GeneralError'

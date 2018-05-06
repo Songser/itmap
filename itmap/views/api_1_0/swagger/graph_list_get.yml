@@ -16,3 +16,7 @@ responses:
         type: array
         items:
           $ref: '#/definitions/Graph'
+  400:
+    description: 默认错误返回
+    schema:
+      $ref: '#/definitions/GeneralError'

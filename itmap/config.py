@@ -27,3 +27,9 @@ MAIL_PORT = 465
 MAIL_USERNAME = ''
 MAIL_PASSWORD = ''
 MAIL_DEFAULT_SENDER = ('itmap', '')
+
+# -- avatar dir --
+AVATAR_DIR = '/itmap/avatars/'
+
+# -- node picture dir --
+NODE_PICTURE_DIR = '/itmap/node_pictures/'
