@@ -1,0 +1,45 @@
+node
+update node
+---
+tags:
+  - node
+parameters:
+- name: nid
+  in: path
+  type: integer
+  description: node id
+  required: true
+- name: name
+  in: body
+  type: string
+  description: 名字
+- name: relate_page_url
+  in: body
+  type: string
+  description: 关联的url
+- name: is_template
+  in: body
+  type: boolean
+  description: 是否是模板
+- name: color
+  in: body
+  type: string
+  description: 颜色[red, green, yellow, blue...]
+- name: size
+  in: body
+  type: string
+  description: 大小[S, M, L]
+- name: shape
+  in: body
+  type: string
+  description: 形状[circle, triangle, roundRect, diamond]
+- name: description
+  in: body
+  type: string
+  description: 描述
+responses:
+  201:
+    description: node id
+    schema:
+        type: integer
+        title: node id

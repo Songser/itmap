@@ -14,6 +14,9 @@ class UserApi(Resource):
     method_decorators = [jwt_required]
 
     def get(self, uid):
+        """
+        file: swagger/user.yml
+        """
         user = User.query.get(uid)
         if not user:
             return {'msg': 'Invalid args'}, 400

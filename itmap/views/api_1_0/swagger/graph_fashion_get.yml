@@ -1,0 +1,25 @@
+graph
+get current fashion graphs
+---
+tags:
+  - graph
+responses:
+  200:
+    description:  fashion graphs
+    schema:
+      type: array
+      items:
+        $ref: '#/definitions/FashionGraph'
+definitions:
+  FashionGraph:
+    type: object
+    properties:
+      id:
+        type: integer
+        title: graph id
+      name:
+        type: string
+        title: graph名字
+      owner_id:
+        type: integer
+        title: 拥有者id

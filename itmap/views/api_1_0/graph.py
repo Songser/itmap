@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from flask_restful import Resource, fields, marshal_with, reqparse
+from flask_restful import Resource, fields, marshal_with, reqparse, marshal
 from flask_jwt_extended import (
     jwt_required, get_jwt_identity,
 )
@@ -71,6 +71,9 @@ class GraphListApi(Resource):
     method_decorators = [jwt_required]
 
     def get(self, uid):
+        """
+        file: swagger/graph_list_get.yml
+        """
         current_uid = get_jwt_identity()
         if uid == current_uid:
             graphs = Graph.query.filter_by(owner_id=uid).all()
@@ -79,6 +82,9 @@ class GraphListApi(Resource):
         return [{'id': g.id, 'name': g.name, 'owner_id': g.owner_id} for g in graphs]
 
     def post(self, uid):
+        """
+        file: swagger/graph_post.yml
+        """
         current_uid = get_jwt_identity()
         if uid != current_uid:
             return {'msg': 'Not Allowed to post'}, 400
@@ -95,6 +101,9 @@ class GraphListApi(Resource):
 class GraphFashionApi(Resource):
 
     def get(self):
+        """
+        file: swagger/graph_fashion_get.yml
+        """
         gids = redis.smembers('graphs_fashion')
         gids = [int(item) for item in gids]
         graphs = Graph.query.filter(Graph.id.in_(gids)).all()
@@ -105,14 +114,20 @@ class GraphApi(Resource):
 
     method_decorators = [jwt_required]
 
-    @marshal_with(graph_fields)
+    #@marshal_with(graph_fields)
     def get(self, gid):
+        """
+        file: swagger/graph_get.yml
+        """
         graph = Graph.query.get(gid)
         if graph is None:
             return {'msg': 'Invalid gid'}, 400
-        return graph
+        return marshal(graph, graph_fields)
 
     def delete(self, gid):
+        """
+        file: swagger/graph_delete.yml
+        """
         graph = Graph.query.get(gid)
         if graph is None:
             return {'msg': 'Invalid gid'}, 400
@@ -121,6 +136,9 @@ class GraphApi(Resource):
         return '', 204
 
     def put(self, gid):
+        """
+        file: swagger/graph_put.yml
+        """
         graph = Graph.query.get(gid)
         uid = get_jwt_identity()
         if graph is None:

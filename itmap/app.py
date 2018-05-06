@@ -10,6 +10,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib import rediscli
 from flask_cors import CORS
 from flask_migrate import Migrate
+from flasgger import Swagger
 
 from itmap.ext import db, mail, redis, login_manager, jwt
 from itmap.models.user import Role, User
@@ -28,6 +29,11 @@ def create_app():
     jwt.init_app(app)
 
     migrate = Migrate(app, db)
+    app.config['SWAGGER'] = {
+    'title': 'ITMAP SWAGGER',
+    'uiversion': 2
+    }
+    swagger = Swagger(app)
 
     admin = Admin(app, name='itmap', template_mode='bootstrap3')
     admin.add_view(ModelView(User, db.session))

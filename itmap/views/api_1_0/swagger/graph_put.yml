@@ -1,0 +1,29 @@
+graph
+update graph
+---
+tags:
+  - graph
+parameters:
+- name: gid
+  in: path
+  type: integer
+  description: graph id
+  required: true
+- name: name
+  in: body
+  type: string
+  description: 名字
+- name: graph_type
+  in: body
+  type: string
+  description: graph类型
+- name: is_private
+  in: body
+  type: boolean
+  description: 是否私有
+responses:
+  201:
+    description: graph id
+    schema:
+        type: integer
+        title: graph id

@@ -1,0 +1,46 @@
+node
+create node
+---
+tags:
+  - node
+parameters:
+- name: name
+  in: body
+  type: string
+  description: 名字
+  required: true
+- name: relate_page_url
+  in: body
+  type: string
+  description: 关联的url
+- name: is_template
+  in: body
+  type: boolean
+  description: 是否是模板
+- name: color
+  in: body
+  type: string
+  description: 颜色[red, green, yellow, blue...]
+- name: size
+  in: body
+  type: string
+  description: 大小[S, M, L]
+- name: shape
+  in: body
+  type: string
+  description: 形状[circle, triangle, roundRect, diamond]
+- name: graph_id
+  in: body
+  type: integer
+  description: graph id
+  required: true
+- name: description
+  in: body
+  type: string
+  description: 描述
+responses:
+  201:
+    description: node id
+    schema:
+        type: integer
+        title: node id

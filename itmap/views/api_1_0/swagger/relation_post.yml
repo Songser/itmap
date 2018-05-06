@@ -1,0 +1,43 @@
+relation
+create relation
+---
+tags:
+  - relation
+parameters:
+- name: source_node_id
+  in: body
+  type: integer
+  description: 源node id
+  required: true
+- name: target_node_id
+  in: body
+  type: integer
+  description: 目标node id
+  required: true
+- name: graph_id
+  in: body
+  type: integer
+  description: graph id
+  required: true
+- name: info
+  in: body
+  type: string
+  description: 信息
+- name: color
+  in: body
+  type: string
+  description: 颜色[red, green, yellow, blue...]
+- name: is_dual_way
+  in: body
+  type: boolean
+  description: 是否双向
+- name: line_type
+  in: body
+  type: string
+  description: 线的类型[bold, dotted, common...]
+responses:
+  201:
+    description: relation id
+    schema:
+        type: integer
+        title: relation id

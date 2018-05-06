@@ -1,0 +1,14 @@
+graph
+delete graph
+---
+tags:
+  - graph
+parameters:
+- name: gid
+  in: path
+  type: integer
+  description: graph id
+  required: true
+responses:
+  204:
+    description: null
