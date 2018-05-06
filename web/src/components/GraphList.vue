@@ -2,7 +2,7 @@
   <div>
     <div class="buttons">
       <el-button type="primary" icon="el-icon-news" circle @click="showAddGraphDialog"></el-button>
-      <el-button type="primary" icon="el-icon-edit" circle @click="editGraph"></el-button>
+      <el-button type="primary" icon="el-icon-edit" circle @click="showEditGraphDialog"></el-button>
       <el-button type="primary" icon="el-icon-delete" circle @click="deleteGraph"></el-button>
     </div>
    <el-menu
@@ -12,23 +12,34 @@
       text-color="#bfcbd9"
       active-text-color="#409EFF"
     >
-     <el-menu-item index="'graph.id'" v-for="graph in fashionList" :key="graph.name" >
+    <template v-for="graph in fashionList">
+     <el-menu-item :index="'graph.name'"  :key="graph.name" >
         <span slot="title">
             <a @click="clickGraph(graph)">{{graph.name}}</a>
         </span>
       </el-menu-item>
-      <el-menu-item :index="'graph.id'" v-for="graph in graphList" :key="graph.id">
+    </template>
+    <template v-for="graph in graphList">
+      <el-menu-item index="'graph.id'"  :key="graph.id">
         <span slot="title">
             <a @click="clickGraph(graph)">{{graph.name}}</a>
         </span>
     </el-menu-item>
+    </template>
     </el-menu>
     <el-dialog
     title="添加图谱"
     :visible.sync="dialogVisible"
     width="50%" :append-to-body=true>
-
   <el-input v-model="newGraphName"></el-input>
+  <el-switch
+  v-model="isPrivate"
+  active-color="#13ce66"
+  inactive-color="#ff4949"
+  inactive-text="所有人可见"
+  active-text="仅自己可见"
+  >
+</el-switch>
   <span slot="footer" class="dialog-footer">
     <el-button @click="dialogVisible = false">取 消</el-button>
     <el-button type="primary" @click="addNewGraph">确 定</el-button>
@@ -42,7 +53,8 @@ import { mapState } from 'vuex'
 import {
   getFashionGraphs,
   getGraphList,
-  addGraph
+  addGraphApi,
+  updateGraphApi
 } from '@/api/graph'
 
 export default {
@@ -52,13 +64,17 @@ export default {
       fashionList: [],
       graphList: [],
       dialogVisible: false,
-      newGraphName: ''
+      newGraphName: '',
+      isPrivate: true,
+      isUpdate: false,
+      selectedGraph: null,
     }
   },
   computed: {
     ...mapState({
       user_id: state => state.user.id,
-      name: state => state.graph.name
+      name: state => state.graph.name,
+      gid: state => state.graph.id,
     })
   },
   created () {
@@ -77,22 +93,37 @@ export default {
   },
   methods: {
     showAddGraphDialog () {
+      this.isUpdate = false
       this.dialogVisible = true
     },
     addNewGraph () {
-      addGraph(this.user_id, this.newGraphName).then((response) => {
+      if (!this.isUpdate) {
+        addGraphApi(this.user_id, this.newGraphName, this.isPrivate).then((response) => {
         this.graphList.push({id: response.data, name: this.newGraphName})
         this.newGraphName = ''
         this.dialogVisible = false
       })
+      }
+      else {
+        updateGraphApi(this.gid, this.newGraphName, this.isPrivate).then((response => {
+          this.$store.commit('setGraphName', this.newGraphName)
+          this.selectedGraph.name = this.newGraphName
+          this.newGraphName = ''
+          this.dialogVisible = false
+        }))
+      }
+      
     },
-    editGraph () {
-
+    showEditGraphDialog () {
+      this.isUpdate = true
+      this.dialogVisible = true
+      this.newGraphName = this.name
     },
     deleteGraph () {
 
     },
     clickGraph (graph) {
+      this.selectedGraph = graph
       this.$store.commit('setGraph', {graph})
       this.$store.dispatch('getNodesByGraph', {gid: graph.id})
     }
@@ -106,5 +137,8 @@ export default {
 }
 .el-dialog {
     text-align: left;
+}
+.el-switch {
+  padding-top: 20px;
 }
 </style>

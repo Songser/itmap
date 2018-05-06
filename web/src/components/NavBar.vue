@@ -1,31 +1,34 @@
 <template>
   <div>
-  <el-menu class="navbar" mode="horizontal">
-    <div class=logo-container>
-      <img class="user-avatar" :src="avatar">
-    </div>
+  <el-menu mode="horizontal">
+    <el-row class="navbar">
+      <el-col :span="4" class=logo-container>
+        <img class="user-avatar" :src="avatar">
+      </el-col>
+   <el-col :span="14">
     <div class="button-container">
       <el-row>
-          <el-col :span="4" class="text-center">
+          <el-col :span="6" class="text-center">
             <a class="pan-btn light-blue-btn" @click="showResource">资源</a>
           </el-col>
-          <el-col :span="4" class="text-center">
+          <el-col :span="6" class="text-center">
             <a class="pan-btn pink-btn" @click="showArtical">文章</a>
           </el-col>
-          <el-col :span="4" class="text-center">
+          <el-col :span="6" class="text-center">
             <a class="pan-btn green-btn" @click="showQuestion">问答</a>
           </el-col>
-          <el-col :span="4" class="text-center">
+          <el-col :span="6" class="text-center">
             <a class="pan-btn tiffany-btn" @click="showUser">用户</a>
           </el-col>
       </el-row>
     </div>
+   </el-col>
+   <el-col :span="6">
     <div class="right-menu">
     <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
           <img class="user-avatar" :src="avatar">
         </div>
-
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item >
             <span v-if="!user_id" @click="login" style="display:block;">立即登陆</span>
@@ -47,10 +50,9 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+   </el-col>
+     </el-row>
   </el-menu>
-  <div class="components-container">
-
-</div>
   </div>
 </template>
 
@@ -120,30 +122,25 @@ export default {
   width: 100%;
   height: 100%;
   background-color: #F0F8FF;
-  border-bottom-width: 0px;
   text-align: left;
   .logo-container {
     float: left;
-    margin-top: 10px;
+    padding-left: 10px;
     img {
       height: 40px;
       width: 40px;
     }
   }
   .button-container {
-    float: left;
-    margin-left: 5%;
-    width: 70%;
+    width: 90%;
     .el-row {
       padding-top: 10px;
-      height: 100%;
       background-color: #F0F8FF;
       box-shadow: 0;
-      width: 100%;
       .pan-btn {
         font-size: 16px;
         margin-right: 10px;
-        padding: 7px 10px;
+        padding: 8px 10px;
         width: 100%;
         height: 100%;
         text-align: center;
@@ -158,7 +155,7 @@ export default {
     }
     .right-menu-item {
       display: inline-block;
-      margin: 0 8px;
+
     }
     .theme-switch {
       vertical-align: 15px;

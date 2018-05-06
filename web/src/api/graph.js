@@ -8,8 +8,12 @@ export function getGraphList (uid) {
   return request.get('/api/v1_0/users/' + uid + '/graphs')
 }
 
-export function addGraph (uid, name) {
-  return request.post('/api/v1_0/users/' + uid + '/graphs', {name})
+export function addGraphApi (uid, name, isPrivate) {
+  return request.post('/api/v1_0/users/' + uid + '/graphs', {name, is_private: isPrivate})
+}
+
+export function updateGraphApi(gid, name, isPrivate) {
+  return request.put('/api/v1_0/graphs/' + gid, {name, is_private: isPrivate})
 }
 
 export function addNodeApi (data) {

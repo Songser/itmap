@@ -1,6 +1,6 @@
 <template>
    <div class="app-wrapper">
-        <el-container class="main-container">
+        <!-- <el-container class="main-container">
         <el-container>
           <el-header>
             <nav-bar/>
@@ -17,7 +17,23 @@
             </el-aside>
           </el-container>
           </el-container>
-        </el-container>
+        </el-container> -->
+        <el-row>
+          <el-col :span="24" class=""><nav-bar/></el-col>
+        </el-row>
+        <el-row class="main-container">
+          <el-col :span="4" class="el-aside">
+            <app-side-bar />
+          </el-col>
+          <el-col :span="14" style="height: 100%">
+            <div class="el-main">
+              <app-main />
+            </div>
+          </el-col>
+          <el-col :span="6" class="el-aside">
+            <app-aside/>
+          </el-col>
+        </el-row>
       </div>
 </template>
 
@@ -43,6 +59,7 @@ export default {
 .app-wrapper {
   @include clearfix;
   height: 100%;
+  width: 100%;
 }
 .main-container {
   position: fixed;
@@ -51,17 +68,19 @@ export default {
 }
 .el-header {
   background-color: #F0F8FF;
-  color: #333;
   width: 100%;
 }
 .el-main {
   background-color: #FFF;
   color: #333;
   text-align: center;
+  width: 100%;
+  height: 100%;
 }
 .el-aside {
   background-color: #E9FEFF;
-  color: #333
+  color: #333;
+  height: 100%;
 }
 .left-aside {
   max-width: 200px;
