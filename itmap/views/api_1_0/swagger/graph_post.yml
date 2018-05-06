@@ -14,10 +14,10 @@ parameters:
   type: string
   description: 名字
   required: true
-- name: graph_type
-  in: body
-  type: string
-  description: graph类型
+#- name: graph_type
+#  in: body
+#  type: string
+#  description: graph类型
 - name: is_private
   in: body
   type: boolean

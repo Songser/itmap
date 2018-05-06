@@ -62,7 +62,7 @@ graph_fields = {
 
 parser = reqparse.RequestParser()
 parser.add_argument('name', trim=True)
-parser.add_argument('graph_type')
+#parser.add_argument('graph_type')
 parser.add_argument('is_private', type=bool)
 
 
@@ -105,8 +105,13 @@ class GraphFashionApi(Resource):
         file: swagger/graph_fashion_get.yml
         """
         gids = redis.smembers('graphs_fashion')
-        gids = [int(item) for item in gids]
-        graphs = Graph.query.filter(Graph.id.in_(gids)).all()
+        if gids:
+            gids = [int(item) for item in gids]
+            graphs = Graph.query.filter(Graph.id.in_(gids)).all()
+        else:
+            graphs = Graph.query.filter_by(graph_type='fashion').all()
+            [redis.sadd('graphs_fashion', graph.id) for graph in graphs]
+            redis.expire('graphs_fashion', 600)
         return [{'id': g.id, 'name': g.name, 'owner_id': g.owner_id} for g in graphs]
 
 
