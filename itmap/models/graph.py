@@ -2,6 +2,8 @@
 
 from datetime import datetime
 
+from flask import current_app
+
 from itmap.ext import db
 
 
@@ -65,6 +67,9 @@ class Node(db.Model):
 
     def __repr__(self):
         return '<Node {!r}>'.format(self.name)
+
+    def pic(self):
+        return '{}{}.jpg'.format(current_app.config['NODE_PICTURE_DIR'], self.id)
 
 
 class Graph(db.Model):

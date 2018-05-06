@@ -1,0 +1,69 @@
+user
+get the detail info for a user.
+---
+tags:
+  - user
+parameters:
+- name: uid
+  in: path
+  type: integer
+  description: 用户id
+  required: true
+definitions:
+  User:
+    type: object
+    properties:
+      name:
+        type: string
+        title: 名字
+      email:
+        type: string
+        title: 邮箱
+      has_verified:
+        type: boolean
+        title: 是否已认证
+      role:
+        type: string
+        title: 角色
+      active:
+        type: boolean
+        title: 是否已激活
+      current_sign_in_time:
+        type: string
+        title: 当前登录时间
+      last_sign_in_time:
+        type: string
+        title: 上次登录时间
+      own_graphs:
+        type: array
+        items:
+          $ref: '#/definitions/Graph'
+  Graph:
+    type: object
+    properties:
+      id:
+        type: integer
+        title: graph ID
+      name:
+        type: string
+        title: graph名字
+      owner_id:
+        type: integer
+        title: 拥有者id
+  GeneralError:
+    type: object
+    properties:
+      msg:
+        type: string
+        title: 消息
+responses:
+  200:
+    description: user detail info
+    schema:
+      $ref: '#/definitions/User'
+  400:
+    description: 默认错误返回
+    schema:
+      $ref: '#/definitions/GeneralError'
+
+

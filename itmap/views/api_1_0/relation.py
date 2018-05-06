@@ -28,6 +28,9 @@ class NodeRelationApi(Resource):
     method_decorators = [jwt_required]
 
     def post(self):
+        """
+        file: swagger/relation_post.yml
+        """
         uid = get_jwt_identity()
         vals = dict(parser.parse_args())
         source = Node.query.get(vals['source_node_id'])
@@ -47,9 +50,12 @@ class NodeRelationApi(Resource):
         relation = NodeRelation(**vals)
         db.session.add(relation)
         db.session.commit()
-        return '', 201
+        return relation.id, 201
 
     def put(self):
+        """
+        file: swagger/relation_put.yml
+        """
         vals = dict(parser.parse_args())
         sid = vals.pop('source_node_id')
         tid = vals.pop('target_node_id')
@@ -65,6 +71,9 @@ class NodeRelationApi(Resource):
         return '', 201
 
     def delete(self):
+        """
+        file: swagger/relation_delete.yml
+        """
         data = request.json
         data = dict(data)
         sid = data.get('source_node_id')

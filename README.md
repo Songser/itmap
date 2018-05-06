@@ -20,7 +20,7 @@ docker-compose up -d
 TEST ENV:
  - docker-compose exec server flask initdb
 PRODUCT ENV:
- just the third step is always need.
+ only the third step is always need.
  - docker-compose exec server flask db init
  - docker-compose exec server flask db migrate
  - docker-compose exec server flask db upgrade
@@ -31,6 +31,12 @@ PRODUCT ENV:
 
 ```
 docker-compose exec server flask ipython
+```
+
+### APIDOC
+
+```
+open http://localhost:5000/apidocs/
 ```
 
 ### ADMIN

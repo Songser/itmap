@@ -1,0 +1,117 @@
+graph
+get graph detail info
+---
+tags:
+  - graph
+parameters:
+- name: gid
+  in: path
+  type: integer
+  description: graph id
+  required: true
+responses:
+  200:
+    description: graph detail info
+    schema:
+      $ref: '#/definitions/GraphDetail'
+  400:
+    description: 默认错误返回
+    schema:
+      $ref: '#/definitions/GeneralError'
+definitions:
+  GraphDetail:
+    type: object
+    properties:
+      id:
+        type: integer
+        title: graph id
+      name:
+        type: string
+        title: graph名字
+      owner_id:
+        type: integer
+        title: 拥有者id
+      owner_name:
+        type: string
+        title: 拥有者名字
+      nodes:
+        type: array
+        items:
+          $ref: '#/definitions/NodeDetail'
+      relations:
+        type: array
+        items:
+          $ref: '#/definitions/RelationDetail'
+  RelationDetail:
+    type: object
+    properties:
+      sid:
+        type: integer
+        title: 来源node id
+      tid:
+        type: integer
+        title: 目标node id
+      source:
+        type: string
+        title: 来源node name
+      target:
+        type: string
+        title: 目标node name
+      gid:
+        type: integer
+        title: graph id
+      timestamp:
+        type: string
+        title: 时间戳
+      value:
+        type: string
+        title: info字段别名
+      color:
+        type: string
+        title: 颜色[red, green, yellow, blue...]
+      is_dual_way:
+        type: boolean
+        title: 是否双向
+      line_type:
+        type: string
+        title: 线的类型
+  NodeDetail:
+    type: object
+    properties:
+      id:
+        type: integer
+        title: node id
+      name:
+        type: string
+        title: node名字
+      relate_page_url:
+        type: string
+        title: 关联的url
+      is_template:
+        type: boolean
+        title: 是否是模板
+      color:
+        type: string
+        title: 颜色[red, green, yellow, blue...]
+      size:
+        type: string
+        title: 大小[S, M, L]
+      shape:
+        type: string
+        title: 形状[circle, triangle, roundRect, diamond]
+      description:
+        type: string
+        title: 描述
+      gid:
+        type: integer
+        title: graph id
+      from_nodes:
+        type: array
+        items:
+          type: integer
+          title: 来源node的id
+      to_nodes:
+        type: array
+        items:
+          type: integer
+          title: 目标node的id

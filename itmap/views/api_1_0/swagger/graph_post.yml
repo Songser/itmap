@@ -1,0 +1,34 @@
+graph
+create graph
+---
+tags:
+  - graph
+parameters:
+- name: uid
+  in: path
+  type: integer
+  description: 用户 id
+  required: true
+- name: name
+  in: body
+  type: string
+  description: 名字
+  required: true
+#- name: graph_type
+#  in: body
+#  type: string
+#  description: graph类型
+- name: is_private
+  in: body
+  type: boolean
+  description: 是否私有
+responses:
+  201:
+    description: graph id
+    schema:
+        type: integer
+        title: graph id
+  400:
+    description: 默认错误返回
+    schema:
+      $ref: '#/definitions/GeneralError'

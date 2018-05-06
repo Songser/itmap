@@ -1,0 +1,18 @@
+user avatar
+delete user avatar
+---
+tags:
+  - user_avatar
+parameters:
+- name: uid
+  in: path
+  type: integer
+  description: user id
+  required: true
+responses:
+  204:
+    description: null
+  400:
+    description: 默认错误返回
+    schema:
+      $ref: '#/definitions/GeneralError'

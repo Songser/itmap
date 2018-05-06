@@ -1,0 +1,18 @@
+user avatar
+update user avatar (avatar文件放入request的body中)
+---
+tags:
+  - user_avatar
+parameters:
+- name: uid
+  in: path
+  type: integer
+  description: user id
+  required: true
+responses:
+  201:
+    description: null
+  400:
+    description: 默认错误返回
+    schema:
+      $ref: '#/definitions/GeneralError'

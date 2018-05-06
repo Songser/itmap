@@ -6,7 +6,7 @@ from flask_restful import Api
 from .graph import GraphListApi, GraphApi, GraphFashionApi
 from .node import NodeApi, NodePostApi
 from .relation import NodeRelationApi
-from .user import UserApi
+from .user import UserApi, UserAvatarApi
 
 bp = Blueprint('api', __name__, url_prefix='/api/v1_0')
 api = Api(bp)
@@ -17,3 +17,4 @@ api.add_resource(NodeApi, '/nodes/<int:nid>')
 api.add_resource(NodePostApi, '/nodes')
 api.add_resource(NodeRelationApi, '/node_rels')
 api.add_resource(UserApi, '/users/<int:uid>')
+api.add_resource(UserAvatarApi, '/users/<int:uid>/avatar')

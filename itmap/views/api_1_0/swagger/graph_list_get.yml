@@ -1,0 +1,22 @@
+graph
+get the all graphs detail info of the user which the user has the authority to see.
+---
+tags:
+  - graph
+parameters:
+- name: uid
+  in: path
+  type: integer
+  description: 用户 id
+  required: true
+responses:
+  200:
+    description: graphs detail info
+    schema:
+        type: array
+        items:
+          $ref: '#/definitions/Graph'
+  400:
+    description: 默认错误返回
+    schema:
+      $ref: '#/definitions/GeneralError'

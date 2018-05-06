@@ -2,6 +2,7 @@
 
 import click
 import code
+import os
 import sys
 
 from flask import Flask
@@ -10,6 +11,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib import rediscli
 from flask_cors import CORS
 from flask_migrate import Migrate
+from flasgger import Swagger
 
 from itmap.ext import db, mail, redis, login_manager, jwt
 from itmap.models.user import Role, User
@@ -28,6 +30,11 @@ def create_app():
     jwt.init_app(app)
 
     migrate = Migrate(app, db)
+    app.config['SWAGGER'] = {
+    'title': 'ITMAP SWAGGER',
+    'uiversion': 2
+    }
+    swagger = Swagger(app)
 
     admin = Admin(app, name='itmap', template_mode='bootstrap3')
     admin.add_view(ModelView(User, db.session))
@@ -40,6 +47,7 @@ def create_app():
     admin.add_view(rediscli.RedisCli(redis._redis_client))
 
     register_blueprints(app)
+    mkdir(app)
 
     return app
 
@@ -48,6 +56,12 @@ def register_blueprints(app):
     from itmap.views import (api_1_0, auth)
     for i in (api_1_0, auth):
         app.register_blueprint(i.bp)
+
+
+def mkdir(app):
+    for path in (app.config['AVATAR_DIR'], app.config['NODE_PICTURE_DIR']):
+        if not os.path.exists(path):
+            os.mkdir(path)
 
 
 app = create_app()

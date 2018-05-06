@@ -25,6 +25,9 @@ class NodePostApi(Resource):
     method_decorators = [jwt_required]
 
     def post(self):
+        """
+        file: swagger/node_post.yml
+        """
         uid = get_jwt_identity()
         vals = dict(parser.parse_args())
         graph = Graph.query.get(vals['graph_id'])
@@ -44,6 +47,9 @@ class NodeApi(Resource):
     method_decorators = [jwt_required]
 
     def put(self, nid):
+        """
+        file: swagger/node_put.yml
+        """
         node = Node.query.get(nid)
         uid = get_jwt_identity()
         if node is None:
@@ -59,6 +65,9 @@ class NodeApi(Resource):
             return node.id, 201
 
     def delete(self, nid):
+        """
+        file: swagger/node_delete.yml
+        """
         node = Node.query.get(nid)
         if node is None:
             return {'msg': 'Invalid nid'}, 400
