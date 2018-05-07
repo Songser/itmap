@@ -77,9 +77,9 @@ class GraphListApi(Resource):
         """
         current_uid = get_jwt_identity()
         if uid == current_uid:
-            graphs = Graph.query.filter_by(owner_id=uid).all()
+            graphs = Graph.query.filter_by(owner_id=uid).order_by(Graph.id).all()
         else:
-            graphs = Graph.query.filter_by(owner_id=uid, is_private=False).all()
+            graphs = Graph.query.filter_by(owner_id=uid, is_private=False).order_by(Graph.id).all()
         return [{'id': g.id, 'name': g.name, 'owner_id': g.owner_id} for g in graphs]
 
     def post(self, uid):
@@ -128,7 +128,10 @@ class GraphApi(Resource):
         graph = Graph.query.get(gid)
         if graph is None:
             return {'msg': 'Invalid gid'}, 400
-        return marshal(graph, graph_fields)
+        raw_result = marshal(graph, graph_fields)
+        raw_result['nodes'].sort(key=lambda r: r['id'])
+        raw_result['relations'].sort(key=lambda r: r['sid'])
+        return raw_result
 
     def delete(self, gid):
         """
