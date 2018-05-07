@@ -4,7 +4,7 @@ from flask import Blueprint
 from flask_restful import Api
 
 from .graph import GraphListApi, GraphApi, GraphFashionApi
-from .node import NodeApi, NodePostApi
+from .node import NodeApi, NodePostApi, NodePicApi
 from .relation import NodeRelationApi
 from .user import UserApi, UserAvatarApi
 
@@ -15,6 +15,7 @@ api.add_resource(GraphApi, '/graphs/<int:gid>')
 api.add_resource(GraphFashionApi, '/graphs/fashion')
 api.add_resource(NodeApi, '/nodes/<int:nid>')
 api.add_resource(NodePostApi, '/nodes')
+api.add_resource(NodePicApi, '/nodes/<int:nid>/pic')
 api.add_resource(NodeRelationApi, '/node_rels')
 api.add_resource(UserApi, '/users/<int:uid>')
 api.add_resource(UserAvatarApi, '/users/<int:uid>/avatar')
