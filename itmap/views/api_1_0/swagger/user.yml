@@ -38,6 +38,9 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Graph'
+      avatar:
+        type: string
+        title: avatar文件绝对路径
   Graph:
     type: object
     properties:
@@ -56,6 +59,9 @@ definitions:
       msg:
         type: string
         title: 消息
+      status:
+        type: integer
+        title: http code
 responses:
   200:
     description: user detail info

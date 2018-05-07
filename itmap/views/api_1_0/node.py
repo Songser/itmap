@@ -1,5 +1,8 @@
 # coding=utf-8
 
+import os
+
+from flask import request
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import (
     jwt_required, get_jwt_identity,
@@ -73,4 +76,40 @@ class NodeApi(Resource):
             return {'msg': 'Invalid nid'}, 400
         db.session.delete(node)
         db.session.commit()
+        return '', 204
+
+
+class NodePicApi(Resource):
+
+    method_decorators = [jwt_required]
+
+    def put(self, nid):
+        """
+        file: swagger/node_pic_put.yml
+        """
+        current_uid = get_jwt_identity()
+        node = Node.query.get(nid)
+        if not node:
+            return {'msg': 'Invalid args'}, 400
+        if node.owner_id != current_uid:
+            return {'msg': 'Not allowed'}, 400
+        path = node.pic
+        with open(path, 'wb') as fp:
+            fp.write(request.get_data())
+        return '', 201
+
+    def delete(self, nid):
+        """
+        file: swagger/node_pic_delete.yml
+        """
+        current_uid = get_jwt_identity()
+        node = Node.query.get(nid)
+        if not node:
+            return {'msg': 'Invalid args'}, 400
+        if node.owner_id != current_uid:
+            return {'msg': 'Not allowed'}, 400
+        path = node.pic
+        if not os.path.isfile(path):
+            return {'msg': 'Upload Picture first'}, 400
+        os.remove(path)
         return '', 204

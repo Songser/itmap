@@ -29,7 +29,9 @@ MAIL_PASSWORD = ''
 MAIL_DEFAULT_SENDER = ('itmap', '')
 
 # -- avatar dir --
-AVATAR_DIR = '/itmap/avatars/'
+AVATAR_DIR = 'avatars'
+ABSOLUTE_AVATAR_DIR = '/itmap/avatars/'
 
 # -- node picture dir --
-NODE_PICTURE_DIR = '/itmap/node_pictures/'
+NODE_PICTURE_DIR = 'node_pictures'
+ABSOLUTE_NODE_PICTURE_DIR = '/itmap/node_pictures/'

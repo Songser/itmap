@@ -16,7 +16,7 @@ class NodeRelation(db.Model):
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    info = db.Column(db.String(255))
+    info = db.Column(db.String(255), default='')
     color = db.Column(db.String(255))
     is_dual_way = db.Column(db.Boolean, default=False)  # 是双向还是单向
     line_type = db.Column(db.String(255))  # 线的类型
@@ -68,8 +68,9 @@ class Node(db.Model):
     def __repr__(self):
         return '<Node {!r}>'.format(self.name)
 
+    @property
     def pic(self):
-        return '{}{}.jpg'.format(current_app.config['NODE_PICTURE_DIR'], self.id)
+        return '{}{}.jpg'.format(current_app.config['ABSOLUTE_NODE_PICTURE_DIR'], self.id)
 
 
 class Graph(db.Model):

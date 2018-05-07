@@ -95,6 +95,7 @@ class User(db.Model, UserMixin):
             'current_sign_in_time': arrow.get(self.current_sign_in_time).to('Asia/Shanghai').format('YYYY-MM-DD HH:mm:ss'),
             'last_sign_in_time': arrow.get(self.last_sign_in_time).to('Asia/Shanghai').format('YYYY-MM-DD HH:mm:ss'),
             'own_graphs': [{'id':g.id, 'name':g.name, 'owner_id': self.id} for g in self.own_graphs],
+            'avatar': self.avatar,
         }
 
     #@property
@@ -110,7 +111,7 @@ class User(db.Model, UserMixin):
 
     @property
     def avatar(self):
-        return '{}{}.jpg'.format(current_app.config['AVATAR_DIR'], self.email_md5)
+        return '{}{}.jpg'.format(current_app.config['ABSOLUTE_AVATAR_DIR'], self.email_md5)
 
     @staticmethod
     def generate_password(password):

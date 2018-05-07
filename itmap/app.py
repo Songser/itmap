@@ -29,12 +29,12 @@ def create_app():
     login_manager.init_app(app)
     jwt.init_app(app)
 
-    migrate = Migrate(app, db)
+    Migrate(app, db)
     app.config['SWAGGER'] = {
-    'title': 'ITMAP SWAGGER',
-    'uiversion': 2
+        'title': 'ITMAP SWAGGER',
+        'uiversion': 2
     }
-    swagger = Swagger(app)
+    Swagger(app)
 
     admin = Admin(app, name='itmap', template_mode='bootstrap3')
     admin.add_view(ModelView(User, db.session))
@@ -49,24 +49,25 @@ def create_app():
     register_blueprints(app)
     mkdir(app)
 
+    CORS(app)
+    app.debug = True
+
     return app
 
 
 def register_blueprints(app):
-    from itmap.views import (api_1_0, auth)
-    for i in (api_1_0, auth):
+    from itmap.views import (api_1_0, auth, picture)
+    for i in (api_1_0, auth, picture):
         app.register_blueprint(i.bp)
 
 
 def mkdir(app):
-    for path in (app.config['AVATAR_DIR'], app.config['NODE_PICTURE_DIR']):
+    for path in (app.config['ABSOLUTE_AVATAR_DIR'], app.config['ABSOLUTE_NODE_PICTURE_DIR']):
         if not os.path.exists(path):
             os.mkdir(path)
 
 
 app = create_app()
-CORS(app)
-app.debug = True
 
 
 @app.cli.command(with_appcontext=True)
