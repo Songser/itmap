@@ -7,9 +7,10 @@ from .graph import GraphListApi, GraphApi, GraphFashionApi
 from .node import NodeApi, NodePostApi, NodePicApi
 from .relation import NodeRelationApi
 from .user import UserApi, UserAvatarApi
+from .errors import errors
 
 bp = Blueprint('api', __name__, url_prefix='/api/v1_0')
-api = Api(bp)
+api = Api(bp, errors=errors)
 api.add_resource(GraphListApi, '/users/<int:uid>/graphs')
 api.add_resource(GraphApi, '/graphs/<int:gid>')
 api.add_resource(GraphFashionApi, '/graphs/fashion')

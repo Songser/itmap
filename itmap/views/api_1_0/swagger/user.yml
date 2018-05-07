@@ -59,6 +59,9 @@ definitions:
       msg:
         type: string
         title: 消息
+      status:
+        type: integer
+        title: http code
 responses:
   200:
     description: user detail info
