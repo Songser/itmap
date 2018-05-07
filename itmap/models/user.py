@@ -110,7 +110,7 @@ class User(db.Model, UserMixin):
 
     @property
     def avatar(self):
-        return '{}{}.jpg'.format(current_app.config['AVATAR_DIR'], self.email_md5)
+        return '{}{}.jpg'.format(current_app.config['ABSOLUTE_AVATAR_DIR'], self.email_md5)
 
     @staticmethod
     def generate_password(password):

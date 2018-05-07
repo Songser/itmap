@@ -56,13 +56,13 @@ def create_app():
 
 
 def register_blueprints(app):
-    from itmap.views import (api_1_0, auth)
-    for i in (api_1_0, auth):
+    from itmap.views import (api_1_0, auth, picture)
+    for i in (api_1_0, auth, picture):
         app.register_blueprint(i.bp)
 
 
 def mkdir(app):
-    for path in (app.config['AVATAR_DIR'], app.config['NODE_PICTURE_DIR']):
+    for path in (app.config['ABSOLUTE_AVATAR_DIR'], app.config['ABSOLUTE_NODE_PICTURE_DIR']):
         if not os.path.exists(path):
             os.mkdir(path)
 
@@ -70,9 +70,9 @@ def mkdir(app):
 app = create_app()
 
 
-@app.route('/avatars/<path:path>', methods=['GET'])
-def send_avatar(path):
-    return send_from_directory('avatars', path)
+#@app.route('/avatars/<path:path>', methods=['GET'])
+#def send_avatar(path):
+#    return send_from_directory('avatars', path)
 
 
 @app.cli.command(with_appcontext=True)

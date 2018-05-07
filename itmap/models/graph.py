@@ -69,7 +69,7 @@ class Node(db.Model):
         return '<Node {!r}>'.format(self.name)
 
     def pic(self):
-        return '{}{}.jpg'.format(current_app.config['NODE_PICTURE_DIR'], self.id)
+        return '{}{}.jpg'.format(current_app.config['ABSOLUTE_NODE_PICTURE_DIR'], self.id)
 
 
 class Graph(db.Model):
