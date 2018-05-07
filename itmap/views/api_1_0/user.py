@@ -29,21 +29,6 @@ class UserAvatarApi(Resource):
 
     method_decorators = [jwt_required]
 
-    def get(self, uid):
-        """
-        file: swagger/user_avatar_get.yml
-        """
-        user = User.query.get(uid)
-        if not user:
-            return {'msg': 'Invalid args'}, 400
-        path = user.avatar
-        if not os.path.isfile(path):
-            return {'msg': 'Upload Avatar first'}, 400
-        res = None
-        with open(path, 'rb') as fp:
-            res = fp.read()
-        return {'avatar': res.hex()}, 200
-
     def put(self, uid):
         """
         file: swagger/user_avatar_put.yml
@@ -52,7 +37,6 @@ class UserAvatarApi(Resource):
         if not user:
             return {'msg': 'Invalid args'}, 400
         path = user.avatar
-        print(os.path.exists('/itmap/avatars/'))
         with open(path, 'wb') as fp:
             fp.write(request.get_data())
         return '', 201

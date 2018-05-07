@@ -5,7 +5,7 @@ import code
 import os
 import sys
 
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib import rediscli
@@ -49,6 +49,9 @@ def create_app():
     register_blueprints(app)
     mkdir(app)
 
+    CORS(app)
+    app.debug = True
+
     return app
 
 
@@ -65,8 +68,11 @@ def mkdir(app):
 
 
 app = create_app()
-CORS(app)
-app.debug = True
+
+
+@app.route('/avatars/<path:path>', methods=['GET'])
+def send_avatar(path):
+    return send_from_directory('avatars', path)
 
 
 @app.cli.command(with_appcontext=True)
