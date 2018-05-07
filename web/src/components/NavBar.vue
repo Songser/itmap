@@ -1,9 +1,10 @@
 <template>
-  <div>
-  <el-menu mode="horizontal">
-    <el-row class="navbar">
-      <el-col :span="4" class=logo-container>
+  <el-menu mode="horizontal" class="navbar">
+    <el-row >
+      <el-col :span="4">
+        <div class="logo-container">
         <img class="user-avatar" :src="avatar">
+        </div>
       </el-col>
    <el-col :span="14">
     <div class="button-container">
@@ -34,7 +35,7 @@
             <span v-if="!user_id" @click="login" style="display:block;">立即登陆</span>
             <span v-if="user_id" style="display:block;">{{name}}</span>
           </el-dropdown-item>
-          <router-link to="/">
+          <router-link to="/user">
             <el-dropdown-item divided>
               个人设置
             </el-dropdown-item>
@@ -53,7 +54,6 @@
    </el-col>
      </el-row>
   </el-menu>
-  </div>
 </template>
 
 <script>
@@ -115,17 +115,15 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.el-dialog {
-  z-index: 200 !important;
-}
 .navbar {
   width: 100%;
-  height: 100%;
   background-color: #F0F8FF;
   text-align: left;
+  height: 100%;
   .logo-container {
     float: left;
     padding-left: 10px;
+    padding-top: 10px;
     img {
       height: 40px;
       width: 40px;
@@ -142,7 +140,6 @@ export default {
         margin-right: 10px;
         padding: 8px 10px;
         width: 100%;
-        height: 100%;
         text-align: center;
       }
     }
@@ -165,7 +162,7 @@ export default {
       margin-right: 10px;
       .avatar-wrapper {
         cursor: pointer;
-        margin-top: 10px;
+        padding-top: 10px;
         position: relative;
         .user-avatar {
           width: 40px;

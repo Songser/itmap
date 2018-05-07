@@ -12,8 +12,12 @@ export function addGraphApi (uid, name, isPrivate) {
   return request.post('/api/v1_0/users/' + uid + '/graphs', {name, is_private: isPrivate})
 }
 
-export function updateGraphApi(gid, name, isPrivate) {
+export function updateGraphApi (gid, name, isPrivate) {
   return request.put('/api/v1_0/graphs/' + gid, {name, is_private: isPrivate})
+}
+
+export function deleteGraphApi (gid) {
+  return request.delete('/api/v1_0/graphs/' + gid)
 }
 
 export function addNodeApi (data) {

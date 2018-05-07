@@ -18,8 +18,10 @@
           </el-container>
           </el-container>
         </el-container> -->
-        <el-row>
-          <el-col :span="24" class=""><nav-bar/></el-col>
+        <el-row class="el-header">
+          <el-col :span="24" >
+            <nav-bar/>
+          </el-col>
         </el-row>
         <el-row class="main-container">
           <el-col :span="4" class="el-aside">
@@ -66,9 +68,12 @@ export default {
   height: 100%;
   width: 100%;
 }
+
 .el-header {
   background-color: #F0F8FF;
   width: 100%;
+  padding: 0;
+  margin: 0;
 }
 .el-main {
   background-color: #FFF;
@@ -84,8 +89,10 @@ export default {
 }
 .left-aside {
   max-width: 200px;
+  height: 100%;
 }
 .right-aside {
   max-width: 300px;
+  height: 100%;
 }
 </style>
