@@ -1,0 +1,18 @@
+node picture
+update node picture (picture文件放入request的body中)
+---
+tags:
+  - node_pic
+parameters:
+- name: nid
+  in: path
+  type: integer
+  description: node id
+  required: true
+responses:
+  201:
+    description: null
+  400:
+    description: 默认错误返回
+    schema:
+      $ref: '#/definitions/GeneralError'

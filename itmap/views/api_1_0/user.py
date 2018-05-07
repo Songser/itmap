@@ -33,9 +33,10 @@ class UserAvatarApi(Resource):
         """
         file: swagger/user_avatar_put.yml
         """
+        current_uid = get_jwt_identity()
+        if current_uid != uid:
+            return {'msg': 'Not allowed'}, 400
         user = User.query.get(uid)
-        if not user:
-            return {'msg': 'Invalid args'}, 400
         path = user.avatar
         with open(path, 'wb') as fp:
             fp.write(request.get_data())
@@ -45,9 +46,10 @@ class UserAvatarApi(Resource):
         """
         file: swagger/user_avatar_delete.yml
         """
+        current_uid = get_jwt_identity()
+        if current_uid != uid:
+            return {'msg': 'Not allowed'}, 400
         user = User.query.get(uid)
-        if not user:
-            return {'msg': 'Invalid args'}, 400
         path = user.avatar
         if not os.path.isfile(path):
             return {'msg': 'Upload Avatar first'}, 400

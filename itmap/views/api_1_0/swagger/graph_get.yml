@@ -115,3 +115,6 @@ definitions:
         items:
           type: integer
           title: 目标node的id
+      pic:
+        type: string
+        title: 图片文件绝对路径

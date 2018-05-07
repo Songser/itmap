@@ -1,0 +1,18 @@
+node picture
+delete node picture
+---
+tags:
+  - node_pic
+parameters:
+- name: nid
+  in: path
+  type: integer
+  description: node id
+  required: true
+responses:
+  204:
+    description: null
+  400:
+    description: 默认错误返回
+    schema:
+      $ref: '#/definitions/GeneralError'

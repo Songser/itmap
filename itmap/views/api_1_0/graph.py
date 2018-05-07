@@ -48,6 +48,7 @@ node_fields = {
     'gid': fields.Integer,
     'from_nodes': FromNodeField,
     'to_nodes': ToNodeField,
+    'pic': fields.String,
 }
 
 graph_fields = {

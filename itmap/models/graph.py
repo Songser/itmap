@@ -68,6 +68,7 @@ class Node(db.Model):
     def __repr__(self):
         return '<Node {!r}>'.format(self.name)
 
+    @property
     def pic(self):
         return '{}{}.jpg'.format(current_app.config['ABSOLUTE_NODE_PICTURE_DIR'], self.id)
 
