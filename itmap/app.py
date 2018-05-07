@@ -5,7 +5,7 @@ import code
 import os
 import sys
 
-from flask import Flask, send_from_directory
+from flask import Flask
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib import rediscli
@@ -29,12 +29,12 @@ def create_app():
     login_manager.init_app(app)
     jwt.init_app(app)
 
-    migrate = Migrate(app, db)
+    Migrate(app, db)
     app.config['SWAGGER'] = {
-    'title': 'ITMAP SWAGGER',
-    'uiversion': 2
+        'title': 'ITMAP SWAGGER',
+        'uiversion': 2
     }
-    swagger = Swagger(app)
+    Swagger(app)
 
     admin = Admin(app, name='itmap', template_mode='bootstrap3')
     admin.add_view(ModelView(User, db.session))
@@ -68,11 +68,6 @@ def mkdir(app):
 
 
 app = create_app()
-
-
-#@app.route('/avatars/<path:path>', methods=['GET'])
-#def send_avatar(path):
-#    return send_from_directory('avatars', path)
 
 
 @app.cli.command(with_appcontext=True)
