@@ -83,7 +83,7 @@ export default {
   },
   computed: {
     ...mapState({
-      user_id: state => state.user.id,
+      userId: state => state.user.id,
       name: state => state.graph.name,
       gid: state => state.graph.id
     })
@@ -99,8 +99,8 @@ export default {
         })
       }
     })
-    if (this.user_id) {
-      getGraphList(this.user_id).then(response => {
+    if (this.userId) {
+      getGraphList(this.userId).then(response => {
         this.graphList = response.data
       })
     }
@@ -112,7 +112,7 @@ export default {
     },
     addNewGraph () {
       if (!this.isUpdate) {
-        addGraphApi(this.user_id, this.newGraphName, this.isPrivate).then(
+        addGraphApi(this.userId, this.newGraphName, this.isPrivate).then(
           response => {
             this.graphList.push({ id: response.data, name: this.newGraphName })
             this.newGraphName = ''

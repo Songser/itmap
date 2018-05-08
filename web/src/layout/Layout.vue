@@ -18,19 +18,17 @@
           </el-container>
           </el-container>
         </el-container> -->
-        <el-row class="el-header">
+        <el-row>
           <el-col :span="24" >
             <nav-bar/>
           </el-col>
         </el-row>
-        <el-row class="main-container">
+        <el-row style="height: 100%">
           <el-col :span="4" class="el-aside">
             <app-side-bar />
           </el-col>
-          <el-col :span="14" style="height: 100%">
-            <div class="el-main">
-              <app-main />
-            </div>
+          <el-col :span="14" class="el-main">
+              <app-main/>
           </el-col>
           <el-col :span="6" class="el-aside">
             <app-aside/>
@@ -63,6 +61,7 @@ export default {
   height: 100%;
   width: 100%;
 }
+
 .main-container {
   position: fixed;
   height: 100%;
@@ -77,15 +76,11 @@ export default {
 }
 .el-main {
   background-color: #FFF;
-  color: #333;
-  text-align: center;
-  width: 100%;
-  height: 100%;
+  height: 100%
 }
 .el-aside {
   background-color: #E9FEFF;
-  color: #333;
-  height: 100%;
+  height: 100%
 }
 .left-aside {
   max-width: 200px;

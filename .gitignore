@@ -8,3 +8,4 @@ local_settings.py
 *.rdb
 itmap/avatars/*
 itmap/node_pictures/*
+.DS_Store

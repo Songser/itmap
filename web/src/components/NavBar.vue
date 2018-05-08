@@ -35,11 +35,11 @@
             <span v-if="!user_id" @click="login" style="display:block;">立即登陆</span>
             <span v-if="user_id" style="display:block;">{{name}}</span>
           </el-dropdown-item>
-          <router-link to="/user">
-            <el-dropdown-item divided>
+          <el-dropdown-item divided>
+            <span @click="showUserSetting" style="display:block;">
               个人设置
-            </el-dropdown-item>
-          </router-link>
+            </span>
+          </el-dropdown-item>
           <a target='_blank' href="https://github.com/PanJiaChen/vue-element-admin/">
             <el-dropdown-item>
               个人图谱
@@ -52,7 +52,13 @@
       </el-dropdown>
     </div>
    </el-col>
-     </el-row>
+  </el-row>
+  <el-dialog
+      title="个人设置"
+      :visible.sync="showUserDialog"
+      width="60%" :append-to-body=true>
+      <user />
+    </el-dialog>
   </el-menu>
 </template>
 
@@ -60,11 +66,13 @@
 import { mapState } from 'vuex'
 import logo from '@/assets/logo.png'
 import PanThumb from '@/components/PanThumb'
+import User from '@/components/User'
 
 export default {
   name: 'nav-bar',
   components: {
-    PanThumb
+    PanThumb,
+    User
   },
   data () {
     return {
@@ -95,6 +103,12 @@ export default {
     addNode () {
       this.addNodeDialog = true
     },
+    addNodeClose () {
+      this.addNodeDialog = false
+    },
+    showUserSetting () {
+      this.showUserDialog = true
+    },
     showResource () {
 
     },
@@ -107,9 +121,7 @@ export default {
     showUser () {
 
     },
-    addNodeClose () {
-      this.addNodeDialog = false
-    }
+
   }
 }
 </script>

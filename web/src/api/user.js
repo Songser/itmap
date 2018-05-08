@@ -10,3 +10,7 @@ export function register (username, pwd, email) {
   let password = sha256(pwd)
   return request.post('/auth/register', {username, password, email})
 }
+
+export function getUserApi (userId) {
+  return request.get('/api/v1_0/users/' + userId)
+}

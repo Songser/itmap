@@ -34,6 +34,12 @@ export default {
 </script>
 
 <style scoped>
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
 .pan-item {
   width: 200px;
   height: 200px;
