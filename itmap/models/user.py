@@ -6,6 +6,7 @@ import hashlib
 from threading import Thread
 from werkzeug import security
 
+from flask import url_for, current_app
 from flask_mail import Message
 from flask_security import UserMixin, RoleMixin, AnonymousUser
 
