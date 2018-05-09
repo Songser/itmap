@@ -13,6 +13,7 @@ services:
     environment:
       FLASK_APP: app.py
     command: ["flask", "run", "--host=0.0.0.0"]
+    #command: ["gunicorn", "--workers=3", "itmap.app:app", "-b", "0.0.0.0:5000"]
 
   web:
     build: 

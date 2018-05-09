@@ -27,6 +27,7 @@ flasgger = "*"
 arrow = "*"
 ipython = "*"
 psycopg2 = "*"
+gunicorn = "*"
 
 [requires]
 
