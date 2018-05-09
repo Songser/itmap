@@ -2,7 +2,7 @@
 
 import os
 
-from flask import request
+from flask import request, current_app
 from flask_restful import Resource, fields, marshal, marshal_with, reqparse
 from flask_jwt_extended import (
     jwt_required, get_jwt_identity,
@@ -38,8 +38,11 @@ class UserAvatarApi(Resource):
             return {'msg': 'Not allowed'}, 400
         user = User.query.get(uid)
         path = user.avatar
-        with open(path, 'wb') as fp:
-            fp.write(request.get_data())
+        f = request.files['avatar']
+        f.save(path)
+        #current_app.logger.error(request.get_data())
+        # with open(path, 'wb') as fp:
+            # fp.write(request.get_data())
         return '', 201
 
     def delete(self, uid):
