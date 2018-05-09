@@ -2,7 +2,7 @@
 
 import os
 
-from flask import request
+from flask import request, current_app
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import (
     jwt_required, get_jwt_identity,
@@ -93,9 +93,9 @@ class NodePicApi(Resource):
             return {'msg': 'Invalid args'}, 400
         if node.owner_id != current_uid:
             return {'msg': 'Not allowed'}, 400
-        path = node.pic
-        with open(path, 'wb') as fp:
-            fp.write(request.get_data())
+        path = current_app.config['ABSOLUTE_NODE_PICTURE_DIR'] + node.pic
+        f = request.files['node_pic']
+        f.save(path)
         return '', 201
 
     def delete(self, nid):
@@ -108,7 +108,7 @@ class NodePicApi(Resource):
             return {'msg': 'Invalid args'}, 400
         if node.owner_id != current_uid:
             return {'msg': 'Not allowed'}, 400
-        path = node.pic
+        path = current_app.config['ABSOLUTE_NODE_PICTURE_DIR'] + node.pic
         if not os.path.isfile(path):
             return {'msg': 'Upload Picture first'}, 400
         os.remove(path)

@@ -37,12 +37,9 @@ class UserAvatarApi(Resource):
         if current_uid != uid:
             return {'msg': 'Not allowed'}, 400
         user = User.query.get(uid)
-        path = user.avatar
+        path = current_app.config['ABSOLUTE_AVATAR_DIR'] + user.avatar
         f = request.files['avatar']
         f.save(path)
-        #current_app.logger.error(request.get_data())
-        # with open(path, 'wb') as fp:
-            # fp.write(request.get_data())
         return '', 201
 
     def delete(self, uid):
@@ -53,7 +50,7 @@ class UserAvatarApi(Resource):
         if current_uid != uid:
             return {'msg': 'Not allowed'}, 400
         user = User.query.get(uid)
-        path = user.avatar
+        path = current_app.config['ABSOLUTE_AVATAR_DIR'] + user.avatar
         if not os.path.isfile(path):
             return {'msg': 'Upload Avatar first'}, 400
         os.remove(path)

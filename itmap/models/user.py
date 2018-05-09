@@ -6,7 +6,6 @@ import hashlib
 from threading import Thread
 from werkzeug import security
 
-from flask import url_for, current_app
 from flask_mail import Message
 from flask_security import UserMixin, RoleMixin, AnonymousUser
 
@@ -111,7 +110,7 @@ class User(db.Model, UserMixin):
 
     @property
     def avatar(self):
-        return '{}{}.jpg'.format(current_app.config['ABSOLUTE_AVATAR_DIR'], self.email_md5)
+        return '{}.jpg'.format(self.email_md5)
 
     @staticmethod
     def generate_password(password):
