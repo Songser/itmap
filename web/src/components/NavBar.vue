@@ -3,23 +3,23 @@
     <el-row >
       <el-col :span="4">
         <div class="logo-container">
-        <img class="user-avatar" :src="avatar">
+        <img class="user-avatar" :src="logo" :onerror="defaultImage">
         </div>
       </el-col>
    <el-col :span="14">
     <div class="button-container">
       <el-row>
           <el-col :span="6" class="text-center">
-            <a class="pan-btn light-blue-btn" @click="showResource">资源</a>
+            <a class="pan-btn light-blue-btn" @click="showResource">文章</a>
           </el-col>
           <el-col :span="6" class="text-center">
-            <a class="pan-btn pink-btn" @click="showArtical">文章</a>
+            <a class="pan-btn pink-btn" @click="showArtical">问答</a>
           </el-col>
           <el-col :span="6" class="text-center">
-            <a class="pan-btn green-btn" @click="showQuestion">问答</a>
+            <a class="pan-btn green-btn" @click="showQuestion">用户</a>
           </el-col>
           <el-col :span="6" class="text-center">
-            <a class="pan-btn tiffany-btn" @click="showUser">用户</a>
+            <a class="pan-btn tiffany-btn" @click="showUser">书籍</a>
           </el-col>
       </el-row>
     </div>
@@ -28,7 +28,7 @@
     <div class="right-menu">
     <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
-          <img class="user-avatar" :src="avatar">
+          <img class="user-avatar" :src="avatar" :onerror="defaultImage">
         </div>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item >
@@ -40,11 +40,6 @@
               个人设置
             </span>
           </el-dropdown-item>
-          <a target='_blank' href="https://github.com/PanJiaChen/vue-element-admin/">
-            <el-dropdown-item>
-              个人图谱
-            </el-dropdown-item>
-          </a>
           <el-dropdown-item divided>
             <span @click="logout" style="display:block;">退出登陆</span>
           </el-dropdown-item>
@@ -76,18 +71,20 @@ export default {
   },
   data () {
     return {
-      avatar: logo,
       addNodeDialog: false,
       showResourceDialog: false,
       showArticalDialog: false,
       showQuestionDialog: false,
-      showUserDialog: false
+      showUserDialog: false,
+      logo: logo,
+      defaultImage: 'this.src="' + require('../assets/logo.png') + '"'
     }
   },
   computed: {
     ...mapState({
       user_id: state => state.user.id,
-      name: state => state.user.name
+      name: state => state.user.name,
+      avatar: state => state.user.avatar
     })
   },
   created () {

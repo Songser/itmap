@@ -154,7 +154,8 @@ def current_user():
             name=user.name,
             email=user.email,
             active=user.active,
-            verified=user.has_verified), 200
+            verified=user.has_verified,
+            avatar=user.avatar), 200
     else:
         return jsonify(user_id=0), 200
 

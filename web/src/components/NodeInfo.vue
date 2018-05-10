@@ -5,7 +5,7 @@
       <img src='https://wpimg.wallstcn.com/e7d23d71-cf19-4b90-a1cc-f56af8c0903d.png'>
     </div>
     <div style="position:relative;">
-      <pan-thumb class="panThumb" :image="avatar"></pan-thumb>
+      <pan-thumb class="panThumb" :image="image"></pan-thumb>
       <div style="padding-top:35px;" class='progress-item'>
         <h3>节点: {{name}}</h3>
       </div>
@@ -66,9 +66,9 @@ export default {
         article_count: 1024,
         pageviews_count: 1024
       },
-      avatar: logo,
       addNodeDialog: false,
-      delNodeDialog: false
+      delNodeDialog: false,
+      defaultImg: logo,
     }
   },
   computed: mapState({
@@ -77,7 +77,8 @@ export default {
     user: state => state.graph.ownerName,
     desc: state => state.node.desc,
     create_date: state => state.node.create_date,
-    graph: state => state.graph.name
+    graph: state => state.graph.name,
+    image: state => BASE_URL + '/node_pics/'+ state.node.id +'.jpg'
   }),
   methods: {
     showAddNodeDialog () {

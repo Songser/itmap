@@ -7,8 +7,8 @@
   list-type="picture-card"
   :on-preview="handlePictureCardPreview"
   :on-remove="handleRemove"
-  :headers="headers"
   :auto-upload="false"
+  :http-request="handlerUpload"
   ref="upload">
   <i class="el-icon-plus"></i>
 </el-upload>
@@ -54,6 +54,14 @@
 <script>
 import { mapState } from 'vuex'
 import { getToken } from '@/utils/auth'
+import {
+  addNodeApi,
+  addLinkApi,
+  getNodesApi,
+  delNodeApi,
+  uploadNodePicApi,
+} from '@/api/graph'
+
 export default {
   name: 'add-node',
   data: function () {
@@ -66,25 +74,42 @@ export default {
       shape: 'circle',
       dialogImageUrl: '',
       dialogVisible: false,
-      headers: {Authorization: 'Bearer ' + getToken()},
       action: '',
+      newNodeId: 0,
     }
   },
   methods: {
     onSubmit () {
-      this.$store.dispatch('addNode', {
+      let data = {
         graphId: this.graph.id,
         name: this.name,
         color: this.color,
         shape: this.shape,
         size: this.size,
-        source_id: this.node.id,
-        source: this.node.name,
-        target: this.name,
-        value: this.info,
-        upload: this.$refs.upload,
-        action: this.action,
+        desc: this.desc,
+        
+      }
+      addNodeApi(data).then(response => {
+        this.newNodeId = response.data
+        data['target_id'] = this.newNodeId
+        this.$store.commit('addNode', data)
+        this.$refs.upload.submit()
+        if (this.node.name && this.name){
+          addLinkApi({
+            source_id: this.node.id,
+            target_id: this.newNodeId,
+            graphId:  this.graph.id,
+            value: this.info
+          }).then(response => {
+            this.$store.commit('addLink', {
+            source: this.node.name,
+            target: this.name,
+            value: this.info,
+          })
+          })
+        }
       })
+      
       this.$emit('closeAddNodeDialog')
     },
     cancle () {
@@ -96,6 +121,12 @@ export default {
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    handlerUpload(options){
+      console.log(options)
+      let form = new FormData()
+      form.append(options.filename, options.file)
+      uploadNodePicApi(form, this.newNodeId)
     }
   },
   computed: mapState({

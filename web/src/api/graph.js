@@ -32,6 +32,7 @@ export function addNodeApi (data) {
 }
 
 export function addLinkApi (data) {
+  console.log(data)
   return request.post('/api/v1_0/node_rels', {
     source_node_id: data.source_id,
     target_node_id: data.target_id,
@@ -46,4 +47,8 @@ export function getNodesApi (gid) {
 
 export function delNodeApi (id) {
   return request.delete('/api/v1_0/nodes/' + id)
+}
+
+export function uploadNodePicApi (form, nodeId) {
+  return request.post('/api/v1_0/nodes/' + nodeId + '/pic', form)
 }

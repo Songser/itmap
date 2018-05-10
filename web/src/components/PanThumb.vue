@@ -5,11 +5,12 @@
         <slot></slot>
       </div>
     </div>
-    <img class="pan-thumb" :src="image">
+    <img class="pan-thumb" :src="image" :onerror="defaultImage" />
   </div>
 </template>
 
 <script>
+import logo from '@/assets/logo.png'
 export default {
   name: 'PanThumb',
   props: {
@@ -28,6 +29,11 @@ export default {
     height: {
       type: String,
       default: '150px'
+    }
+  },
+  data() {
+    return {
+      defaultImage: 'this.src="' + require('../assets/logo.png') + '"'
     }
   }
 }
@@ -133,4 +139,5 @@ export default {
   opacity: 1;
   transform: translateX(0px) rotate(0deg);
 }
+
 </style>
