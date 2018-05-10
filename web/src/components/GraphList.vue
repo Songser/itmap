@@ -171,7 +171,11 @@ export default {
 
 <style scoped>
 .buttons {
-  margin: 10px;
+  margin: 10px 0;
+  text-align: center;
+}
+.el-button {
+  margin: 0;
 }
 .el-dialog {
   text-align: left;

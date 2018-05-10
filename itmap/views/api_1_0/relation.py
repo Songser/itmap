@@ -50,7 +50,7 @@ class NodeRelationApi(Resource):
         relation = NodeRelation(**vals)
         db.session.add(relation)
         db.session.commit()
-        return relation.id, 201
+        return True, 201
 
     def put(self):
         """

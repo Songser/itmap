@@ -802,7 +802,10 @@ export default {
           withCredentials
         } = this,
         fmData = new FormData()
+        console.log(createImgUrl)
+        console.log(field)
       fmData.append(field, data2blob(createImgUrl, mime), field + '.' + imgFormat)
+      console.log(fmData)
       // 添加其他参数
       if (typeof params === 'object' && params) {
         Object.keys(params).forEach((k) => {
@@ -819,6 +822,7 @@ export default {
       that.reset()
       that.loading = 1
       that.setStep(3)
+      console.log(fmData)
       request({
         url,
         method: 'put',

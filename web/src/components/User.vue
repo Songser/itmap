@@ -50,11 +50,11 @@ export default {
       form: {
         name: '',
         email: '',
-        sex: '',
+        gender: 'male',
         birthday: '',
         mobile: '',
         wechat: '',
-        avatar: 'https://wpimg.wallstcn.com/577965b9-bb9e-4e02-9f0c-095b41417191',
+        avatar: '',
       },
       imagecropperKey: 0,
       imagecropperShow: false,
@@ -72,11 +72,12 @@ export default {
           let data = response.data
           this.form.name = data.name
           this.form.email = data.email
+          this.form.avatar = BASE_URL + '/avatars/'+ data.avatar
       })
   },
   methods: {
       close() {
-
+          this.imagecropperShow = false
       },
       cropSuccess () {
 

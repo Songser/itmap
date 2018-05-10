@@ -83,7 +83,7 @@ class NodePicApi(Resource):
 
     method_decorators = [jwt_required]
 
-    def put(self, nid):
+    def post(self, nid):
         """
         file: swagger/node_pic_put.yml
         """

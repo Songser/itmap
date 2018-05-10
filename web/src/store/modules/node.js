@@ -118,12 +118,16 @@ const actions = {
           create_date: ''
         })
       }
+      return data.id
     })
   },
   addNode ({commit}, data) {
     addNodeApi(data).then(response => {
       data['target_id'] = response.data
       commit('addNode', data)
+      let upload = data.upload
+      data.action = BASE_URL + '/api/v1_0/nodes/' + data['target_id'] + '/pic'
+      upload.submit()
       if (data.source && data.target) {
         addLinkApi(data).then(response => {
           commit('addLink', {
@@ -131,8 +135,10 @@ const actions = {
             target: data.target,
             value: data.value
           })
+          
         })
       }
+      return data['target_id']
     })
   },
   delNode ({commit}, {id, name}) {

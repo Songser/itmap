@@ -1,5 +1,21 @@
 <template>
   <el-form label-width="80px" :label-position='"left"'>
+  <el-form-item label="图标">
+    <el-upload
+    name="node_pic"
+    :action="action"
+  list-type="picture-card"
+  :on-preview="handlePictureCardPreview"
+  :on-remove="handleRemove"
+  :headers="headers"
+  :auto-upload="false"
+  ref="upload">
+  <i class="el-icon-plus"></i>
+</el-upload>
+<el-dialog :visible.sync="dialogVisible">
+  <img width="100%" :src="dialogImageUrl" alt="">
+</el-dialog>
+  </el-form-item>
   <el-form-item label="图谱">
     <el-input v-model="graph.name" disabled></el-input>
   </el-form-item>
@@ -37,6 +53,7 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import { getToken } from '@/utils/auth'
 export default {
   name: 'add-node',
   data: function () {
@@ -46,7 +63,11 @@ export default {
       info: '',
       color: '#c23531',
       size: 'M',
-      shape: 'circle'
+      shape: 'circle',
+      dialogImageUrl: '',
+      dialogVisible: false,
+      headers: {Authorization: 'Bearer ' + getToken()},
+      action: '',
     }
   },
   methods: {
@@ -60,18 +81,27 @@ export default {
         source_id: this.node.id,
         source: this.node.name,
         target: this.name,
-        value: this.info
+        value: this.info,
+        upload: this.$refs.upload,
+        action: this.action,
       })
       this.$emit('closeAddNodeDialog')
     },
     cancle () {
       this.$emit('closeAddNodeDialog')
+    },
+    handleRemove(file, fileList) {
+      
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
     }
   },
   computed: mapState({
     node: state => state.node,
     user: state => state.user,
-    graph: state => state.graph
+    graph: state => state.graph,
   })
 }
 </script>
