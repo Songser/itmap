@@ -4,14 +4,16 @@ import Vue from 'vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import App from './App'
+import Vuetify from 'vuetify'
 import router from './router'
 import store from './store'
 import './icons'
 
-import '@/styles/index.scss'
+import 'vuetify/dist/vuetify.css'
+
 
 Vue.config.productionTip = false
-Vue.use(ElementUI)
+Vue.use(Vuetify)
 
 /* eslint-disable no-new */
 new Vue({

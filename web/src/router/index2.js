@@ -2,10 +2,11 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import http from '@/utils/request'
 import store from '@/store'
+import Graph from '@/components/Graph'
 import Layout from '@/layout/Layout'
-import AppHeader from '@/views/AppHeader'
-import Login from '@/views/Login'
-
+import Login from '@/components/Login'
+import Register from '@/components/Register'
+import User from '@/components/User'
 
 Vue.use(VueRouter)
 
@@ -17,18 +18,32 @@ const router = new VueRouter({
       component: Layout,
       children: [{
         path: 'index',
-        component: AppHeader,
+        component: Graph,
         name: 'index'
       }]
+    },
+    {
+      path: '/graph',
+      name: 'Graph',
+      component: Graph
     },
     {
       path: '/login',
       name: 'Login',
       component: Login
     },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
+    },
+    {
+      path: '/user',
+      name: 'User',
+      component: User
+    }
   ]
 })
-
 
 function getUser () {
   return http.get('/auth/current_user')
