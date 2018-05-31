@@ -1,22 +1,35 @@
 <template>
-  <v-container>
-    <v-layout row justify-center mt-3>
-      <v-flex xs12 sm6 md6>
-        <v-card dark color="indigo" mt-3>
-          <!-- <v-card-title class="white--text">登陆</v-card-title> -->
-          <v-card-text>
-            <v-form v-model="valid">
-              <v-text-field v-model="loginForm.name" label="姓名" required></v-text-field>
-              <v-text-field v-model="loginForm.password" label="密码" required></v-text-field>
-              <v-btn :disabled="!valid" @click="submit">
-                登录
-              </v-btn>
-            </v-form>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+  <v-app id="inspire">
+    <v-content>
+      <v-container fluid fill-height grid-list-md>
+        <v-layout align-center justify-center>
+          <v-flex xs12 sm8 md4>
+            <v-card class="elevation-12">
+              <v-toolbar dark color="primary">
+                <v-toolbar-title>用户登录</v-toolbar-title>
+              </v-toolbar>
+              <v-card-text>
+                <v-form ref="loginForm">
+                  <v-text-field v-model="username" prepend-icon="person" name="username" label="姓名" type="text"></v-text-field>
+                  <v-text-field v-model="password" prepend-icon="lock" name="password" label="密码" type="password"></v-text-field>
+                </v-form>
+              </v-card-text>
+              <v-card-actions px-5 >
+                 <v-btn color="primary" @click="handleLogin">登录</v-btn>
+                 <v-spacer></v-spacer>
+                <v-btn fab small color="primary">
+                  <v-icon >fab fa-github</v-icon>
+                </v-btn>
+                <v-btn fab small color="primary">
+                  <v-icon >fab fa-weixin</v-icon>
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
@@ -44,10 +57,8 @@ export default {
       }
     };
     return {
-      loginForm: {
-        username: "",
-        password: ""
-      },
+      username: "",
+      password: "",
       loginRules: {
         username: [
           { required: true, trigger: "blur", validator: validateUsername }
@@ -77,7 +88,7 @@ export default {
     },
     handleLogin() {
       this.loading = true;
-      login(this.loginForm.username, this.loginForm.password).then(response => {
+      login(this.username, this.password).then(response => {
         let data = response.data;
         setToken(data.access_token);
         this.$store.commit("setUser", {
@@ -90,9 +101,13 @@ export default {
         this.$router.push("index");
         this.loading = false;
       });
-    },
-    created() {},
-    destroyed() {}
+    }
   }
 };
 </script>
+
+<style scoped>
+.card__actions .btn {
+  margin: 0 20px;
+}
+</style>
