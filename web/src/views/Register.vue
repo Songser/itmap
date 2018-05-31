@@ -6,27 +6,18 @@
           <v-flex xs12 sm8 md4>
             <v-card class="elevation-12">
               <v-toolbar dark color="primary">
-                <v-toolbar-title>用户登录</v-toolbar-title>
+                <v-toolbar-title>用户注册</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <v-form ref="loginForm">
                   <v-text-field v-model="username" :rules="loginRules.username" prepend-icon="person" name="username" label="姓名" type="text"></v-text-field>
+                  <v-text-field v-model="email" :rules="loginRules.email" prepend-icon="email" name="email" label="邮箱" type="text"></v-text-field>
                   <v-text-field v-model="password" prepend-icon="lock" name="password" label="密码" type="password"></v-text-field>
+                  <v-text-field v-model="password" prepend-icon="lock" name="password" label="确认密码" type="password"></v-text-field>
                 </v-form>
               </v-card-text>
               <v-card-actions px-5 >
                 <v-btn block dark :loading="loading" color="primary" @click="handleLogin">登录</v-btn>
-              </v-card-actions>
-              <v-card-actions px-5 >
-                 <v-btn flat color="indigo" to='register'>立即注册</v-btn>
-                 <v-btn flat color="indigo" to='forget'>忘记密码</v-btn>
-                 <v-spacer></v-spacer>
-                <v-btn fab small color="primary">
-                  <v-icon >fab fa-github</v-icon>
-                </v-btn>
-                <v-btn fab small color="primary">
-                  <v-icon >fab fa-weixin</v-icon>
-                </v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -49,7 +40,9 @@ export default {
   data() {
     return {
       username: "",
+      email: "",
       password: "",
+      retryPwd: "",
       loginRules: {
         username: [
           v => !!v || '不能为空',
@@ -57,6 +50,10 @@ export default {
         ],
         password: [
           v => !!v || '不能为空',
+        ],
+        email: [
+          v => !!v || '不能为空',
+          v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || '邮箱格式无效'
         ]
       },
       loading: false,
@@ -85,12 +82,12 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang='scss' scoped>
 @import '../styles/mixin.scss';
 .card__actions .btn {
   margin: 0px 10px 20px 10px;
 }
 .content {
-  @include realbg()
+ @include realbg()
 }
 </style>
