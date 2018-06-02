@@ -4,6 +4,7 @@ import http from '@/utils/request'
 import store from '@/store'
 import Layout from '@/layout/Layout'
 import AppHeader from '@/views/AppHeader'
+import AppMain from '@/views/AppMain'
 import Login from '@/views/Login'
 import Register from '@/views/Register'
 
@@ -18,7 +19,7 @@ const router = new VueRouter({
       component: Layout,
       children: [{
         path: 'index',
-        component: AppHeader,
+        component: AppMain,
         name: 'index'
       }]
     },

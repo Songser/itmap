@@ -11,5 +11,13 @@ export default new Vuex.Store({
     user,
     node,
     graph
+  },
+  state: {
+    leftDrawer: false
+  },
+  mutations: {
+    openLeftDrawer (state) {
+      state.leftDrawer = !state.leftDrawer
+    }
   }
 })

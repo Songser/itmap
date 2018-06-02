@@ -27,6 +27,7 @@ import 'echarts/lib/chart/graph'
 import 'echarts/lib/component/tooltip'
 
 export default {
+  name: 'graph',
   components: {
     chart: ECharts
   },

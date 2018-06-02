@@ -10,14 +10,46 @@
               </v-toolbar>
               <v-card-text>
                 <v-form ref="loginForm">
-                  <v-text-field v-model="username" :rules="loginRules.username" prepend-icon="person" name="username" label="姓名" type="text"></v-text-field>
-                  <v-text-field v-model="email" :rules="loginRules.email" prepend-icon="email" name="email" label="邮箱" type="text"></v-text-field>
-                  <v-text-field v-model="password" prepend-icon="lock" name="password" label="密码" type="password"></v-text-field>
-                  <v-text-field v-model="password" prepend-icon="lock" name="password" label="确认密码" type="password"></v-text-field>
+                  <v-text-field v-model="username"
+                    :error-messages="nameErrors"
+                    prepend-icon="person"
+                    name="username"
+                    label="姓名"
+                    type="text"
+                    @input="$v.username.$touch()"
+                    @blur="$v.username.$touch()">
+                  </v-text-field>
+                  <v-text-field v-model="email"
+                    :error-messages="emailErrors"
+                    prepend-icon="email"
+                    name="email"
+                    label="邮箱"
+                    type="text"
+                    @input="$v.email.$touch()"
+                    @blur="$v.email.$touch()">
+                  </v-text-field>
+                  <v-text-field v-model="password"
+                    :error-messages="passwordErrors"
+                    prepend-icon="lock"
+                    name="password"
+                    label="密码"
+                    type="password"
+                    @input="$v.password.$touch()"
+                    @blur="$v.password.$touch()">
+                  </v-text-field>
+                  <v-text-field v-model="retryPwd"
+                    :error-messages="retryPwdErrors"
+                    prepend-icon="lock"
+                    name="retryPwd"
+                    label="确认密码"
+                    type="password"
+                    @input="$v.retryPwd.$touch()"
+                    @blur="$v.retryPwd.$touch()">
+                  </v-text-field>
                 </v-form>
               </v-card-text>
               <v-card-actions px-5 >
-                <v-btn block dark :loading="loading" color="primary" @click="handleLogin">登录</v-btn>
+                <v-btn block dark :loading="loading" color="primary" @click="handleRegister">注册</v-btn>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -28,60 +60,78 @@
 </template>
 
 <script>
-import { isvalidUsername } from "@/utils/validate";
-import SocialSign from "@/components/SocialSignin";
+import { validationMixin } from 'vuelidate';
+import { required, minLength, email, sameAs } from 'vuelidate/lib/validators';
 import { setToken } from "@/utils/auth";
-import { login } from "@/api/user";
+import { register } from "@/api/user";
 
 
 export default {
-  components: { SocialSign },
-  name: "Login",
+  name: "register",
+  mixins: [validationMixin],
+  validations: {
+      username: { required, minLength: minLength(4) },
+      email: { required, email },
+      password: { required, minLength: minLength(6) },
+      retryPwd: {
+        required, sameAsPassword: sameAs('password')
+      }
+  },
   data() {
     return {
       username: "",
       email: "",
       password: "",
       retryPwd: "",
-      loginRules: {
-        username: [
-          v => !!v || '不能为空',
-          v => v.length >= 4 || '不能小于6个字节'
-        ],
-        password: [
-          v => !!v || '不能为空',
-        ],
-        email: [
-          v => !!v || '不能为空',
-          v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || '邮箱格式无效'
-        ]
-      },
       loading: false,
     };
   },
-  methods: {
-    handleLogin() {
-      this.loading = true;
-      login(this.username, this.password).then(response => {
-        let data = response.data;
-        setToken(data.access_token);
-        this.$store.commit("setUser", {
-          name: data.name,
-          id: data.user_id,
-          email: data.email,
-          active: data.active,
-          token: data.access_token
-        });
-        this.$router.push("index");
-        this.loading = false;
-      }, response => {
-        this.loading = false;
-      });
+  computed: {
+    nameErrors () {
+      const errors = []
+      if (!this.$v.username.$dirty) return errors
+      !this.$v.username.minLength && errors.push('不少于5个字符')
+      !this.$v.username.required && errors.push('不能为空')
+      return errors
+    },
+    emailErrors () {
+      const errors = []
+      if (!this.$v.email.$dirty) return errors
+      !this.$v.email.email && errors.push('邮箱格式错误')
+      !this.$v.email.required && errors.push('不能为空')
+      return errors
+    },
+    passwordErrors () {
+      const errors = []
+      if (!this.$v.password.$dirty) return errors
+      !this.$v.password.required && errors.push('不能为空')
+      return errors
+    },
+    retryPwdErrors () {
+      const errors = []
+      if (!this.$v.retryPwd.$dirty) return errors
+      !this.$v.retryPwd.required && errors.push('不能为空')
+      !this.$v.retryPwd.sameAsPassword && errors.push('两次输入密码不相同')
+      return errors
     }
+  },
+  methods: {
+    handleRegister (formName) {
+      if (!this.$v.$invalid) {
+        this.loading = true
+        register(this.username, this.password, this.email)
+          .then((response) => {
+            this.loading = false
+            this.$router.push('login')
+          }, (response) => {
+            this.loading = false
+          })
+      }
+    },
+
   }
 };
 </script>
-
 <style lang='scss' scoped>
 @import '../styles/mixin.scss';
 .card__actions .btn {
