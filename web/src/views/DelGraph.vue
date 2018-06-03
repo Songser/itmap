@@ -20,20 +20,30 @@
   </section>
 </template>
 <script>
+import { deleteGraphApi } from "@/api/graph";
+
 export default {
   name: "del-graph",
   props: ["graph"],
-  data () {
+  data() {
     return {
-      showDialog: false
-    }
+      showDialog: false,
+      snackbar: false
+    };
   },
   methods: {
-    openDialog () {
-      this.showDialog = true
+    openDialog() {
+      this.showDialog = true;
     },
-    clear () {
+    delGraph() {
+      if (this.graph.owner_id !== this.$store.state.user.id) {
+        this.$store.commit('showSnackar', '无权限删除图谱')
+      } else {
+        deleteGraphApi(this.graph.id).then(response => {
 
+        });
+      }
+      this.showDialog = false;
     }
   }
 };

@@ -15,6 +15,9 @@
             <v-list-tile-content>
               <v-list-tile-title v-html="item.name"></v-list-tile-title>
             </v-list-tile-content>
+            <v-list-tile-action>
+              <del-graph v-bind:graph="item"/>
+            </v-list-tile-action>
           </v-list-tile>
           <v-divider :key="item.name"></v-divider>
         </template>

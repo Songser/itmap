@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="leftDrawer" app fixed persistent>
+    <v-navigation-drawer v-model="leftDrawer" app fixed enable-resize-watcher persistent>
       <app-left />
     </v-navigation-drawer>
     <v-toolbar app>
@@ -11,10 +11,15 @@
     <v-content>
       <router-view />
     </v-content>
+    <v-snackbar :timeout="5000" color="error" :top="true"  v-model="snackbar">
+      {{snackbarContent}}
+    </v-snackbar>
   </v-app>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 import AppHeader from "@/views/AppHeader";
 import AppLeft from "@/views/AppLeft";
 export default {
@@ -29,6 +34,12 @@ export default {
       rightDrawer: false,
       mini: true,
     }
+  },
+  computed: {
+    ...mapState({
+      snackbar: state => state.snackbar,
+      snackbarContent: state => state.snackbarContent,
+    })
   },
   methods: {
     openLeftDrawer(){

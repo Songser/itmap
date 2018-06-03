@@ -13,11 +13,13 @@ export default new Vuex.Store({
     graph
   },
   state: {
-    leftDrawer: false
+    snackbar: false,
+    snackbarContent: '',
   },
   mutations: {
-    openLeftDrawer (state) {
-      state.leftDrawer = !state.leftDrawer
+    showSnackar (state, content) {
+      state.snackbar = true
+      state.snackbarContent = content
     }
   }
 })
