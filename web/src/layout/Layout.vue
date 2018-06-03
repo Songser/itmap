@@ -1,12 +1,13 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="leftDrawer" fixed app>
+    <v-navigation-drawer v-model="leftDrawer" app fixed persistent>
       <app-left />
     </v-navigation-drawer>
-    <v-navigation-drawer v-model="rightDrawer" right fixed app >
-      <app-left />
+    <v-toolbar app>
+      <app-header @openLeftDrawer="openLeftDrawer" @openRightDrawer="openRightDrawer"/>
+    </v-toolbar>
+    <v-navigation-drawer v-model="rightDrawer" right fixed app clipped>
     </v-navigation-drawer>
-    <app-header @openLeftDrawer="openLeftDrawer"/>
     <v-content>
       <router-view />
     </v-content>
@@ -25,12 +26,16 @@ export default {
   data () {
     return {
       leftDrawer: true,
-      rightDrawer: false
+      rightDrawer: false,
+      mini: true,
     }
   },
   methods: {
     openLeftDrawer(){
       this.leftDrawer = true
+    },
+    openRightDrawer() {
+      this.rightDrawer = true
     }
   }
 };

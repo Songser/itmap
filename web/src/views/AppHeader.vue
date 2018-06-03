@@ -6,21 +6,49 @@
     <v-btn icon>
       <v-icon>search</v-icon>
     </v-btn>
-    <v-btn icon>
+    <v-chip close @click="showUser" @input="logout">
+      <v-avatar>
+        <img :src="avatar" alt="trevor" :onerror="defaultImage">
+      </v-avatar>
+      {{name}}
+    </v-chip>
+    <v-btn icon @click="openRightDrawer">
       <v-icon>more_vert</v-icon>
     </v-btn>
   </v-toolbar>
-
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapState } from "vuex";
 export default {
   name: "app-header",
-  methods: {
-    openLeftDrawer () {
-      this.$emit('openLeftDrawer')
+  data () {
+    return {
+      defaultImage: 'this.src="' + require('../assets/logo.png') + '"'
     }
-  }
+  },
+  computed: {
+    ...mapState({
+      user_id: state => state.user.id,
+      name: state => state.user.name,
+      avatar: state => state.user.avatar
+    })
+  },
+  methods: {
+    openLeftDrawer() {
+      this.$emit("openLeftDrawer");
+    },
+    openRightDrawer() {
+      this.$emit("openRightDrawer")
+    },
+    showUser () {
+      if (!this.user_id){
+        this.$router.push("login");
+      }
+    },
+    logout () {
+      console.log('fffff')
+    }
+  },
 };
 </script>
