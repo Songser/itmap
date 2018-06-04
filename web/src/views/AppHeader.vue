@@ -9,7 +9,7 @@
       <v-avatar @click.stop="addNode">
         <v-icon medium>fas fa-plus-circle</v-icon>
       </v-avatar>
-      <span>{{node}}</span>
+      <span @click.stop="showDetail">{{node}}</span>
     </v-chip>
     <v-spacer></v-spacer>
     <v-chip close @click="showUser" @input="logout">
@@ -22,8 +22,11 @@
     <v-btn icon @click="openRightDrawer">
       <v-icon>more_vert</v-icon>
     </v-btn>
-    <v-dialog v-model="addNodeDialog" max-width="500px" lazy persistent>
-      <add-node />
+    <v-dialog v-model="addNodeDialog" max-width="600px" lazy persistent>
+      <add-node @closeAddNodeDialog="closeAddNodeDialog"/>
+    </v-dialog>
+    <v-dialog v-model="detailDialog" fullscreen hide-overlay scrollable transition="dialog-bottom-transition">
+      <node-info @closeDetailDialog="closeDetailDialog"/>
     </v-dialog>
   </v-toolbar>
 </template>
@@ -31,14 +34,17 @@
 <script>
 import { mapState } from "vuex";
 import AddNode from "@/views/AddNode"
+import NodeInfo from "@/views/NodeInfo"
 export default {
   name: "app-header",
   components: {
-    AddNode
+    AddNode,
+    NodeInfo
   },
   data() {
     return {
       addNodeDialog: false,
+      detailDialog: false,
       defaultImage: 'this.src="' + require("../assets/logo.png") + '"'
     };
   },
@@ -67,7 +73,17 @@ export default {
     },
     logout() {
       console.log("fffff");
+    },
+    closeAddNodeDialog () {
+      this.addNodeDialog = false
+    },
+    showDetail() {
+      this.detailDialog = true
+    },
+    closeDetailDialog () {
+      this.detailDialog = false
     }
+
   }
 };
 </script>
@@ -77,5 +93,8 @@ export default {
 }
 .chip span {
   cursor: pointer
+}
+.avatar {
+  cursor: pointer;
 }
 </style>

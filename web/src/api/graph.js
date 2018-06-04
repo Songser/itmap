@@ -50,5 +50,6 @@ export function delNodeApi (id) {
 }
 
 export function uploadNodePicApi (form, nodeId) {
+  console.log(form)
   return request.post('/api/v1_0/nodes/' + nodeId + '/pic', form)
 }

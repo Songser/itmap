@@ -9,14 +9,11 @@
           <v-flex xs4>
             <v-subheader>图标</v-subheader>
           </v-flex>
-          <v-flex xs4>
-            <pan-thumb class="panThumb"  :image="image"></pan-thumb>
-          </v-flex>
-          <v-flex xs4>
-            <v-btn type="primary" size="small" @click="imagecropperShow=true">上传图片
-              <v-icon right dark>cloud_upload</v-icon>
-            </v-btn>
-            <image-cropper :width="300" :height="300" :url="uploadUrl" @close='close' @crop-upload-success="cropSuccess" langType="en" :key="imagecropperKey" v-show="imagecropperShow"></image-cropper>
+          <v-flex xs8 mb-3>
+            <v-avatar size="70" color="grey lighten-4" @click="imagecropperShow=true">
+              <img :src="image" alt="avatar" v-show="image">
+            </v-avatar>
+            <image-cropper :width="300" :height="300" :field="field" @close='close' @cropSuccess="cropSuccess" langType="zh" v-show="imagecropperShow"></image-cropper>
           </v-flex>
         </v-layout>
         <v-layout row>
@@ -105,6 +102,7 @@
 <script>
 import { mapState } from "vuex";
 import { getToken } from "@/utils/auth";
+import data2blob from "@/utils/data2blob.js";
 import {
   addNodeApi,
   addLinkApi,
@@ -114,7 +112,7 @@ import {
 } from "@/api/graph";
 import UploadFile from "@/components/UploadFile";
 import ImageCropper from "@/components/ImageCropper";
-import PanThumb from '@/components/PanThumb'
+import PanThumb from "@/components/PanThumb";
 
 export default {
   name: "add-node",
@@ -124,6 +122,7 @@ export default {
     PanThumb
   },
   data: function() {
+    console.log("fffff");
     return {
       name: "",
       desc: "",
@@ -138,14 +137,13 @@ export default {
       newNodeId: 0,
       imagecropperKey: 0,
       imagecropperShow: false,
+      field: "node_pic",
     };
   },
   computed: mapState({
     node: state => state.node,
     user: state => state.user,
     graph: state => state.graph,
-    uploadUrl: state => '/api/v1_0/nodes/' + state.node.id + '/pic'
-
   }),
   methods: {
     onSubmit() {
@@ -161,7 +159,7 @@ export default {
         this.newNodeId = response.data;
         data["target_id"] = this.newNodeId;
         this.$store.commit("addNode", data);
-        this.$refs.upload.submit();
+        this.handlerUpload()
         if (this.node.name && this.name) {
           addLinkApi({
             source_id: this.node.id,
@@ -177,29 +175,24 @@ export default {
           });
         }
       });
-
       this.$emit("closeAddNodeDialog");
     },
     cancle() {
       this.$emit("closeAddNodeDialog");
     },
-    handleRemove(file, fileList) {},
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
+    cropSuccess(createImgUrl, field, mime, ki) {
+      this.image = createImgUrl;
+      this.mime = mime;
     },
-    handlerUpload(options) {
-      console.log(options);
+    handlerUpload() {
       let form = new FormData();
-      form.append(options.filename, options.file);
+      form.append(this.field, data2blob(this.image, this.mime));
+      form.append('fffff', 'eeeee')
       uploadNodePicApi(form, this.newNodeId);
     },
-    close () {
-      this.imagecropperShow = false
-    },
-    cropSuccess () {
-
-      }
+    close() {
+      this.imagecropperShow = false;
+    }
   }
 };
 </script>
@@ -208,15 +201,15 @@ export default {
   padding: 0;
 }
 .panThumb {
-    z-index: 100;
-    height: 70px!important;
-    width: 70px!important;
-    border: 5px solid #ffffff;
-    background-color: #fff;
-    box-shadow: none!important;
-    /deep/ .pan-info {
-      box-shadow: none!important;
-    }
+  z-index: 100;
+  height: 70px !important;
+  width: 70px !important;
+  border: 5px solid #ffffff;
+  background-color: #fff;
+  box-shadow: none !important;
+  /deep/ .pan-info {
+    box-shadow: none !important;
   }
+}
 </style>
 
