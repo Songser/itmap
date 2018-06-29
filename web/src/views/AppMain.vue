@@ -2,7 +2,7 @@
   <graph />
 </template>
 <script>
-import Graph from '@/components/Graph'
+import Graph from '@/views/Graph'
 export default {
   name: 'app-main',
   components: {

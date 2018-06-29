@@ -60,31 +60,30 @@
 </template>
 
 <script>
-import { validationMixin } from 'vuelidate';
-import { required, minLength, email, sameAs } from 'vuelidate/lib/validators';
-import { setToken } from "@/utils/auth";
-import { register } from "@/api/user";
-
+import { validationMixin } from 'vuelidate'
+import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
+import { setToken } from '@/utils/auth'
+import { register } from '@/api/user'
 
 export default {
-  name: "register",
+  name: 'register',
   mixins: [validationMixin],
   validations: {
-      username: { required, minLength: minLength(4) },
-      email: { required, email },
-      password: { required, minLength: minLength(6) },
-      retryPwd: {
-        required, sameAsPassword: sameAs('password')
-      }
+    username: { required, minLength: minLength(4) },
+    email: { required, email },
+    password: { required, minLength: minLength(6) },
+    retryPwd: {
+      required, sameAsPassword: sameAs('password')
+    }
   },
-  data() {
+  data () {
     return {
-      username: "",
-      email: "",
-      password: "",
-      retryPwd: "",
-      loading: false,
-    };
+      username: '',
+      email: '',
+      password: '',
+      retryPwd: '',
+      loading: false
+    }
   },
   computed: {
     nameErrors () {
@@ -127,10 +126,10 @@ export default {
             this.loading = false
           })
       }
-    },
+    }
 
   }
-};
+}
 </script>
 <style lang='scss' scoped>
 @import '../styles/mixin.scss';

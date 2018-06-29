@@ -3,14 +3,14 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import GraphList from "@/views/GraphList";
+import { mapState } from 'vuex'
+import GraphList from '@/views/GraphList'
 export default {
-  name: "app-left",
+  name: 'app-left',
   components: {
-    GraphList,
-  },
-};
+    GraphList
+  }
+}
 </script>
 
 <style>

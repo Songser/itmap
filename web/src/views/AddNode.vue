@@ -100,53 +100,53 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { getToken } from "@/utils/auth";
-import data2blob from "@/utils/data2blob.js";
+import { mapState } from 'vuex'
+import { getToken } from '@/utils/auth'
+import data2blob from '@/utils/data2blob.js'
 import {
   addNodeApi,
   addLinkApi,
   getNodesApi,
   delNodeApi,
   uploadNodePicApi
-} from "@/api/graph";
-import UploadFile from "@/components/UploadFile";
-import ImageCropper from "@/components/ImageCropper";
-import PanThumb from "@/components/PanThumb";
+} from '@/api/graph'
+import UploadFile from '@/components/UploadFile'
+import ImageCropper from '@/components/ImageCropper'
+import PanThumb from '@/components/PanThumb'
 
 export default {
-  name: "add-node",
+  name: 'add-node',
   components: {
     UploadFile,
     ImageCropper,
     PanThumb
   },
-  data: function() {
-    console.log("fffff");
+  data: function () {
+    console.log('fffff')
     return {
-      name: "",
-      desc: "",
-      info: "",
-      color: "#c23531",
-      size: "M",
-      image: "",
-      shape: "circle",
-      dialogImageUrl: "",
+      name: '',
+      desc: '',
+      info: '',
+      color: '#c23531',
+      size: 'M',
+      image: '',
+      shape: 'circle',
+      dialogImageUrl: '',
       dialogVisible: false,
-      action: "",
+      action: '',
       newNodeId: 0,
       imagecropperKey: 0,
       imagecropperShow: false,
-      field: "node_pic",
-    };
+      field: 'node_pic'
+    }
   },
   computed: mapState({
     node: state => state.node,
     user: state => state.user,
-    graph: state => state.graph,
+    graph: state => state.graph
   }),
   methods: {
-    onSubmit() {
+    onSubmit () {
       let data = {
         graphId: this.graph.id,
         name: this.name,
@@ -154,11 +154,11 @@ export default {
         shape: this.shape,
         size: this.size,
         desc: this.desc
-      };
+      }
       addNodeApi(data).then(response => {
-        this.newNodeId = response.data;
-        data["target_id"] = this.newNodeId;
-        this.$store.commit("addNode", data);
+        this.newNodeId = response.data
+        data['target_id'] = this.newNodeId
+        this.$store.commit('addNode', data)
         this.handlerUpload()
         if (this.node.name && this.name) {
           addLinkApi({
@@ -167,34 +167,34 @@ export default {
             graphId: this.graph.id,
             value: this.info
           }).then(response => {
-            this.$store.commit("addLink", {
+            this.$store.commit('addLink', {
               source: this.node.name,
               target: this.name,
               value: this.info
-            });
-          });
+            })
+          })
         }
-      });
-      this.$emit("closeAddNodeDialog");
+      })
+      this.$emit('closeAddNodeDialog')
     },
-    cancle() {
-      this.$emit("closeAddNodeDialog");
+    cancle () {
+      this.$emit('closeAddNodeDialog')
     },
-    cropSuccess(createImgUrl, field, mime, ki) {
-      this.image = createImgUrl;
-      this.mime = mime;
+    cropSuccess (createImgUrl, field, mime, ki) {
+      this.image = createImgUrl
+      this.mime = mime
     },
-    handlerUpload() {
-      let form = new FormData();
-      form.append(this.field, data2blob(this.image, this.mime));
+    handlerUpload () {
+      let form = new FormData()
+      form.append(this.field, data2blob(this.image, this.mime))
       form.append('fffff', 'eeeee')
-      uploadNodePicApi(form, this.newNodeId);
+      uploadNodePicApi(form, this.newNodeId)
     },
-    close() {
-      this.imagecropperShow = false;
+    close () {
+      this.imagecropperShow = false
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .input-group {
@@ -212,4 +212,3 @@ export default {
   }
 }
 </style>
-

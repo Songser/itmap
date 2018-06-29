@@ -14,7 +14,7 @@ export default new Vuex.Store({
   },
   state: {
     snackbar: false,
-    snackbarContent: '',
+    snackbarContent: ''
   },
   mutations: {
     showSnackar (state, content) {

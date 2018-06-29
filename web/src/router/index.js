@@ -8,7 +8,6 @@ import AppMain from '@/views/AppMain'
 import Login from '@/views/Login'
 import Register from '@/views/Register'
 
-
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -35,7 +34,6 @@ const router = new VueRouter({
     }
   ]
 })
-
 
 function getUser () {
   return http.get('/auth/current_user')

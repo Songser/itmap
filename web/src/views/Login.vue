@@ -37,52 +37,51 @@
 </template>
 
 <script>
-import { isvalidUsername } from "@/utils/validate";
-import SocialSign from "@/components/SocialSignin";
-import { setToken } from "@/utils/auth";
-import { login } from "@/api/user";
-
+import { isvalidUsername } from '@/utils/validate'
+import SocialSign from '@/components/SocialSignin'
+import { setToken } from '@/utils/auth'
+import { login } from '@/api/user'
 
 export default {
   components: { SocialSign },
-  name: "Login",
-  data() {
+  name: 'Login',
+  data () {
     return {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
       loginRules: {
         username: [
           v => !!v || '不能为空',
           v => v.length >= 4 || '不能小于6个字节'
         ],
         password: [
-          v => !!v || '不能为空',
+          v => !!v || '不能为空'
         ]
       },
-      loading: false,
-    };
+      loading: false
+    }
   },
   methods: {
-    handleLogin() {
-      this.loading = true;
+    handleLogin () {
+      this.loading = true
       login(this.username, this.password).then(response => {
-        let data = response.data;
-        setToken(data.access_token);
-        this.$store.commit("setUser", {
+        let data = response.data
+        setToken(data.access_token)
+        this.$store.commit('setUser', {
           name: data.name,
           id: data.user_id,
           email: data.email,
           active: data.active,
           token: data.access_token
-        });
-        this.$router.push("index");
-        this.loading = false;
+        })
+        this.$router.push('index')
+        this.loading = false
       }, response => {
-        this.loading = false;
-      });
+        this.loading = false
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

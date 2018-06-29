@@ -19,7 +19,6 @@
 </template>
 <script>
 export default {
-  name: "node-info"
+  name: 'node-info'
 }
 </script>
-

@@ -22,31 +22,30 @@
 </template>
 <script>
 import {
-  addGraphApi,
-} from "@/api/graph";
+  addGraphApi
+} from '@/api/graph'
 
 export default {
-  name: "add-graph",
-  data() {
+  name: 'add-graph',
+  data () {
     return {
       showDialog: false,
-      name: "",
+      name: '',
       isPrivate: false
-    };
+    }
   },
   methods: {
-    openDialog() {
-      this.showDialog = true;
+    openDialog () {
+      this.showDialog = true
     },
-    addGraph() {
-      let userId = this.$store.state.user.id;
+    addGraph () {
+      let userId = this.$store.state.user.id
       addGraphApi(userId, this.name, this.isPrivate).then(response => {
         this.$emit('addGraph', { id: response.data, name: this.name })
-        this.name = "";
-        this.showDialog = false;
-      });
+        this.name = ''
+        this.showDialog = false
+      })
     }
   }
-};
+}
 </script>
-

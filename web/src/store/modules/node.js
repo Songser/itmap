@@ -133,7 +133,6 @@ const actions = {
             target: data.target,
             value: data.value
           })
-          
         })
       }
       return data['target_id']

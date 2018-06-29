@@ -32,52 +32,52 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import AddNode from "@/views/AddNode"
-import NodeInfo from "@/views/NodeInfo"
+import { mapState } from 'vuex'
+import AddNode from '@/views/AddNode'
+import NodeInfo from '@/views/NodeInfo'
 export default {
-  name: "app-header",
+  name: 'app-header',
   components: {
     AddNode,
     NodeInfo
   },
-  data() {
+  data () {
     return {
       addNodeDialog: false,
       detailDialog: false,
-      defaultImage: 'this.src="' + require("../assets/logo.png") + '"'
-    };
+      defaultImage: 'this.src="' + require('../assets/logo.png') + '"'
+    }
   },
   computed: {
     ...mapState({
       user_id: state => state.user.id,
       name: state => state.user.name,
       avatar: state => state.user.avatar,
-      node: state => state.node.name,
+      node: state => state.node.name
     })
   },
   methods: {
-    openLeftDrawer() {
-      this.$emit("openLeftDrawer");
+    openLeftDrawer () {
+      this.$emit('openLeftDrawer')
     },
-    openRightDrawer() {
-      this.$emit("openRightDrawer");
+    openRightDrawer () {
+      this.$emit('openRightDrawer')
     },
-    showUser() {
+    showUser () {
       if (!this.user_id) {
-        this.$router.push("login");
+        this.$router.push('login')
       }
     },
     addNode () {
       this.addNodeDialog = true
     },
-    logout() {
-      console.log("fffff");
+    logout () {
+      console.log('fffff')
     },
     closeAddNodeDialog () {
       this.addNodeDialog = false
     },
-    showDetail() {
+    showDetail () {
       this.detailDialog = true
     },
     closeDetailDialog () {
@@ -85,7 +85,7 @@ export default {
     }
 
   }
-};
+}
 </script>
 <style scoped>
 .chip .avatar {
