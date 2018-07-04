@@ -1,9 +1,9 @@
 <template>
-  <v-toolbar color="blue">
+  <v-toolbar app color="blue">
     <v-toolbar-side-icon @click.stop="openLeftDrawer"></v-toolbar-side-icon>
     <v-toolbar-title>ITMAP</v-toolbar-title>
     <v-layout row align-center ml-5 mr-3 style="max-width: 200px">
-      <v-text-field :append-icon-cb="() => {}" placeholder="Search..." single-line append-icon="search" color="white" hide-details></v-text-field>
+      <v-text-field placeholder="Search..." single-line append-icon="search" color="white" hide-details></v-text-field>
     </v-layout>
     <v-chip color='green'>
       <v-avatar @click.stop="addNode">
@@ -30,7 +30,6 @@
     </v-dialog>
   </v-toolbar>
 </template>
-
 <script>
 import { mapState } from 'vuex'
 import AddNode from '@/views/AddNode'

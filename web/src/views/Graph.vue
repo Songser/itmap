@@ -1,46 +1,55 @@
 <template>
   <section>
-    <div id='graph'>
-
-    </div>
+    <v-graph :width="graph.width" :height="graph.width" :fit-view="graph.fitView" :fit-view-padding="graph.fitViewPadding" :animate="graph.animate" :type="graph.type" :data="data" :on-click="graph.onClick">
+    </v-graph>
   </section>
 </template>
 <script>
-import G6 from '@antv/g6'
-
 export default {
-  name: 'graph',
-  data () {
-    let graph = new G6.Graph({
-      container: 'graph',
-      width: 600,
-      height: 300
-    })
-    let data = {
-      nodes: [
+  name: "graph",
+  data() {
+    const data = {
+      roots: [
         {
-          id: 'node1',
-          x: 100,
-          y: 200
-        },
-        {
-          id: 'node2',
-          x: 300,
-          y: 200
-        }
-      ],
-      edges: [
-        {
-          id: 'edge1',
-          target: 'node2',
-          source: 'node1'
+          label: "root",
+          id: 1,
+          children: [
+            {
+              label: "child1",
+              children: [
+                {
+                  label: "child\n1.1"
+                }
+              ]
+            },
+            {
+              label: "child2"
+            }
+          ]
         }
       ]
-    }
-    graph.read(data)
+    };
+    const graph = {
+      width: 500,
+      height: 500,
+      fitView: "cc",
+      fitViewPadding: true,
+      animate: true,
+      type: "tree",
+      data,
+      onClick: function(ev, graph) {
+        console.log("click", ev, graph);
+      }
+    };
+    const zoom = {
+      min: 1,
+      max: 10
+    };
     return {
-      graph: graph
-    }
+      graph,
+      data,
+      zoom
+    };
   }
-}
+};
 </script>

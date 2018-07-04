@@ -1,5 +1,5 @@
 <template>
-    <graph-list />
+    <graph-list/>
 </template>
 
 <script>

@@ -1,11 +1,9 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="leftDrawer" app fixed enable-resize-watcher persistent>
+    <v-navigation-drawer v-model="leftDrawer" :permanent="leftDrawer" app>
       <app-left />
     </v-navigation-drawer>
-    <v-toolbar app>
       <app-header @openLeftDrawer="openLeftDrawer" @openRightDrawer="openRightDrawer"/>
-    </v-toolbar>
     <v-navigation-drawer v-model="rightDrawer" right fixed app clipped>
     </v-navigation-drawer>
     <v-content>
@@ -32,7 +30,7 @@ export default {
     return {
       leftDrawer: true,
       rightDrawer: false,
-      mini: true,
+      mini: false,
     }
   },
   computed: {
@@ -43,7 +41,7 @@ export default {
   },
   methods: {
     openLeftDrawer(){
-      this.leftDrawer = true
+      this.leftDrawer = !this.leftDrawer
     },
     openRightDrawer() {
       this.rightDrawer = true
