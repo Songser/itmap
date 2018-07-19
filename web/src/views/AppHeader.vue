@@ -69,6 +69,7 @@ export default {
     },
     addNode () {
       this.addNodeDialog = true
+      this.$root.eventHub.$emit('addNode', 'ddddd');
     },
     logout () {
       console.log('fffff')

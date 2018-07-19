@@ -23,5 +23,8 @@ new Vue({
   router,
   store,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+  data: {
+    eventHub: new Vue()
+  }
 })

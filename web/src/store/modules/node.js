@@ -16,6 +16,29 @@ const state = {
 }
 
 const mutations = {
+  setNodesV2 (state, val) {
+    let nodes = []
+    val.forEach((value, index, array) => {
+      let node = {
+        id: value.id,
+        color: value.color,
+        shape: value.shape,
+        label: value.name,
+        desc: value.description,
+        create_date: value.create_date,
+        index: 1,
+      }
+      if (value.size === 'L'){
+        node['size'] = [65, 65]
+      } else if (value.size === 'M') {
+        node['size'] = [45, 45]
+      } else if (value.size === 'S') {
+        node['size'] = [35, 35]
+      }
+      nodes.push(node)
+    })
+    state.nodes = nodes
+  },
   setNodes (state, val) {
     let nodes = []
     val.forEach((value, index, array) => {
@@ -108,7 +131,7 @@ const actions = {
         ownerName: data.owner_name
       })
       commit('setLinks', data.relations)
-      commit('setNodes', data.nodes)
+      commit('setNodesV2', data.nodes)
       if (data.nodes.length > 0) {
         commit('setNode', data.nodes[0])
       } else {
