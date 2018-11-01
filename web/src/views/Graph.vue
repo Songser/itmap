@@ -1,73 +1,116 @@
 <template>
-  <v-graph :width="graph.width" :height="graph.width" :fit-view="graph.fitView" :fit-view-padding="graph.fitViewPadding" :animate="graph.animate" :type="graph.type" :data="data" :on-click="graph.onClick">
-    <v-zoom :max="zoom.max" :min="zoom.min"></v-zoom>
-  </v-graph>
+  <div class="main-graph">
+    <chart ref="graph" :options="graph" @click="clickNode"/>
+  </div>
 </template>
+
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
+import ECharts from 'vue-echarts/components/ECharts'
+import 'echarts/lib/chart/line'
+import 'echarts/lib/chart/graph'
+import 'echarts/lib/component/tooltip'
 import { addNodeApi, addLinkApi, getNodesApi, delNodeApi } from "@/api/graph";
 
-const data = {
-  nodes: [
-    {
-      id: "node1",
-      x: 100,
-      y: 200
-    },
-    {
-      id: "node2",
-      x: 300,
-      y: 200
-    }
-  ],
-  edges: [
-    {
-      id: "edge1",
-      target: "node2",
-      source: "node1"
-    }
-  ]
-};
-const graph = {
-  type: 'graph',
-  width: 500,
-  height: 500,
-  fitView: 'cc',
-  fitViewPadding: true,
-  animate: true,
-  data
-};
-const zoom = {
-  min: 1,
-  max: 10
-};
+
 export default {
-  name: "graph",
-  data() {
-    return {
-      graph,
-      data,
-      zoom
-    };
-  },
-  created() {
-    this.$root.eventHub.$on("addNode", target => {
-      console.log("addNode");
-    });
+  name: 'graph',
+  components: {
+    chart: ECharts
   },
   computed: {
     ...mapState({
       graphId: state => state.graph.id
     })
   },
+  data: function () {
+    return {
+      oldGraphId: 0,
+      nodes: [],
+      links: [],
+      graph: {
+        title: {
+          text: 'test'
+        },
+        left: '10%',
+        top: 'auto',
+        right: 'auto',
+        bottom: 'auto',
+        width: 800,
+        height: 900,
+        tooltip: {},
+        animationDurationUpdate: 1500,
+        animationEasingUpdate: 'quinticInOut',
+        edgeSymbol: ['circle', 'arrow'],
+        label: {
+          normal: {
+            show: true,
+            textStyle: {
+              fontSize: 12
+            }
+          }
+        },
+        legend: {
+          x: 'center',
+          show: false,
+          data: ['朋友', '战友', '亲戚']
+        },
+        series: [
+          {
+            type: 'graph',
+            layout: 'force',
+            symbolSize: 45,
+            focusNodeAdjacency: true,
+            roam: true,
+            draggable: true,
+            categories: [],
+            label: {
+              normal: {
+                show: true,
+                textStyle: {
+                  fontsize: 12
+                }
+              }
+            },
+            force: {
+              repulsion: 1000
+            },
+            edgeSymbolSize: [4, 50],
+            edgeLabel: {
+              normal: {
+                show: true,
+                textStyle: {
+                  fontSize: 10
+                },
+                formatter: '{c}'
+              }
+            },
+            data: this.nodes,
+            links: this.links,
+            lineStyle: {
+              normal: {
+                opacity: 0.9,
+                width: 1,
+                curveness: 0
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
   watch: {
     graphId(value) {
+      console.log(this.graphId)
       if (value) {
-        console.log(value);
+        if (this.oldGraphId == value){
+          return
+        }
+        this.oldGraphId = value
         getNodesApi(value).then(response => {
           const data = response.data;
-          console.log(data);
-          let nodes = [];
+          console.log('===', data);
+          this.nodes = []
           data.nodes.forEach((value, index, array) => {
             let node = {
               id: value.id,
@@ -76,57 +119,25 @@ export default {
               label: value.name,
               desc: value.description,
               create_date: value.create_date,
-              index: 1
-            };
-            if (value.size === "L") {
-              node["size"] = [65, 65];
-            } else if (value.size === "M") {
-              node["size"] = [45, 45];
-            } else if (value.size === "S") {
-              node["size"] = [35, 35];
+              index: 1,
             }
-            nodes.push(node);
-          });
-          let edges = [];
-          data.relations.forEach((value, index, array) => {
-            let edge = {
-              target: value.tid,
-              source: value.sid,
-            };
-            edges.push(edge);
-          });
-          console.log(nodes);
-          console.log(edges)
-          let nodes2 = [
-                {
-                  id: "node3",
-                },
-                {
-                  id: "node4",
-                },
-                {
-                  id: "node5",
-                },
-              ]
-            console.log(nodes2)
-          this.data = Object.assign(
-            {},
-            {
-              nodes: nodes,
-              edges: edges
+            if (value.size === 'L') {
+              node['size'] = [65, 65]
+            } else if (value.size === 'M') {
+              node['size'] = [45, 45]
+            } else if (value.size === 'S') {
+              node['size'] = [35, 35]
             }
-          );
-          this.zoom = Object.assign(
-            {},
-            {
-              min: 1,
-              max: 10,
-              current: 1
-            }
-          );
-        });
+            this.nodes.push(node)
+          })
+        })
       }
     }
+  },
+  methods: {
+    clickNode (params) {
+
+    }
   }
-};
+}
 </script>
