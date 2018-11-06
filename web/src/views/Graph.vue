@@ -4,6 +4,21 @@
   </div>
 </template>
 
+<style scoped>
+.main-graph {
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+.echarts {
+  height: 95%;
+  width: 80%;
+  margin: 10px;
+  padding: 0px;
+}
+</style>
+
 <script>
 import { mapState } from 'vuex'
 import ECharts from 'vue-echarts/components/ECharts'
@@ -26,8 +41,6 @@ export default {
   data: function () {
     return {
       oldGraphId: 0,
-      nodes: [],
-      links: [],
       graph: {
         title: {
           text: 'test'
@@ -85,8 +98,8 @@ export default {
                 formatter: '{c}'
               }
             },
-            data: this.nodes,
-            links: this.links,
+            data: [],
+            links: [],
             lineStyle: {
               normal: {
                 opacity: 0.9,
@@ -110,33 +123,65 @@ export default {
         getNodesApi(value).then(response => {
           const data = response.data;
           console.log('===', data);
-          this.nodes = []
+          let nodes = []
           data.nodes.forEach((value, index, array) => {
             let node = {
-              id: value.id,
-              color: value.color,
-              shape: value.shape,
-              label: value.name,
+              name: value.name,
+              nid: value.id,
               desc: value.description,
-              create_date: value.create_date,
-              index: 1,
+              create_date: value.create_date
+            }
+            if (value.color) {
+              node['itemStyle'] = { 'color': value.color }
             }
             if (value.size === 'L') {
-              node['size'] = [65, 65]
+              node['symbolSize'] = [65, 65]
             } else if (value.size === 'M') {
-              node['size'] = [45, 45]
+              node['symbolSize'] = [45, 45]
             } else if (value.size === 'S') {
-              node['size'] = [35, 35]
+              node['symbolSize'] = [35, 35]
             }
-            this.nodes.push(node)
+            if (value.shape) {
+              node['symbol'] = value.shape
+            }
+            nodes.push(node)
           })
+          let links = []
+          data.relations.forEach((value, index, array) => {
+            let link = {
+              source: value.source,
+              target: value.target,
+              value: value.value,
+            }
+            links.push(link)
+          })
+          let graph = this.$refs.graph
+          let options = graph.options
+          options.series[0].data = nodes
+          options.series[0].links = links
+          graph.mergeOptions(options)
+          if (nodes.length > 0){
+            console.log(nodes)
+            this.$store.commit('setNode', {
+              id: nodes[0].nid,
+              name: nodes[0].name,
+              desc: nodes[0].desc,
+              create_date: nodes[0].create_date
+            })
+          }
         })
       }
     }
   },
   methods: {
     clickNode (params) {
-
+      let data = params.data
+      this.$store.commit('setNode', {
+        id: data.nid,
+        name: data.name,
+        desc: data.desc,
+        create_date: data.create_date
+      })
     }
   }
 }
