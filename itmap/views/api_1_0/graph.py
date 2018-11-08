@@ -1,8 +1,16 @@
 # coding=utf-8
 
-from flask_restful import Resource, fields, marshal_with, reqparse, marshal
+from flask_restful import (
+    Resource,
+    fields,
+    marshal_with,
+    reqparse,
+    marshal,
+)
 from flask_jwt_extended import (
-    jwt_required, get_jwt_identity,
+    jwt_required,
+    get_jwt_identity,
+    jwt_optional,
 )
 
 from itmap.ext import db, redis
@@ -121,6 +129,7 @@ class GraphApi(Resource):
     # method_decorators = [jwt_required]
 
     #@marshal_with(graph_fields)
+    @jwt_optional
     def get(self, gid):
         """
         file: swagger/graph_get.yml

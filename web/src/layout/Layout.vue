@@ -1,10 +1,11 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="leftDrawer" :permanent="leftDrawer" app>
+    <v-navigation-drawer v-model="leftDrawer" :permanent="leftDrawer" fixed app>
       <app-left />
     </v-navigation-drawer>
-      <app-header @openLeftDrawer="openLeftDrawer" @openRightDrawer="openRightDrawer"/>
-    <v-navigation-drawer v-model="rightDrawer" right fixed app clipped>
+      <app-header @openLeftDrawer="openLeftDrawer" @openRightDrawer="openRightDrawer">
+      </app-header>
+    <v-navigation-drawer v-model="rightDrawer" right fixed app clipped :temporary='true'>
     </v-navigation-drawer>
     <v-content>
       <router-view />
