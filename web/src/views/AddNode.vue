@@ -122,7 +122,6 @@ export default {
     PanThumb
   },
   data: function () {
-    console.log('fffff')
     return {
       name: '',
       desc: '',
@@ -158,8 +157,8 @@ export default {
       addNodeApi(data).then(response => {
         this.newNodeId = response.data
         data['target_id'] = this.newNodeId
-        this.$store.commit('addNode', data)
         this.handlerUpload()
+        this.$root.eventHub.$emit('addNode', data)
         if (this.node.name && this.name) {
           addLinkApi({
             source_id: this.node.id,
@@ -167,7 +166,7 @@ export default {
             graphId: this.graph.id,
             value: this.info
           }).then(response => {
-            this.$store.commit('addLink', {
+            this.$root.eventHub.$emit('addLink', {
               source: this.node.name,
               target: this.name,
               value: this.info
@@ -187,7 +186,6 @@ export default {
     handlerUpload () {
       let form = new FormData()
       form.append(this.field, data2blob(this.image, this.mime))
-      form.append('fffff', 'eeeee')
       uploadNodePicApi(form, this.newNodeId)
     },
     close () {

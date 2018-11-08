@@ -118,7 +118,7 @@ class GraphFashionApi(Resource):
 
 class GraphApi(Resource):
 
-    method_decorators = [jwt_required]
+    # method_decorators = [jwt_required]
 
     #@marshal_with(graph_fields)
     def get(self, gid):
@@ -128,11 +128,16 @@ class GraphApi(Resource):
         graph = Graph.query.get(gid)
         if graph is None:
             return {'msg': 'Invalid gid'}, 400
+        if graph.graph_type != 'fashion':
+            uid = get_jwt_identity()
+            if not uid:
+                return {'msg': 'Not allowed'}, 401
         raw_result = marshal(graph, graph_fields)
         raw_result['nodes'].sort(key=lambda r: r['id'])
         raw_result['relations'].sort(key=lambda r: r['sid'])
         return raw_result
 
+    @jwt_required
     def delete(self, gid):
         """
         file: swagger/graph_delete.yml
@@ -144,6 +149,7 @@ class GraphApi(Resource):
         db.session.commit()
         return '', 204
 
+    @jwt_required
     def put(self, gid):
         """
         file: swagger/graph_put.yml

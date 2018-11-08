@@ -38,6 +38,14 @@ export default {
       graphId: state => state.graph.id
     })
   },
+  created() {
+    this.$root.eventHub.$on('addNode',(target) => {
+      this.addNode(target)
+    });
+    this.$root.eventHub.$on('addLink', (target) => {
+      this.addLink(target)
+    })
+  },
   data: function () {
     return {
       oldGraphId: 0,
@@ -125,25 +133,8 @@ export default {
           console.log('===', data);
           let nodes = []
           data.nodes.forEach((value, index, array) => {
-            let node = {
-              name: value.name,
-              nid: value.id,
-              desc: value.description,
-              create_date: value.create_date
-            }
-            if (value.color) {
-              node['itemStyle'] = { 'color': value.color }
-            }
-            if (value.size === 'L') {
-              node['symbolSize'] = [65, 65]
-            } else if (value.size === 'M') {
-              node['symbolSize'] = [45, 45]
-            } else if (value.size === 'S') {
-              node['symbolSize'] = [35, 35]
-            }
-            if (value.shape) {
-              node['symbol'] = value.shape
-            }
+            let node = this.genNode(value.id, value.name, value.description,
+              value.create_date, value.color, value.size, value.shape)
             nodes.push(node)
           })
           let links = []
@@ -161,7 +152,6 @@ export default {
           options.series[0].links = links
           graph.mergeOptions(options)
           if (nodes.length > 0){
-            console.log(nodes)
             this.$store.commit('setNode', {
               id: nodes[0].nid,
               name: nodes[0].name,
@@ -182,6 +172,42 @@ export default {
         desc: data.desc,
         create_date: data.create_date
       })
+    },
+    addNode(data) {
+      let node = this.genNode(data.graphId, data.name, data.desc, '',
+        data.color, data.size, data.shape)
+      let graph = this.$refs.graph
+      let options = graph.options
+      options.series[0].data.push(node)
+      graph.mergeOptions(options)
+    },
+    addLink(data) {
+      let graph = this.$refs.graph
+      let options = graph.options
+      options.series[0].links.push(data)
+      graph.mergeOptions(options)
+    },
+    genNode(nid, name, description, create_date, color, size, shape) {
+      let node = {
+        name: name,
+        nid: nid,
+        desc: description,
+        create_date: create_date
+      }
+      if (color) {
+        node['itemStyle'] = { 'color': color }
+      }
+      if (size === 'L') {
+        node['symbolSize'] = [65, 65]
+      } else if (size === 'M') {
+        node['symbolSize'] = [45, 45]
+      } else if (size === 'S') {
+        node['symbolSize'] = [35, 35]
+      }
+      if (shape) {
+        node['symbol'] = shape
+      }
+      return node
     }
   }
 }

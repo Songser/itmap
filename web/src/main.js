@@ -15,7 +15,7 @@ import 'vuetify/dist/vuetify.css'
 
 Vue.config.productionTip = false
 Vue.use(Vuetify)
-Vue.use(ViserGraphVue)
+// Vue.use(ViserGraphVue)
 
 /* eslint-disable no-new */
 new Vue({
