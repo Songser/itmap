@@ -130,11 +130,11 @@ export default {
         this.oldGraphId = value
         getNodesApi(value).then(response => {
           const data = response.data;
-          console.log('===', data);
+          console.log(data)
           let nodes = []
           data.nodes.forEach((value, index, array) => {
             let node = this.genNode(value.id, value.name, value.description,
-              value.create_date, value.color, value.size, value.shape)
+              value.create_date, value.color, value.size, value.shape, value.pic)
             nodes.push(node)
           })
           let links = []
@@ -156,6 +156,7 @@ export default {
               id: nodes[0].nid,
               name: nodes[0].name,
               desc: nodes[0].desc,
+              pic: nodes[0].pic,
               create_date: nodes[0].create_date
             })
           }
@@ -165,13 +166,17 @@ export default {
   },
   methods: {
     clickNode (params) {
+      console.log(params)
       let data = params.data
+      console.log(data)
       this.$store.commit('setNode', {
         id: data.nid,
         name: data.name,
         desc: data.desc,
+        pic: data.pic,
         create_date: data.create_date
       })
+      this.$root.eventHub.$emit('openRightDrawer')
     },
     addNode(data) {
       let node = this.genNode(data.graphId, data.name, data.desc, '',
@@ -187,12 +192,13 @@ export default {
       options.series[0].links.push(data)
       graph.mergeOptions(options)
     },
-    genNode(nid, name, description, create_date, color, size, shape) {
+    genNode(nid, name, description, create_date, color, size, shape, pic) {
       let node = {
         name: name,
         nid: nid,
         desc: description,
-        create_date: create_date
+        pic: pic,
+        create_date: create_date,
       }
       if (color) {
         node['itemStyle'] = { 'color': color }

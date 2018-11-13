@@ -9,7 +9,7 @@ const state = {
   id: 0,
   name: '',
   desc: '',
-  image: '',
+  pic: '',
   create_date: '',
   nodes: [],
   links: []
@@ -71,7 +71,8 @@ const mutations = {
   setNode (state, val) {
     state.id = val.id
     state.name = val.name
-    state.desc = val.description
+    state.desc = val.desc
+    state.pic = val.pic
     state.create_date = val.create_date
   },
   addNode (state, value) {

@@ -3,9 +3,10 @@
     <v-navigation-drawer v-model="leftDrawer" :permanent="leftDrawer" fixed app>
       <app-left />
     </v-navigation-drawer>
-      <app-header @openLeftDrawer="openLeftDrawer" @openRightDrawer="openRightDrawer">
-      </app-header>
+    <app-header @openLeftDrawer="openLeftDrawer" @openRightDrawer="openRightDrawer">
+    </app-header>
     <v-navigation-drawer v-model="rightDrawer" right fixed app clipped :temporary='true'>
+      <app-right />
     </v-navigation-drawer>
     <v-content>
       <router-view />
@@ -21,11 +22,13 @@ import { mapState } from "vuex";
 
 import AppHeader from "@/views/AppHeader";
 import AppLeft from "@/views/AppLeft";
+import AppRight from "@/views/AppRight";
 export default {
   name: "layout",
   components: {
     AppHeader,
-    AppLeft
+    AppLeft,
+    AppRight
   },
   data () {
     return {
@@ -33,6 +36,14 @@ export default {
       rightDrawer: false,
       mini: false,
     }
+  },
+  created() {
+    this.$root.eventHub.$on('openLeftDrawer',() => {
+      this.openLeftDrawer()
+    });
+    this.$root.eventHub.$on('openRightDrawer', (target) => {
+      this.openRightDrawer()
+    })
   },
   computed: {
     ...mapState({

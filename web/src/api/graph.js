@@ -51,3 +51,7 @@ export function delNodeApi (id) {
 export function uploadNodePicApi (form, nodeId) {
   return request.post('/api/v1_0/nodes/' + nodeId + '/pic', form)
 }
+
+export function get_picture(path) {
+  return BASE_URL + '/node_pics/' + path
+}
