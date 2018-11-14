@@ -129,6 +129,7 @@ class GraphApi(Resource):
     # method_decorators = [jwt_required]
 
     #@marshal_with(graph_fields)
+    @jwt_optional
     def get(self, gid):
         """
         file: swagger/graph_get.yml

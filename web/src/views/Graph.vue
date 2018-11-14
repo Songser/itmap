@@ -130,7 +130,11 @@ export default {
         this.oldGraphId = value
         getNodesApi(value).then(response => {
           const data = response.data;
-          console.log(data)
+          if (data.nodes.length == 0){
+            this.$root.eventHub.$emit('addNode', 'ddddd');
+            return
+          }
+
           let nodes = []
           data.nodes.forEach((value, index, array) => {
             let node = this.genNode(value.id, value.name, value.description,

@@ -19,15 +19,9 @@
       <span v-if="name">{{name}}</span>
       <span v-else>登录</span>
     </v-chip>
-    <v-btn icon @click="openRightDrawer">
+    <!-- <v-btn icon @click="openRightDrawer">
       <v-icon>more_vert</v-icon>
-    </v-btn>
-    <v-dialog v-model="addNodeDialog" max-width="600px" lazy persistent>
-      <add-node @closeAddNodeDialog="closeAddNodeDialog"/>
-    </v-dialog>
-    <v-dialog v-model="detailDialog" fullscreen hide-overlay scrollable transition="dialog-bottom-transition">
-      <node-info @closeDetailDialog="closeDetailDialog"/>
-    </v-dialog>
+    </v-btn> -->
   </v-toolbar>
 </template>
 <script>
@@ -42,8 +36,6 @@ export default {
   },
   data () {
     return {
-      addNodeDialog: false,
-      detailDialog: false,
       defaultImage: 'this.src="' + require('../assets/logo.png') + '"'
     }
   },
@@ -59,23 +51,16 @@ export default {
     openLeftDrawer () {
       this.$emit('openLeftDrawer')
     },
-    openRightDrawer () {
-      this.$emit('openRightDrawer')
-    },
+    // openRightDrawer () {
+    //   this.$emit('openRightDrawer')
+    // },
     showUser () {
       if (!this.user_id) {
         this.$router.push('login')
       }
     },
-    addNode () {
-      this.addNodeDialog = true
-      this.$root.eventHub.$emit('addNode', 'ddddd');
-    },
     logout () {
       console.log('fffff')
-    },
-    closeAddNodeDialog () {
-      this.addNodeDialog = false
     },
     showDetail () {
       this.detailDialog = true
