@@ -83,6 +83,9 @@ export default {
     closeAddNodeDialog () {
       this.addNodeDialog = false
     },
+    closeDetailDialog () {
+
+    }
   }
 };
 </script>
