@@ -9,7 +9,7 @@ from flask_jwt_extended import (
 )
 
 from itmap.ext import db
-from itmap.models.graph import Node, Graph
+from itmap.models.graph import Node, Graph, NodeRelation
 from itmap.utils import update
 
 parser = reqparse.RequestParser(bundle_errors=True)
@@ -74,9 +74,12 @@ class NodeApi(Resource):
         node = Node.query.get(nid)
         if node is None:
             return {'msg': 'Invalid nid'}, 400
+        relations = NodeRelation.get_relation_by_node_id(nid)
+        for rel in relations:
+            db.session.delete(rel)
         db.session.delete(node)
         db.session.commit()
-        return '', 204
+        return 'success', 204
 
 
 class NodePicApi(Resource):

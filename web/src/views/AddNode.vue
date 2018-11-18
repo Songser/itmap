@@ -122,6 +122,7 @@ export default {
         this.handlerUpload();
         this.$root.eventHub.$emit("addNode", data);
         if (this.node.name && this.name) {
+          console.log('add link')
           addLinkApi({
             source_id: this.node.id,
             target_id: this.newNodeId,
@@ -133,9 +134,10 @@ export default {
               target: this.name,
               value: this.info
             });
+            this.init();
           });
         }
-        this.init();
+
       });
       this.$emit("closeAddNodeDialog");
     },
@@ -150,7 +152,6 @@ export default {
       if (!this.image){
         return
       }
-      console.log(this.image)
       let form = new FormData();
       form.append(this.field, data2blob(this.image, this.mime));
       uploadNodePicApi(form, this.newNodeId);

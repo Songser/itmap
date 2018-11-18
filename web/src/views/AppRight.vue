@@ -1,8 +1,7 @@
 <template>
   <v-card id="create" hover>
     <v-container fluid>
-      <v-img :src="image" height="200px" :onerror="defaultImage">
-      </v-img>
+      <img :src="image" height="200px" width="100%" :onerror="defaultImage">
       <v-card-title primary-title>
         <div>
           <div class="headline">{{name}}</div>
@@ -20,16 +19,27 @@
         <v-icon>account_circle</v-icon>
         <v-icon>close</v-icon>
       </v-btn>
-      <v-btn fab dark small color="green">
+      <v-btn fab dark small color="red" @click="delNodeDialog = true">
+        <v-icon>delete</v-icon>
+      </v-btn>
+          <v-btn fab dark small color="green">
         <v-icon>edit</v-icon>
       </v-btn>
       <v-btn fab dark small color="indigo" @click="addNode">
         <v-icon>add</v-icon>
       </v-btn>
-      <v-btn fab dark small color="red">
-        <v-icon>delete</v-icon>
-      </v-btn>
     </v-speed-dial>
+    <v-dialog v-model="delNodeDialog" persistent max-width="290">
+      <v-card>
+        <v-card-title class="headline">删除节点: {{name}}</v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" flat @click="delNode">确认</v-btn>
+          <v-btn color="green darken-1" flat @click="delNodeDialog = false">取消</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </v-card>
 </template>
 <style scoped>
@@ -48,13 +58,14 @@
 
 <script>
 import { mapState } from "vuex";
-
+import { delNodeApi } from "@/api/graph";
 export default {
   name: "app-right",
   data() {
     return {
       fab: false,
-      defaultImage: 'this.src="' + require("../assets/logo.png") + '"'
+      defaultImage: 'this.src="' + require("../assets/logo.png") + '"',
+      delNodeDialog: false,
     };
   },
   computed: {
@@ -87,7 +98,13 @@ export default {
   methods: {
     addNode() {
       this.$root.eventHub.$emit("showAddNodeDialog", true);
-    }
+    },
+    delNode () {
+      delNodeApi(this.nodeId).then(response => {
+        this.delNodeDialog = false
+        this.$root.eventHub.$emit("delNode", this.nodeId);
+      })
+    },
   }
 };
 </script>

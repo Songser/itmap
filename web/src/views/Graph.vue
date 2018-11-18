@@ -44,7 +44,10 @@ export default {
     });
     this.$root.eventHub.$on('addLink', (target) => {
       this.addLink(target)
-    })
+    });
+    this.$root.eventHub.$on('delNode',(target) => {
+      this.delNode(target)
+    });
   },
   data: function () {
     return {
@@ -193,7 +196,24 @@ export default {
       options.series[0].data.push(node)
       graph.mergeOptions(options)
     },
+    delNode(nodeId) {
+      console.log(nodeId)
+      let graph = this.$refs.graph
+      let options = graph.options
+      let data = options.series[0].data
+      data.forEach((value, index, array) => {
+        console.log(value)
+        console.log(index)
+        console.log(array)
+        if (value.nid == nodeId){
+          array.splice(index, 1)
+          graph.mergeOptions(options)
+          return
+        }
+      })
+    },
     addLink(data) {
+      console.log('addLink', data)
       let graph = this.$refs.graph
       let options = graph.options
       options.series[0].links.push(data)

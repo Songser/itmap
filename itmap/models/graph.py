@@ -1,7 +1,7 @@
 # coding=utf-8
 
 from datetime import datetime
-
+from sqlalchemy import or_
 from itmap.ext import db
 
 
@@ -34,6 +34,10 @@ class NodeRelation(db.Model):
             kwargs.update({'owner_id': oid})
         rels = cls.query.filter_by(**kwargs).first()
         return rels
+
+    @classmethod
+    def get_relation_by_node_id(cls, nid):
+        return cls.query.filter(or_(cls.source_node_id == nid, cls.target_node_id == nid)).all()
 
 
 class Node(db.Model):
