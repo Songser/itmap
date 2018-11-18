@@ -1,7 +1,7 @@
 <template>
   <v-card id="create" hover>
     <v-container fluid>
-      <v-img :src="image" height="200px">
+      <v-img :src="image" height="200px" :onerror="defaultImage">
       </v-img>
       <v-card-title primary-title>
         <div>
@@ -9,14 +9,15 @@
           <span class="grey--text">{{desc}}</span>
         </div>
       </v-card-title>
+      <v-spacer></v-spacer>
       <v-card-actions>
         <v-btn flat color="purple">更多</v-btn>
         <v-spacer></v-spacer>
       </v-card-actions>
     </v-container>
-    <v-speed-dial :top="false" :bottom="true" :right="true" :left="false" :open-on-hover="true" transition="slide-x-reverse-transition">
+    <v-speed-dial v-model="fab" :top="false" :bottom="true" :right="true" :left="false" :open-on-hover="true" transition="slide-x-reverse-transition">
       <v-btn slot="activator" v-model="fab" color="blue darken-2" dark fab>
-        <v-icon>home</v-icon>
+        <v-icon>account_circle</v-icon>
         <v-icon>close</v-icon>
       </v-btn>
       <v-btn fab dark small color="green">
@@ -28,12 +29,6 @@
       <v-btn fab dark small color="red">
         <v-icon>delete</v-icon>
       </v-btn>
-      <v-dialog v-model="addNodeDialog" max-width="600px" >
-        <add-node @closeAddNodeDialog="closeAddNodeDialog" />
-      </v-dialog>
-      <v-dialog v-model="detailDialog" fullscreen hide-overlay scrollable transition="dialog-bottom-transition">
-        <node-info @closeDetailDialog="closeDetailDialog" />
-      </v-dialog>
     </v-speed-dial>
   </v-card>
 </template>
@@ -53,16 +48,29 @@
 
 <script>
 import { mapState } from "vuex";
+
 export default {
   name: "app-right",
   data() {
     return {
-      fab: true,
-      addNodeDialog: false,
-      detailDialog: false,
+      fab: false,
+      defaultImage: 'this.src="' + require("../assets/logo.png") + '"'
     };
   },
   computed: {
+    activeFab() {
+      console.log(this.tabs)
+      switch (this.tabs) {
+        case "one":
+          return { class: "purple", icon: "account_circle" };
+        case "two":
+          return { class: "red", icon: "edit" };
+        case "three":
+          return { class: "green", icon: "keyboard_arrow_up" };
+        default:
+          return {};
+      }
+    },
     ...mapState({
       nodeId: state => state.node.id,
       name: state => state.node.name,
@@ -77,14 +85,8 @@ export default {
     })
   },
   methods: {
-    addNode () {
-      this.addNodeDialog = true
-    },
-    closeAddNodeDialog () {
-      this.addNodeDialog = false
-    },
-    closeDetailDialog () {
-
+    addNode() {
+      this.$root.eventHub.$emit("showAddNodeDialog", true);
     }
   }
 };

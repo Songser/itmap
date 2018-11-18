@@ -131,7 +131,8 @@ export default {
         getNodesApi(value).then(response => {
           const data = response.data;
           if (data.nodes.length == 0){
-            this.$root.eventHub.$emit('addNode', 'ddddd');
+            this.updateGraph([], [])
+            this.$root.eventHub.$emit('showAddNodeDialog', '');
             return
           }
 
@@ -150,11 +151,7 @@ export default {
             }
             links.push(link)
           })
-          let graph = this.$refs.graph
-          let options = graph.options
-          options.series[0].data = nodes
-          options.series[0].links = links
-          graph.mergeOptions(options)
+          this.updateGraph(nodes, links)
           if (nodes.length > 0){
             this.$store.commit('setNode', {
               id: nodes[0].nid,
@@ -170,9 +167,7 @@ export default {
   },
   methods: {
     clickNode (params) {
-      console.log(params)
       let data = params.data
-      console.log(data)
       this.$store.commit('setNode', {
         id: data.nid,
         name: data.name,
@@ -181,6 +176,14 @@ export default {
         create_date: data.create_date
       })
       this.$root.eventHub.$emit('openRightDrawer')
+    },
+    updateGraph(nodes, links) {
+      let graph = this.$refs.graph
+      let options = graph.options
+      options.series[0].data = nodes
+      options.series[0].links = links
+      console.log('update graph', options)
+      graph.mergeOptions(options)
     },
     addNode(data) {
       let node = this.genNode(data.graphId, data.name, data.desc, '',

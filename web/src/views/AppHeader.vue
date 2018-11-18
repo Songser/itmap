@@ -26,14 +26,8 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import AddNode from '@/views/AddNode'
-import NodeInfo from '@/views/NodeInfo'
 export default {
   name: 'app-header',
-  components: {
-    AddNode,
-    NodeInfo
-  },
   data () {
     return {
       defaultImage: 'this.src="' + require('../assets/logo.png') + '"'
