@@ -72,6 +72,10 @@ const mutations = {
     state.id = val.id
     state.name = val.name
     state.desc = val.desc
+    state.color = val.color
+    state.size = val.size
+    state.shape = val.shape
+    state.info = val.info
     state.pic = val.pic
     state.create_date = val.create_date
   },

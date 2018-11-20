@@ -15,7 +15,7 @@
       {{snackbarContent}}
     </v-snackbar>
     <v-dialog v-model="addNodeDialog" max-width="600px" persistent>
-        <add-node @closeAddNodeDialog="closeAddNodeDialog" />
+        <add-node @closeAddNodeDialog="closeAddNodeDialog" @openAddNodeDialog="openAddNodeDialog" />
       </v-dialog>
       <v-dialog v-model="detailDialog" fullscreen hide-overlay scrollable transition="dialog-bottom-transition">
         <node-info @closeDetailDialog="closeDetailDialog" />
@@ -56,9 +56,9 @@ export default {
     this.$root.eventHub.$on('openRightDrawer', (target) => {
       this.openRightDrawer()
     });
-    this.$root.eventHub.$on('showAddNodeDialog',(target) => {
-      this.addNodeDialog = true
-    });
+    // this.$root.eventHub.$on('showAddNodeDialog',(target) => {
+    //   this.addNodeDialog = true
+    // });
   },
   computed: {
     ...mapState({
@@ -75,6 +75,9 @@ export default {
     },
     closeAddNodeDialog () {
       this.addNodeDialog = false
+    },
+    openAddNodeDialog () {
+      this.addNodeDialog = true
     },
     closeDetailDialog () {
       this.closeDetailDialog = false

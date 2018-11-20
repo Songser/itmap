@@ -22,10 +22,10 @@
       <v-btn fab dark small color="red" @click="delNodeDialog = true">
         <v-icon>delete</v-icon>
       </v-btn>
-          <v-btn fab dark small color="green">
+          <v-btn fab dark small color="indigo" @click="updateNode">
         <v-icon>edit</v-icon>
       </v-btn>
-      <v-btn fab dark small color="indigo" @click="addNode">
+      <v-btn fab dark small color="green" @click="addNode">
         <v-icon>add</v-icon>
       </v-btn>
     </v-speed-dial>
@@ -97,7 +97,7 @@ export default {
   },
   methods: {
     addNode() {
-      this.$root.eventHub.$emit("showAddNodeDialog", true);
+      this.$root.eventHub.$emit("addNodeEvent", true);
     },
     delNode () {
       delNodeApi(this.nodeId).then(response => {
@@ -105,6 +105,9 @@ export default {
         this.$root.eventHub.$emit("delNode", this.nodeId);
       })
     },
+    updateNode() {
+      this.$root.eventHub.$emit("updateNodeEvent")
+    }
   }
 };
 </script>

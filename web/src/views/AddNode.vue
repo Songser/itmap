@@ -71,6 +71,7 @@ export default {
     PanThumb,
     "chrome-picker": Chrome,
   },
+
   data: function() {
     return {
       name: "",
@@ -84,8 +85,24 @@ export default {
       dialogVisible: false,
       newNodeId: 0,
       imagecropperShow: false,
-      field: "node_pic"
+      field: "node_pic",
+      update: false,
     };
+  },
+  created() {
+    this.$root.eventHub.$on('addNodeEvent', () => {
+      this.$emit("openAddNodeDialog");
+    });
+    this.$root.eventHub.$on('updateNodeEvent', () => {
+      this.update = true
+      this.name = this.node.name
+      this.desc = this.node.desc
+      this.color = this.node.color
+      this.size = this.node.size
+      this.shape = this.node.shape
+      this.info = this.node.info
+      this.$emit("openAddNodeDialog");
+    })
   },
   computed: mapState({
     node: state => state.node,
@@ -107,7 +124,6 @@ export default {
       this.imagecropperShow = false;
     },
     onSubmit() {
-      console.log(this.color)
       let data = {
         graphId: this.graph.id,
         name: this.name,
@@ -122,7 +138,6 @@ export default {
         this.handlerUpload();
         this.$root.eventHub.$emit("addNode", data);
         if (this.node.name && this.name) {
-          console.log('add link')
           addLinkApi({
             source_id: this.node.id,
             target_id: this.newNodeId,

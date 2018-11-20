@@ -171,10 +171,32 @@ export default {
   methods: {
     clickNode (params) {
       let data = params.data
+      let size = ''
+      if (data.symbolSize[0] == 35){
+        size = 'S'
+      }
+      else if (data.symbolSize[0] == 45){
+        size = 'M'
+      }
+      else if (data.symbolSize[0] == 65){
+        size = 'L'
+      }
+      let info = ''
+      let graph = this.$refs.graph
+      let links = graph.options.series[0].links
+      links.forEach((value, index, array) => {
+        if (value.target == data.name){
+          info = value.value
+        }
+      })
       this.$store.commit('setNode', {
         id: data.nid,
         name: data.name,
         desc: data.desc,
+        color: data.itemStyle.color,
+        size: size,
+        shape: data.symbol,
+        info: info,
         pic: data.pic,
         create_date: data.create_date
       })
@@ -185,7 +207,6 @@ export default {
       let options = graph.options
       options.series[0].data = nodes
       options.series[0].links = links
-      console.log('update graph', options)
       graph.mergeOptions(options)
     },
     addNode(data) {
@@ -197,14 +218,10 @@ export default {
       graph.mergeOptions(options)
     },
     delNode(nodeId) {
-      console.log(nodeId)
       let graph = this.$refs.graph
       let options = graph.options
       let data = options.series[0].data
       data.forEach((value, index, array) => {
-        console.log(value)
-        console.log(index)
-        console.log(array)
         if (value.nid == nodeId){
           array.splice(index, 1)
           graph.mergeOptions(options)
@@ -213,7 +230,6 @@ export default {
       })
     },
     addLink(data) {
-      console.log('addLink', data)
       let graph = this.$refs.graph
       let options = graph.options
       options.series[0].links.push(data)
