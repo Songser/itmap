@@ -10,9 +10,9 @@
             图片
           </v-flex>
           <v-flex xs10>
-            <v-avatar size="70" color="grey lighten-4" @click="imagecropperShow=true">
+            <div size="70" style="width:29px" color="grey lighten-4" @click="imagecropperShow=true">
               <img :src="image" alt="avatar" v-show="image">
-            </v-avatar>
+            </div>
             <image-cropper :width="300" :height="300" :field="field" @close='close' @cropSuccess="cropSuccess" langType="zh" v-show="imagecropperShow">
             </image-cropper>
           </v-flex>
@@ -34,8 +34,7 @@
           <v-radio label="三角形" value="triangle"></v-radio>
           <v-radio label="棱形" value="diamond"></v-radio>
         </v-radio-group>
-
-            <v-textarea v-model="desc" label="描述" multi-line rows="3"></v-textarea>
+        <v-textarea v-model="desc" label="描述" multi-line rows="3"></v-textarea>
       </v-form>
     </v-card-text>
     <v-card-actions>
@@ -50,14 +49,15 @@
 import { mapState } from "vuex";
 import { getToken } from "@/utils/auth";
 import data2blob from "@/utils/data2blob.js";
-import { Chrome } from 'vue-color'
+import { Chrome } from "vue-color";
 
 import {
   addNodeApi,
   addLinkApi,
   getNodesApi,
   delNodeApi,
-  uploadNodePicApi
+  uploadNodePicApi,
+  updateNodeApi
 } from "@/api/graph";
 import UploadFile from "@/components/UploadFile";
 import ImageCropper from "@/components/ImageCropper";
@@ -69,7 +69,7 @@ export default {
     UploadFile,
     ImageCropper,
     PanThumb,
-    "chrome-picker": Chrome,
+    "chrome-picker": Chrome
   },
 
   data: function() {
@@ -81,28 +81,30 @@ export default {
       size: "M",
       image: "",
       shape: "circle",
-      dialogImageUrl: "",
-      dialogVisible: false,
       newNodeId: 0,
       imagecropperShow: false,
       field: "node_pic",
-      update: false,
+      update: false
     };
   },
   created() {
-    this.$root.eventHub.$on('addNodeEvent', () => {
+    this.$root.eventHub.$on("addNodeEvent", () => {
       this.$emit("openAddNodeDialog");
     });
-    this.$root.eventHub.$on('updateNodeEvent', () => {
-      this.update = true
-      this.name = this.node.name
-      this.desc = this.node.desc
-      this.color = this.node.color
-      this.size = this.node.size
-      this.shape = this.node.shape
-      this.info = this.node.info
+    this.$root.eventHub.$on("updateNodeEvent", () => {
+      console.log(this.node.pic);
+      this.update = true;
+      this.name = this.node.name;
+      this.desc = this.node.desc;
+      this.color = this.node.color;
+      this.size = this.node.size;
+      this.shape = this.node.shape;
+      this.info = this.node.info;
+      if (this.node.pic) {
+        this.image = BASE_URL + "/node_pics/" + this.node.pic;
+      }
       this.$emit("openAddNodeDialog");
-    })
+    });
   },
   computed: mapState({
     node: state => state.node,
@@ -118,20 +120,55 @@ export default {
       this.size = "M";
       this.image = "";
       this.shape = "circle";
-      this.dialogImageUrl = "";
-      this.dialogVisible = false;
       this.newNodeId = 0;
       this.imagecropperShow = false;
     },
     onSubmit() {
+      let color = this.color.hex;
+      if (!color) {
+        color = "#c23531";
+      }
       let data = {
         graphId: this.graph.id,
+        nid: this.node.id,
         name: this.name,
-        color: this.color.hex,
+        color: color,
         shape: this.shape,
         size: this.size,
         desc: this.desc
       };
+      if (this.update) {
+        this.updateNode(data);
+      } else {
+        this.addNode(data);
+      }
+      this.$emit("closeAddNodeDialog");
+    },
+    cancle() {
+      this.$emit("closeAddNodeDialog");
+    },
+    cropSuccess(createImgUrl, field, mime, ki) {
+      this.image = createImgUrl;
+      this.mime = mime;
+    },
+    handlerUpload() {
+      if (!this.image) {
+        return;
+      }
+      let form = new FormData();
+      form.append(this.field, data2blob(this.image, this.mime));
+      uploadNodePicApi(form, this.newNodeId);
+    },
+    close() {
+      this.imagecropperShow = false;
+    },
+    updateNode(data) {
+      updateNodeApi(data).then(response => {
+        this.init();
+      });
+    },
+    addNode(data) {
+      console.log(data);
       addNodeApi(data).then(response => {
         this.newNodeId = response.data;
         data["target_id"] = this.newNodeId;
@@ -152,27 +189,7 @@ export default {
             this.init();
           });
         }
-
       });
-      this.$emit("closeAddNodeDialog");
-    },
-    cancle() {
-      this.$emit("closeAddNodeDialog");
-    },
-    cropSuccess(createImgUrl, field, mime, ki) {
-      this.image = createImgUrl;
-      this.mime = mime;
-    },
-    handlerUpload() {
-      if (!this.image){
-        return
-      }
-      let form = new FormData();
-      form.append(this.field, data2blob(this.image, this.mime));
-      uploadNodePicApi(form, this.newNodeId);
-    },
-    close() {
-      this.imagecropperShow = false;
     }
   }
 };

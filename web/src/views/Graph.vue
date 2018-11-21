@@ -171,6 +171,7 @@ export default {
   methods: {
     clickNode (params) {
       let data = params.data
+      console.log(data)
       let size = ''
       if (data.symbolSize[0] == 35){
         size = 'S'
@@ -189,11 +190,15 @@ export default {
           info = value.value
         }
       })
+      let color = '#c23531'
+      if (data.itemStyle) {
+        color = data.itemStyle.color
+      }
       this.$store.commit('setNode', {
         id: data.nid,
         name: data.name,
         desc: data.desc,
-        color: data.itemStyle.color,
+        color: color,
         size: size,
         shape: data.symbol,
         info: info,

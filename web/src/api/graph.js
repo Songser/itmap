@@ -55,3 +55,14 @@ export function uploadNodePicApi (form, nodeId) {
 export function get_picture(path) {
   return BASE_URL + '/node_pics/' + path
 }
+
+export function updateNodeApi(data) {
+  return request.put('/api/v1_0/nodes/' + data.nid, {
+    graph_id: data.graphId,
+    name: data.name,
+    color: data.color,
+    description: data.desc,
+    size: data.size,
+    shape: data.shape
+  })
+}
