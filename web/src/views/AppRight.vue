@@ -106,7 +106,7 @@ export default {
       })
     },
     updateNode() {
-      this.$root.eventHub.$emit("updateNodeEvent")
+      this.$root.eventHub.$emit("updateNodeEvent", true)
     }
   }
 };

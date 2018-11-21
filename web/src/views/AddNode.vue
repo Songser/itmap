@@ -10,10 +10,10 @@
             图片
           </v-flex>
           <v-flex xs10>
-            <div size="70" style="width:29px" color="grey lighten-4" @click="imagecropperShow=true">
+            <v-avatar size="150" style="width:29px" color="grey lighten-4" @click="imagecropperShow=true">
               <img :src="image" alt="avatar" v-show="image">
-            </div>
-            <image-cropper :width="300" :height="300" :field="field" @close='close' @cropSuccess="cropSuccess" langType="zh" v-show="imagecropperShow">
+            </v-avatar>
+            <image-cropper :width="200" :height="200" :field="field" @close='close' @cropSuccess="cropSuccess" langType="zh" v-show="imagecropperShow">
             </image-cropper>
           </v-flex>
         </v-layout>
@@ -92,7 +92,6 @@ export default {
       this.$emit("openAddNodeDialog");
     });
     this.$root.eventHub.$on("updateNodeEvent", () => {
-      console.log(this.node.pic);
       this.update = true;
       this.name = this.node.name;
       this.desc = this.node.desc;
@@ -152,6 +151,7 @@ export default {
       this.mime = mime;
     },
     handlerUpload() {
+      console.log(this.image)
       if (!this.image) {
         return;
       }
@@ -164,6 +164,8 @@ export default {
     },
     updateNode(data) {
       updateNodeApi(data).then(response => {
+        this.newNodeId = this.node.id
+        this.handlerUpload();
         this.init();
       });
     },
@@ -197,6 +199,9 @@ export default {
 <style lang="scss" scoped>
 .input-group {
   padding: 0;
+}
+.v-avatar img{
+  border-radius: 0;
 }
 .panThumb {
   z-index: 100;
