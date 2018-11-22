@@ -77,6 +77,8 @@ const mutations = {
     state.shape = val.shape
     state.info = val.info
     state.pic = val.pic
+    state.source = val.source
+    state.source_id = val.source_id
     state.create_date = val.create_date
   },
   addNode (state, value) {

@@ -35,7 +35,8 @@ export default {
   },
   computed: {
     ...mapState({
-      graphId: state => state.graph.id
+      graphId: state => state.graph.id,
+      node: state => state.node
     })
   },
   created() {
@@ -45,9 +46,12 @@ export default {
     this.$root.eventHub.$on('addLink', (target) => {
       this.addLink(target)
     });
-    this.$root.eventHub.$on('delNode',(target) => {
+    this.$root.eventHub.$on('delNode', (target) => {
       this.delNode(target)
     });
+    this.$root.eventHub.$on('updateNode', (target) => {
+      this.updateNode(target)
+    })
   },
   data: function () {
     return {
@@ -147,7 +151,10 @@ export default {
           })
           let links = []
           data.relations.forEach((value, index, array) => {
+            console.log(value)
             let link = {
+              sid: value.sid,
+              tid: value.tid,
               source: value.source,
               target: value.target,
               value: value.value,
@@ -155,15 +162,6 @@ export default {
             links.push(link)
           })
           this.updateGraph(nodes, links)
-          if (nodes.length > 0){
-            this.$store.commit('setNode', {
-              id: nodes[0].nid,
-              name: nodes[0].name,
-              desc: nodes[0].desc,
-              pic: nodes[0].pic,
-              create_date: nodes[0].create_date
-            })
-          }
         })
       }
     }
@@ -183,11 +181,15 @@ export default {
         size = 'L'
       }
       let info = ''
+      let source = ''
+      let source_id = 0
       let graph = this.$refs.graph
       let links = graph.options.series[0].links
       links.forEach((value, index, array) => {
-        if (value.target == data.name){
+        if (value.tid == data.nid){
           info = value.value
+          source = value.source
+          source_id = value.sid
         }
       })
       let color = '#c23531'
@@ -203,6 +205,8 @@ export default {
         shape: data.symbol,
         info: info,
         pic: data.pic,
+        source: source,
+        source_id: source_id,
         create_date: data.create_date
       })
       this.$root.eventHub.$emit('openRightDrawer')
@@ -215,12 +219,37 @@ export default {
       graph.mergeOptions(options)
     },
     addNode(data) {
-      let node = this.genNode(data.graphId, data.name, data.desc, '',
+      let node = this.genNode(this.graphId, data.name, data.desc, '',
         data.color, data.size, data.shape)
       let graph = this.$refs.graph
       let options = graph.options
       options.series[0].data.push(node)
       graph.mergeOptions(options)
+    },
+    updateNode(data) {
+      let node = this.genNode(this.graphId, data.name, data.desc, '',
+        data.color, data.size, data.shape)
+      let graph = this.$refs.graph
+      let options = graph.options
+      let nodes = options.series[0].data
+      for (let i = 0; i < nodes.length; i++){
+        if (nodes[i].nid == data.nid){
+          nodes[i] = node
+          break
+        }
+      }
+      let links = options.series[0].links
+      if (data.value) {
+        for (let i = 0; i< links.length; i++) {
+          if (links[i].sid == this.node.source_id){
+            links[i].value = data.value
+            break
+          }
+        }
+      }
+
+      graph.mergeOptions(options)
+
     },
     delNode(nodeId) {
       let graph = this.$refs.graph
@@ -240,11 +269,11 @@ export default {
       options.series[0].links.push(data)
       graph.mergeOptions(options)
     },
-    genNode(nid, name, description, create_date, color, size, shape, pic) {
+    genNode(nid, name, desc, create_date, color, size, shape, pic) {
       let node = {
         name: name,
         nid: nid,
-        desc: description,
+        desc: desc,
         pic: pic,
         create_date: create_date,
       }

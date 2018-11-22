@@ -66,3 +66,12 @@ export function updateNodeApi(data) {
     shape: data.shape
   })
 }
+
+export function updateLinkApi(data) {
+  return request.put('/api/v1_0/node_rels', {
+    source_node_id: data.source_id,
+    target_node_id: data.target_id,
+    graph_id: data.graphId,
+    info: data.value
+  })
+}

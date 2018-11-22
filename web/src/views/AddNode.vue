@@ -18,7 +18,7 @@
           </v-flex>
         </v-layout>
         <v-text-field v-model="graph.name" label="图谱" disabled></v-text-field>
-        <v-text-field v-model="node.name" label="上级节点" disabled></v-text-field>
+        <v-text-field v-model="source" label="上级节点" disabled></v-text-field>
         <v-text-field v-model="name" label="名称" autofocus></v-text-field>
         <v-text-field v-model="info" label="关系"></v-text-field>
         <!-- <v-text-field v-model="color" lebel="颜色" type="color"></v-text-field> -->
@@ -57,7 +57,8 @@ import {
   getNodesApi,
   delNodeApi,
   uploadNodePicApi,
-  updateNodeApi
+  updateNodeApi,
+  updateLinkApi,
 } from "@/api/graph";
 import UploadFile from "@/components/UploadFile";
 import ImageCropper from "@/components/ImageCropper";
@@ -82,6 +83,8 @@ export default {
       image: "",
       shape: "circle",
       newNodeId: 0,
+      oldLink: "",
+      source: '',
       imagecropperShow: false,
       field: "node_pic",
       update: false
@@ -99,17 +102,29 @@ export default {
       this.size = this.node.size;
       this.shape = this.node.shape;
       this.info = this.node.info;
+      this.sourceName = this.node.source
       if (this.node.pic) {
         this.image = BASE_URL + "/node_pics/" + this.node.pic;
       }
       this.$emit("openAddNodeDialog");
     });
   },
-  computed: mapState({
-    node: state => state.node,
-    user: state => state.user,
-    graph: state => state.graph
-  }),
+  computed: {
+    sourceName: {
+      get() {
+        this.source = this.$store.state.node.name
+      },
+      set( value ) {
+        this.source = value
+      }
+
+    },
+    ...mapState({
+      node: state => state.node,
+      user: state => state.user,
+      graph: state => state.graph,
+    }),
+  },
   methods: {
     init() {
       this.name = "";
@@ -151,9 +166,12 @@ export default {
       this.mime = mime;
     },
     handlerUpload() {
-      console.log(this.image)
       if (!this.image) {
         return;
+      }
+      let index = this.image.indexOf('data:image')
+      if (index != 0){
+        return
       }
       let form = new FormData();
       form.append(this.field, data2blob(this.image, this.mime));
@@ -164,13 +182,27 @@ export default {
     },
     updateNode(data) {
       updateNodeApi(data).then(response => {
-        this.newNodeId = this.node.id
         this.handlerUpload();
-        this.init();
+        console.log('info', this.info)
+        if (this.node.name && this.name && this.oldLink != this.info){
+          updateLinkApi({
+            source_id: this.node.source_id,
+            target_id: this.node.id,
+            graphId: this.graph.id,
+            value: this.info
+          }).then(response => {
+            data['value'] = this.info
+            this.$root.eventHub.$emit('updateNode', data)
+            this.init();
+          })
+        }
+        else {
+          this.$root.eventHub.$emit('updateNode', data)
+        }
+
       });
     },
     addNode(data) {
-      console.log(data);
       addNodeApi(data).then(response => {
         this.newNodeId = response.data;
         data["target_id"] = this.newNodeId;
