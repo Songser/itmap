@@ -70,7 +70,6 @@ export default {
   },
   computed: {
     activeFab() {
-      console.log(this.tabs)
       switch (this.tabs) {
         case "one":
           return { class: "purple", icon: "account_circle" };

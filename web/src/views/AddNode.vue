@@ -92,6 +92,7 @@ export default {
   },
   created() {
     this.$root.eventHub.$on("addNodeEvent", () => {
+      this.init()
       this.$emit("openAddNodeDialog");
     });
     this.$root.eventHub.$on("updateNodeEvent", () => {
@@ -183,7 +184,6 @@ export default {
     updateNode(data) {
       updateNodeApi(data).then(response => {
         this.handlerUpload();
-        console.log('info', this.info)
         if (this.node.name && this.name && this.oldLink != this.info){
           updateLinkApi({
             source_id: this.node.source_id,

@@ -129,7 +129,6 @@ export default {
   },
   watch: {
     graphId(value) {
-      console.log(this.graphId)
       if (value) {
         if (this.oldGraphId == value){
           return
@@ -139,7 +138,7 @@ export default {
           const data = response.data;
           if (data.nodes.length == 0){
             this.updateGraph([], [])
-            this.$root.eventHub.$emit('showAddNodeDialog', '');
+            this.$root.eventHub.$emit('addNodeEvent', '');
             return
           }
 
@@ -151,7 +150,6 @@ export default {
           })
           let links = []
           data.relations.forEach((value, index, array) => {
-            console.log(value)
             let link = {
               sid: value.sid,
               tid: value.tid,
@@ -169,7 +167,6 @@ export default {
   methods: {
     clickNode (params) {
       let data = params.data
-      console.log(data)
       let size = ''
       if (data.symbolSize[0] == 35){
         size = 'S'
@@ -219,7 +216,7 @@ export default {
       graph.mergeOptions(options)
     },
     addNode(data) {
-      let node = this.genNode(this.graphId, data.name, data.desc, '',
+      let node = this.genNode(date.nid, data.name, data.desc, '',
         data.color, data.size, data.shape)
       let graph = this.$refs.graph
       let options = graph.options
@@ -227,7 +224,7 @@ export default {
       graph.mergeOptions(options)
     },
     updateNode(data) {
-      let node = this.genNode(this.graphId, data.name, data.desc, '',
+      let node = this.genNode(data.nid, data.name, data.desc, '',
         data.color, data.size, data.shape)
       let graph = this.$refs.graph
       let options = graph.options
@@ -241,15 +238,13 @@ export default {
       let links = options.series[0].links
       if (data.value) {
         for (let i = 0; i< links.length; i++) {
-          if (links[i].sid == this.node.source_id){
+          if (links[i].sid == this.node.source_id && links[i].value != data.value){
             links[i].value = data.value
             break
           }
         }
       }
-
       graph.mergeOptions(options)
-
     },
     delNode(nodeId) {
       let graph = this.$refs.graph
