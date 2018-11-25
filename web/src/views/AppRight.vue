@@ -10,7 +10,7 @@
       </v-card-title>
       <v-spacer></v-spacer>
       <v-card-actions>
-        <v-btn flat color="purple">更多</v-btn>
+        <v-btn flat color="purple" @click="showMore">更多</v-btn>
         <v-spacer></v-spacer>
       </v-card-actions>
     </v-container>
@@ -96,6 +96,7 @@ export default {
   },
   methods: {
     addNode() {
+      this.$emit('closeRightDrawer')
       this.$root.eventHub.$emit("addNodeEvent", true);
     },
     delNode () {
@@ -103,9 +104,15 @@ export default {
         this.delNodeDialog = false
         this.$root.eventHub.$emit("delNode", this.nodeId);
       })
+      this.$emit('closeRightDrawer')
     },
     updateNode() {
+      this.$emit('closeRightDrawer')
       this.$root.eventHub.$emit("updateNodeEvent", true)
+    },
+    showMore () {
+      this.$root.eventHub.$emit('showDetailDialog', true)
+      this.$emit('closeRightDrawer')
     }
   }
 };

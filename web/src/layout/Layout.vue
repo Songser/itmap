@@ -5,8 +5,8 @@
     </v-navigation-drawer>
     <app-header @openLeftDrawer="openLeftDrawer" @openRightDrawer="openRightDrawer">
     </app-header>
-    <v-navigation-drawer v-model="rightDrawer" right fixed app clipped :temporary='true'>
-      <app-right />
+    <v-navigation-drawer v-model="rightDrawer" right fixed app clipped :temporary='true' >
+      <app-right @closeRightDrawer="closeRightDrawer" />
     </v-navigation-drawer>
     <v-content>
       <router-view />
@@ -56,9 +56,9 @@ export default {
     this.$root.eventHub.$on('openRightDrawer', (target) => {
       this.openRightDrawer()
     });
-    // this.$root.eventHub.$on('showAddNodeDialog',(target) => {
-    //   this.addNodeDialog = true
-    // });
+    this.$root.eventHub.$on('showDetailDialog',(target) => {
+      this.detailDialog = true
+    });
   },
   computed: {
     ...mapState({
@@ -80,7 +80,11 @@ export default {
       this.addNodeDialog = true
     },
     closeDetailDialog () {
-      this.closeDetailDialog = false
+      this.detailDialog = false
+    },
+    closeRightDrawer() {
+      console.log('eeeee', this.rightDrawer)
+      this.rightDrawer = false
     }
   }
 };
