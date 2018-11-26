@@ -16,6 +16,7 @@ from flasgger import Swagger
 from itmap.ext import db, mail, redis, login_manager, jwt
 from itmap.models.user import Role, User
 from itmap.models.graph import NodeRelation, Node, Graph
+from itmap.models.article import Article
 import itmap.config as _config
 
 
@@ -43,6 +44,7 @@ def create_app():
     admin.add_view(ModelView(NodeRelation, db.session))
     admin.add_view(ModelView(Node, db.session))
     admin.add_view(ModelView(Graph, db.session))
+    admin.add_view(ModelView(Article, db.session))
 
     admin.add_view(rediscli.RedisCli(redis._redis_client))
 
@@ -75,6 +77,7 @@ def initdb():
     click.echo('Init the db')
     from itmap.models.user import Role, User
     from itmap.models.graph import NodeRelation, Node, Graph
+    from itmap.models.article import Article
     # 必须在调用db.create_all之前导入具体的Model
     # 原因是如User这种类是元类Model的实例（大体上是）
     # 当导入时，实际上是创建了User类

@@ -45,7 +45,7 @@ class Node(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True, nullable=True)
-    relate_page_url = db.Column(db.String(64))
+    relate_page_url = db.Column(db.String(128))
 
     is_template = db.Column(db.Boolean, default=False)  # 是否作为模板
 

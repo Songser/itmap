@@ -6,16 +6,34 @@
       </v-btn>
       <!-- <v-toolbar-title>Settings</v-toolbar-title> -->
       <v-spacer></v-spacer>
-      <v-tabs color="primary" fixed-tabs>
-        <v-tab v-for="n in 3" :key="n" :href="`#tab-${n}`">
-          Item {{ n }}
+      <v-tabs color="primary" v-model="model" slider-color="yellow" fixed-tabs >
+        <v-tab href="#article">
+          文章
+        </v-tab>
+        <v-tab href="#comment">
+          留言
+        </v-tab>
+        <v-tab href="#user">
+          用户
+        </v-tab>
+        <v-tab href="#book">
+          书籍
         </v-tab>
       </v-tabs>
 
     </v-toolbar>
-    <v-tabs-items >
-      <v-tab-item v-for="i in 3" :id="`tab-${i}`" :key="i">
-
+    <v-tabs-items v-model="model">
+      <v-tab-item id="article">
+        article
+      </v-tab-item>
+      <v-tab-item id="comment">
+        comment
+      </v-tab-item>
+      <v-tab-item id="user">
+        user
+      </v-tab-item>
+      <v-tab-item id="book">
+        book
       </v-tab-item>
     </v-tabs-items>
   </v-card>
@@ -26,7 +44,7 @@ export default {
   data () {
     return {
       text: 'fff',
-      model: true,
+      model: 'article',
     }
   },
   methods: {
