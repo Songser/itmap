@@ -23,27 +23,31 @@
 
     </v-toolbar>
     <v-tabs-items v-model="model">
-      <v-tab-item id="article">
-        article
+      <v-tab-item value="article">
+        ddddd
+        <app-article></app-article>
       </v-tab-item>
-      <v-tab-item id="comment">
+      <v-tab-item value="comment">
         comment
       </v-tab-item>
-      <v-tab-item id="user">
+      <v-tab-item value="user">
         user
       </v-tab-item>
-      <v-tab-item id="book">
+      <v-tab-item value="book">
         book
       </v-tab-item>
     </v-tabs-items>
   </v-card>
 </template>
 <script>
+import AppArticle from '@/views/Article'
 export default {
   name: "node-info",
+  components: {
+    AppArticle,
+  },
   data () {
     return {
-      text: 'fff',
       model: 'article',
     }
   },
