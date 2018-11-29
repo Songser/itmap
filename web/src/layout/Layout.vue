@@ -18,7 +18,7 @@
         <add-node @closeAddNodeDialog="closeAddNodeDialog" @openAddNodeDialog="openAddNodeDialog" />
       </v-dialog>
       <v-dialog v-model="detailDialog" fullscreen hide-overlay scrollable transition="dialog-bottom-transition">
-        <node-info @closeDetailDialog="closeDetailDialog" />
+        <node-info @closeDetailDialog="closeDetailDialog" @openDetailDialog="openDetailDialog"/>
       </v-dialog>
   </v-app>
 </template>
@@ -56,9 +56,6 @@ export default {
     this.$root.eventHub.$on('openRightDrawer', (target) => {
       this.openRightDrawer()
     });
-    this.$root.eventHub.$on('showDetailDialog',(target) => {
-      this.detailDialog = true
-    });
   },
   computed: {
     ...mapState({
@@ -83,8 +80,10 @@ export default {
       this.detailDialog = false
     },
     closeRightDrawer() {
-      console.log('eeeee', this.rightDrawer)
       this.rightDrawer = false
+    },
+    openDetailDialog() {
+      this.detailDialog = true
     }
   }
 };

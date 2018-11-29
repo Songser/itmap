@@ -1,6 +1,8 @@
 <template>
-  <v-container>
-    <v-list two-line>
+<v-layout row>
+  <v-flex xs12 sm6 offset-sm3>
+    <v-card>
+      <v-list two-line>
       <template v-for="(item, index) in items">
         <v-list-tile :key="item.title" avatar ripple @click="toggle(index)">
           <v-list-tile-content>
@@ -23,7 +25,9 @@
         <v-divider v-if="index + 1 < items.length" :key="index"></v-divider>
       </template>
     </v-list>
-  </v-container>
+    </v-card>
+  </v-flex>
+</v-layout>
 </template>
 <script>
 import { mapState } from "vuex";
@@ -32,6 +36,7 @@ export default {
   name: "app-article",
   data() {
     return {
+      nodeId: 0,
       items: []
     };
   },
@@ -41,10 +46,17 @@ export default {
     })
   },
   created() {
-    console.log("ddddddd");
-    getArticlesApi(this.node.id).then(response => {
-      console.log(response);
-    });
+    this.$root.eventHub.$on("showArticleEvent", () => {
+      if (this.nodeId != this.node.id) {
+        getArticlesApi(this.node.id).then(response => {
+          this.nodeId = this.node.id
+          console.log(response);
+        });
+      }
+    })
+  },
+  methods: {
+
   }
 };
 </script>
