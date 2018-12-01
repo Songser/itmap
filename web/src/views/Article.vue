@@ -1,6 +1,4 @@
 <template>
-<v-layout row>
-  <v-flex xs12 sm6 offset-sm3>
     <v-card>
       <v-list two-line>
       <template v-for="(item, index) in items">
@@ -16,7 +14,6 @@
             <v-icon v-if="selected.indexOf(index) < 0" color="grey lighten-1">
               star_border
             </v-icon>
-
             <v-icon v-else color="yellow darken-2">
               star
             </v-icon>
@@ -26,8 +23,6 @@
       </template>
     </v-list>
     </v-card>
-  </v-flex>
-</v-layout>
 </template>
 <script>
 import { mapState } from "vuex";
