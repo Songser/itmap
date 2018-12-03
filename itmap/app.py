@@ -44,6 +44,7 @@ def create_app():
     admin.add_view(ModelView(NodeRelation, db.session))
     admin.add_view(ModelView(Node, db.session))
     admin.add_view(ModelView(Graph, db.session))
+    
     admin.add_view(ModelView(Article, db.session))
 
     admin.add_view(rediscli.RedisCli(redis._redis_client))

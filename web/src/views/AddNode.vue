@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title>
-      添加节点
+      <p class="title">添加节点</p>
     </v-card-title>
     <v-card-text>
       <v-form>

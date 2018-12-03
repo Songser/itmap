@@ -12,6 +12,15 @@ from flask_jwt_extended import (
 )
 
 from itmap.models.article import Article
+from itmap.models.graph import Node
+from itmap.ext import db
+
+parser = reqparse.RequestParser(bundle_errors=True)
+parser.add_argument('title', trim=True)
+parser.add_argument('url')
+parser.add_argument('author')
+parser.add_argument('source')
+parser.add_argument('description')
 
 aritcle_fields = {
     'id': fields.Integer,
@@ -32,3 +41,19 @@ class ArticleListApi(Resource):
             marshal(a, aritcle_fields)
             for a in articles
         ]
+
+    @jwt_required
+    def post(self, nid):
+        node = Node.query.get(nid)
+        if node is None:
+            return {'msg': 'Invalid nid'}, 400
+        uid = get_jwt_identity()
+        vals = dict(parser.parse_args())
+        vals.update({
+            'owner_id': uid,
+            'node_id': nid,
+        })
+        article = Article(**vals)
+        db.session.add(article)
+        db.session.commit()
+        return article.id, 201

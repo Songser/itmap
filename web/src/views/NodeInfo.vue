@@ -29,7 +29,7 @@
       <v-flex xs12 sm3>
       </v-flex>
       <v-flex xs12 sm6>
-        <v-tabs-items v-model="model">
+        <v-tabs-items >
           <v-tab-item value="article">
             <app-article></app-article>
           </v-tab-item>
@@ -46,26 +46,29 @@
       </v-flex>
     </v-layout>
     <v-fab-transition mb-3 mr-3>
-      <v-btn :color="activeFab.color" :key="activeFab.icon" v-model="fab" dark fab bottom left>
+      <v-btn :color="activeFab.color" :key="activeFab.icon" v-model="fab" dark fab bottom left @click="add">
         <v-icon>{{ activeFab.icon }}</v-icon>
         <v-icon>close</v-icon>
       </v-btn>
     </v-fab-transition>
     <v-dialog v-model="addArticleDialog" max-width="600px" persistent>
-        <add-node @closeAddArticleDialog="closeAddArticleDialog" @openAddArticleDialog="openAddArticleDialog" />
+        <add-article @closeAddArticleDialog="closeAddArticleDialog" @openAddArticleDialog="openAddArticleDialog" />
       </v-dialog>
   </v-card>
 </template>
 <script>
 import AppArticle from "@/views/Article";
+import AddArticle from "@/views/AddArticle"
 import { mapState } from "vuex";
 export default {
   name: "node-info",
   components: {
-    AppArticle
+    AppArticle,
+    AddArticle
   },
   data() {
     return {
+      model: '',
       tabs: "article",
       fab: false,
       addArticleDialog: false,
@@ -97,6 +100,14 @@ export default {
     }
   },
   methods: {
+    add () {
+      if (this.tabs == 'article') {
+        this.addArticleDialog = true
+      }
+    },
+    showArticle () {
+      this.$root.eventHub.$emit('showArticleEvent')
+    },
     closeDialog() {
       this.$emit("closeDetailDialog");
     },
@@ -104,9 +115,8 @@ export default {
       this.model = "article";
       this.$emit("openDetailDialog");
     },
-    showArticle() {},
-    closeAddArticleDialog() {
-
+    closeAddArticleDialog(data) {
+      this.addArticleDialog = false
     },
     openAddArticleDialog () {
 
