@@ -52,7 +52,7 @@ export default {
       }
       addArticleApi(this.node.id, data).then(response => {
         console.log(response)
-        this.$root.eventHub.$emit('AddArticleEvent', data)
+        this.$root.eventHub.$emit('addArticleEvent', data)
         this.$emit('closeAddArticleDialog')
       })
     },

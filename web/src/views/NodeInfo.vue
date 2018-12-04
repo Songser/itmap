@@ -20,9 +20,9 @@
           书籍
         </v-tab>
       </v-tabs>
-      <!-- <v-btn icon>
-        <v-icon>add</v-icon>
-      </v-btn> -->
+      <v-btn icon dark @click="closeDialog" >
+        <v-icon >close</v-icon>
+      </v-btn>
 
     </v-toolbar>
     <v-layout row>

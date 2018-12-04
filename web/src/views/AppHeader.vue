@@ -5,12 +5,12 @@
     <v-layout row align-center ml-5 mr-3 style="max-width: 200px">
       <v-text-field placeholder="Search..." single-line append-icon="search" color="white" hide-details></v-text-field>
     </v-layout>
-    <v-chip color='green'>
+    <!-- <v-chip color='green'>
       <v-avatar @click.stop="addNode">
         <v-icon medium>fas fa-plus-circle</v-icon>
       </v-avatar>
       <span @click.stop="showDetail">{{node}}</span>
-    </v-chip>
+    </v-chip> -->
     <v-spacer></v-spacer>
     <v-chip close @click="showUser" @input="logout">
       <v-avatar>

@@ -1,3 +1,4 @@
+from flask import request
 from flask_restful import (
     Resource,
     fields,
@@ -35,8 +36,13 @@ aritcle_fields = {
 class ArticleListApi(Resource):
 
     def get(self, nid):
+        limit = 20
+        page = int(request.args.get('page', 0))
         articles = Article.query.filter_by(node_id=nid) \
-            .order_by(Article.id).all()
+            .order_by(Article.id)\
+            .offset(page * limit)\
+            .limit(limit)\
+            .all()
         return [
             marshal(a, aritcle_fields)
             for a in articles
