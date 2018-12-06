@@ -1,32 +1,38 @@
 <template>
-  <v-container fluid fill-height>
-    <v-layout v-scroll:#scroll-target="onScroll" column align-center >
-    <v-card hover>
-      <v-list three-line subheader>
-        <template v-for="(item, index) in items">
-          <v-list-tile :key="item.title" avatar ripple :href="item.url" target="_blank">
-            <v-list-tile-content>
-              <v-list-tile-title>{{item.title}}</v-list-tile-title>
-              <!-- <v-list-tile-sub-title class="text--primary">{{ item.author }}</v-list-tile-sub-title> -->
-              <v-list-tile-sub-title style="height: 50px;">{{item.description}}</v-list-tile-sub-title>
-            </v-list-tile-content>
+  <v-card>
+    <v-container fluid grid-list-lg mx-0>
+      <!-- <v-list three-line subheader> -->
+      <v-layout row wrap>
+        <template v-for="(item) in items">
+          <v-flex xs12 :key="item.id">
+            <v-card hover color="blue-grey darken-1" class="white--text elevation-6" >
+              <v-card-title primary-title>
+                <div>
+                  <div class="headline">{{item.title}}</div>
+                  <div>{{item.description}}</div>
+                </div>
+              </v-card-title>
 
-            <v-list-tile-action>
-              <v-list-tile-action-text>{{ item.author }}</v-list-tile-action-text>
-            </v-list-tile-action>
-          </v-list-tile>
-          <v-divider :key="index"></v-divider>
+              <v-divider light></v-divider>
+              <v-card-actions class="pa-3">
+                <span class="grey--text" style="margin-right:5px">作者: </span> {{item.author}}
+                <v-spacer></v-spacer>
+                <v-icon>star_border</v-icon>
+                <v-icon>edit</v-icon>
+                <v-icon>delete</v-icon>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
         </template>
-      </v-list>
+      </v-layout>
+      <!-- </v-list> -->
       <v-card-actions v-show="items.length > 0">
-        <v-spacer></v-spacer>
         <v-btn flat color="orange" @click="prePage">上一页</v-btn>
-        <v-btn flat color="orange" @click="nextPage">下一页</v-btn>
         <v-spacer></v-spacer>
+        <v-btn flat color="orange" @click="nextPage">下一页</v-btn>
       </v-card-actions>
-    </v-card>
-    </v-layout>
-  </v-container>
+    </v-container>
+  </v-card>
 </template>
 <script>
 import { mapState } from "vuex";
@@ -51,36 +57,48 @@ export default {
       if (this.nodeId != this.node.id) {
         this.getArticle();
       }
-    })
+    });
     this.$root.eventHub.$on("addArticleEvent", data => {
-      console.log(data);
-      this.items.append(data);
-    })
+      this.items.push(data);
+    });
   },
   methods: {
     getArticle() {
+      console.log(this.page)
       getArticlesApi(this.node.id, this.page).then(response => {
         this.nodeId = this.node.id;
         let items = response.data;
         if (items.length > 0) {
           this.items = response.data;
-          this.page += 1;
+          console.log(this.page)
         }
       });
     },
     prePage() {
-      this.getArticle();
-    },
-    nextPage() {
       if (this.page <= 0) {
         return;
       }
       this.page -= 1;
       this.getArticle();
     },
-    onScroll (e) {
-        this.offsetTop = e.target.scrollTop
+    nextPage() {
+      if (this.items.length < 20){
+        return
       }
+      this.page += 1;
+      this.getArticle();
+    },
+    onScroll(e) {
+      this.offsetTop = e.target.scrollTop;
+    }
   }
 };
 </script>
+<style scoped>
+.v-card {
+  box-shadow: none;
+}
+.container {
+  padding: 0px;
+}
+</style>

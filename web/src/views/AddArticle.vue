@@ -42,6 +42,13 @@ export default {
     }),
   },
   methods: {
+    init() {
+      this.title="",
+      this.url="",
+      this.author="",
+      this.source="",
+      this.desc=""
+    },
     onSubmit() {
       let data = {
         title: this.title,
@@ -51,9 +58,9 @@ export default {
         description: this.desc
       }
       addArticleApi(this.node.id, data).then(response => {
-        console.log(response)
         this.$root.eventHub.$emit('addArticleEvent', data)
         this.$emit('closeAddArticleDialog')
+        this.init()
       })
     },
     cancle() {

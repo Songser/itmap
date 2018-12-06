@@ -1,5 +1,5 @@
 <template>
-  <v-card tile>
+  <v-card>
     <v-toolbar card dark tabs color="primary">
       <v-btn icon dark @click="closeDialog" >
         <v-icon >close</v-icon>
@@ -23,15 +23,15 @@
       <v-btn icon dark @click="closeDialog" >
         <v-icon >close</v-icon>
       </v-btn>
-
     </v-toolbar>
-    <v-layout row>
+    <v-card-text style="height:100%">
+    <v-layout row >
       <v-flex xs12 sm3>
       </v-flex>
       <v-flex xs12 sm6>
-        <v-tabs-items >
-          <v-tab-item value="article">
-            <app-article></app-article>
+        <v-tabs-items fill-height>
+          <v-tab-item value="article" fill-height>
+            <app-article fill-height></app-article>
           </v-tab-item>
           <v-tab-item value="comment">
             comment
@@ -45,6 +45,7 @@
         </v-tabs-items>
       </v-flex>
     </v-layout>
+    </v-card-text>
     <v-fab-transition mb-3 mr-3>
       <v-btn :color="activeFab.color" :key="activeFab.icon" v-model="fab" dark fab bottom left @click="add">
         <v-icon>{{ activeFab.icon }}</v-icon>
