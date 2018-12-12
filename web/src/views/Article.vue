@@ -34,13 +34,27 @@
         <v-btn flat color="orange" @click="nextPage">下一页</v-btn>
       </v-card-actions>
     </v-container>
+    <v-dialog
+      v-model="showDialog"
+      max-width="600px"
+      persistent
+    >
+      <add-article
+        @closeAddArticleDialog="closeAddArticleDialog"
+      />
+    </v-dialog>
   </v-card>
 </template>
 <script>
 import { mapState } from "vuex";
 import { getArticlesApi } from "@/api/article";
+import AddArticle from "@/views/AddArticle";
 export default {
   name: "app-article",
+  components: {
+    AddArticle,
+  },
+  props: ['addArticle'],
   data() {
     return {
       nodeId: 0,
@@ -48,12 +62,16 @@ export default {
       page: 0,
       offsetTop: 0,
       active: -1,
+      showDialogModel: false,
     };
   },
   computed: {
     ...mapState({
       node: state => state.node
-    })
+    }),
+    showDialog() {
+      return this.addArticle
+    }
   },
   created() {
     this.$root.eventHub.$on("showArticleEvent", () => {
@@ -67,14 +85,11 @@ export default {
   },
   methods: {
     getArticle() {
-      console.log(this.page)
       getArticlesApi(this.node.id, this.page).then(response => {
         this.nodeId = this.node.id;
         let items = response.data;
-        console.log(items[0].active)
         if (items.length > 0) {
           this.items = response.data;
-          console.log(this.page)
         }
       });
     },
@@ -100,7 +115,10 @@ export default {
     },
     outStyle(index) {
       this.active = -1
-    }
+    },
+    closeAddArticleDialog(data) {
+      this.$emit('closeDialog')
+    },
   }
 };
 </script>

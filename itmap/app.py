@@ -79,6 +79,7 @@ def initdb():
     from itmap.models.user import Role, User
     from itmap.models.graph import NodeRelation, Node, Graph
     from itmap.models.article import Article
+    from itmap.models.comment import Comment
     # 必须在调用db.create_all之前导入具体的Model
     # 原因是如User这种类是元类Model的实例（大体上是）
     # 当导入时，实际上是创建了User类
