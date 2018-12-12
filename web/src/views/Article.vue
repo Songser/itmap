@@ -3,23 +3,25 @@
     <v-container fluid grid-list-lg mx-0>
       <!-- <v-list three-line subheader> -->
       <v-layout row wrap>
-        <template v-for="(item) in items">
+        <template v-for="(item, index) in items">
           <v-flex xs12 :key="item.id">
-            <v-card hover color="blue-grey darken-1" class="white--text elevation-6" >
+            <v-card hover color="blue-grey darken-1"
+              class="white--text elevation-6"
+              @mouseenter="selectStyle(index)"
+              @mouseleave="outStyle(index)">
               <v-card-title primary-title>
                 <div>
                   <div class="headline">{{item.title}}</div>
                   <div>{{item.description}}</div>
                 </div>
               </v-card-title>
-
               <v-divider light></v-divider>
               <v-card-actions class="pa-3">
                 <span class="grey--text" style="margin-right:5px">作者: </span> {{item.author}}
                 <v-spacer></v-spacer>
+                <v-icon v-show="active == index">edit</v-icon>
+                <v-icon v-show="active == index">delete</v-icon>
                 <v-icon>star_border</v-icon>
-                <v-icon>edit</v-icon>
-                <v-icon>delete</v-icon>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -44,7 +46,8 @@ export default {
       nodeId: 0,
       items: [],
       page: 0,
-      offsetTop: 0
+      offsetTop: 0,
+      active: -1,
     };
   },
   computed: {
@@ -68,6 +71,7 @@ export default {
       getArticlesApi(this.node.id, this.page).then(response => {
         this.nodeId = this.node.id;
         let items = response.data;
+        console.log(items[0].active)
         if (items.length > 0) {
           this.items = response.data;
           console.log(this.page)
@@ -90,6 +94,12 @@ export default {
     },
     onScroll(e) {
       this.offsetTop = e.target.scrollTop;
+    },
+    selectStyle(index) {
+      this.active = index
+    },
+    outStyle(index) {
+      this.active = -1
     }
   }
 };
