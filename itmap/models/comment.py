@@ -14,3 +14,13 @@ class Comment(db.Model):
 
     def __repr__(self):
         return '<Comment {!r}>'.format(self.title)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'node_id': self.node_id,
+            'title': self.title,
+            'owner_id': self.owner_id,
+            'owner_name': self.owner_id.name,
+            'description': self.description,
+        }

@@ -75,6 +75,7 @@ export default {
   created() {
     getFashionGraphs().then(response => {
       this.fashionList = response.data;
+      console.log(this.fashionList)
       if (this.fashionList.length > 0) {
         this.selectedGraph = this.fashionList[0];
         this.$store.commit("setGraph", this.fashionList[0]);

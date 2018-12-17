@@ -158,6 +158,7 @@ export default {
         return
       }
       this.$root.eventHub.$emit("showArticleEvent");
+      this.$root.eventHub.$emit("showCommentEvent");
     },
     closeDialog() {
       this.$emit("closeDetailDialog");

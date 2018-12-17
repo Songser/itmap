@@ -23,7 +23,7 @@
             >
               <v-card-title primary-title>
                 <div>
-                  <!-- <div class="headline">{{item.title}}</div> -->
+                  <div class="headline">{{item.title}}</div>
                   <div>{{item.description}}</div>
                 </div>
               </v-card-title>
@@ -71,6 +71,7 @@
 <script>
 import { mapState } from "vuex";
 import AddComment from "@/views/AddComment";
+import { getCommentsApi } from "@/api/comment";
 export default {
   name: "app-comment",
   components: {
@@ -91,7 +92,7 @@ export default {
       node: state => state.node
     }),
     showDialog() {
-      return this.addArticle
+      return this.addComment
     }
   },
   created() {
@@ -109,6 +110,7 @@ export default {
       getCommentsApi(this.node.id, this.page).then(response => {
         this.nodeId = this.node.id;
         let items = response.data;
+        console.log(response.data)
         if (items.length > 0) {
           this.items = response.data;
         }
@@ -136,6 +138,9 @@ export default {
     },
     outStyle(index) {
       this.active = -1
+    },
+    closeAddCommentDialog() {
+      this.$emit('closeDialog')
     }
   }
 };

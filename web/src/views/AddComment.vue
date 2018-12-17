@@ -6,7 +6,7 @@
     <v-card-text>
       <v-form>
         <v-text-field v-model="title" label="标题" autofocus></v-text-field>
-        <v-textarea v-model="desc" label="描述" multi-line rows="3"></v-textarea>
+        <v-textarea v-model="desc" label="留言" multi-line rows="5"></v-textarea>
       </v-form>
     </v-card-text>
     <v-card-actions>
@@ -19,11 +19,11 @@
 <script>
 import { mapState } from "vuex";
 import {
-  addArticleApi
-} from '@/api/article'
+  addCommentApi
+} from '@/api/comment'
 
 export default {
-  name: "add-article",
+  name: "add-comment",
   data() {
     return {
       title: "",
@@ -45,7 +45,7 @@ export default {
         title: this.title,
         description: this.desc
       }
-      addArticleApi(this.node.id, data).then(response => {
+      addCommentApi(this.node.id, data).then(response => {
         this.$root.eventHub.$emit('addCommentEvent', data)
         this.$emit('closeAddCommentDialog')
         this.init()
