@@ -1,14 +1,11 @@
 <template>
   <v-card>
     <v-card-title>
-      <p class="title">添加文章</p>
+      <p class="title">添加留言</p>
     </v-card-title>
     <v-card-text>
       <v-form>
         <v-text-field v-model="title" label="标题" autofocus></v-text-field>
-        <v-text-field v-model="url" label="链接"></v-text-field>
-        <v-text-field v-model="author" label="作者"></v-text-field>
-        <v-text-field v-model="source" label="来源"></v-text-field>
         <v-textarea v-model="desc" label="描述" multi-line rows="3"></v-textarea>
       </v-form>
     </v-card-text>
@@ -30,9 +27,6 @@ export default {
   data() {
     return {
       title: "",
-      url: "",
-      author: "",
-      source: "",
       desc: ""
     };
   },
@@ -44,27 +38,21 @@ export default {
   methods: {
     init() {
       this.title="",
-      this.url="",
-      this.author="",
-      this.source="",
       this.desc=""
     },
     onSubmit() {
       let data = {
         title: this.title,
-        url: this.url,
-        author: this.author,
-        source: this.source,
         description: this.desc
       }
       addArticleApi(this.node.id, data).then(response => {
-        this.$root.eventHub.$emit('addArticleEvent', data)
-        this.$emit('closeAddArticleDialog')
+        this.$root.eventHub.$emit('addCommentEvent', data)
+        this.$emit('closeAddCommentDialog')
         this.init()
       })
     },
     cancle() {
-      this.$emit('closeAddArticleDialog')
+      this.$emit('closeAddCommentDialog')
       this.init()
     }
   }

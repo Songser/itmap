@@ -57,12 +57,26 @@
         >下一页</v-btn>
       </v-card-actions>
     </v-container>
+    <v-dialog
+      v-model="showDialog"
+      max-width="600px"
+      persistent
+    >
+      <add-comment
+        @closeAddCommentDialog="closeAddCommentDialog"
+      />
+    </v-dialog>
   </v-card>
 </template>
 <script>
 import { mapState } from "vuex";
+import AddComment from "@/views/AddComment";
 export default {
   name: "app-comment",
+  components: {
+    AddComment,
+  },
+  props: ['addComment'],
   data() {
     return {
       nodeId: 0,
@@ -75,7 +89,10 @@ export default {
   computed: {
     ...mapState({
       node: state => state.node
-    })
+    }),
+    showDialog() {
+      return this.addArticle
+    }
   },
   created() {
     this.$root.eventHub.$on("showCommentEvent", () => {
@@ -89,14 +106,11 @@ export default {
   },
   methods: {
     getComment() {
-      console.log(this.page)
       getCommentsApi(this.node.id, this.page).then(response => {
         this.nodeId = this.node.id;
         let items = response.data;
-        console.log(items[0].active)
         if (items.length > 0) {
           this.items = response.data;
-          console.log(this.page)
         }
       });
     },
@@ -126,3 +140,11 @@ export default {
   }
 };
 </script>
+<style scoped>
+.v-card {
+  box-shadow: none;
+}
+.container {
+  padding: 0px;
+}
+</style>

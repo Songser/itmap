@@ -146,7 +146,7 @@ export default {
     add() {
       switch (this.tabs) {
         case "article":
-          this.addArticle = ture;
+          this.addArticle = true;
           break;
         case "comment":
           this.addComment = true;
