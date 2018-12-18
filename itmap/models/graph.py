@@ -18,7 +18,9 @@ class NodeRelation(db.Model):
     color = db.Column(db.String(255))
     is_dual_way = db.Column(db.Boolean, default=False)  # 是双向还是单向
     line_type = db.Column(db.String(255))  # 线的类型
-
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow,
+                        onupdate=datetime.utcnow)
     def __repr__(self):
         arch = '<->' if self.is_dual_way else '->'
         return '<NodeRelation {!r}{}{!r}>'.format(self.from_node.name, arch, self.to_node.name)
@@ -66,7 +68,9 @@ class Node(db.Model):
                                 backref=db.backref('from_node', lazy='joined'),
                                 lazy='dynamic',
                                 cascade='all, delete-orphan')
-
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow,
+                        onupdate=datetime.utcnow)
     def __repr__(self):
         return '<Node {!r}>'.format(self.name)
 
@@ -86,6 +90,9 @@ class Graph(db.Model):
 
     nodes = db.relationship('Node', backref='graph', cascade='all, delete-orphan')
     relations = db.relationship('NodeRelation', backref='graph', cascade='all, delete-orphan')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow,
+                        onupdate=datetime.utcnow)
 
     def __repr__(self):
         return '<Graph {!r}>'.format(self.name)

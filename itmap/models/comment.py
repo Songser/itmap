@@ -13,6 +13,10 @@ class Comment(db.Model):
     owner = db.relationship('User',
         backref=db.backref('comments', lazy='dynamic'))
     description = db.Column(db.String(2048))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow,
+                        onupdate=datetime.utcnow)
+
 
     def __repr__(self):
         return '<Comment {!r}>'.format(self.title)

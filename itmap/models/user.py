@@ -30,7 +30,9 @@ class Role(db.Model, RoleMixin):
     name = db.Column(db.String(80), unique=True, index=True, nullable=True)
     permissions = db.Column(db.Integer)
     users = db.relationship('User', backref='role')
-
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, default=datetime.now,
+                        onupdate=datetime.now)
     @staticmethod
     def insert_roles():
         roles = {
@@ -72,7 +74,9 @@ class User(db.Model, UserMixin):
 
     current_sign_in_time = db.Column(db.DateTime, default=datetime.utcnow)
     last_sign_in_time = db.Column(db.DateTime)
-
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow,
+                        onupdate=datetime.utcnow)
     def __repr__(self):
         return '<User {!r}>'.format(self.name)
 

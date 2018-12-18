@@ -30,11 +30,11 @@
         <v-tab href="#comment">
           留言
         </v-tab>
-        <v-tab href="#user">
-          用户
-        </v-tab>
         <v-tab href="#book">
           书籍
+        </v-tab>
+        <v-tab href="#user">
+          用户
         </v-tab>
       </v-tabs>
       <v-btn
@@ -67,11 +67,12 @@
               <app-comment :addComment="addComment"
                 @closeDialog="addComment=false"></app-comment>
             </v-tab-item>
+            <v-tab-item value="book">
+              <app-book :addBook="addBook"
+                @closeDialog="addBook=false"></app-book>
+            </v-tab-item>
             <v-tab-item value="user">
               user
-            </v-tab-item>
-            <v-tab-item value="book">
-              book
             </v-tab-item>
           </v-tabs-items>
         </v-flex>
@@ -100,12 +101,15 @@
 <script>
 import AppArticle from "@/views/Article";
 import AppComment from "@/views/Comment";
+import AppBook from "@/views/Book";
+
 import { mapState } from "vuex";
 export default {
   name: "node-info",
   components: {
     AppArticle,
     AppComment,
+    AppBook,
   },
   data() {
     return {
@@ -114,6 +118,7 @@ export default {
       fab: false,
       addArticle: false,
       addComment: false,
+      addBook: false,
       nodeId: 0,
     };
   },
@@ -151,6 +156,9 @@ export default {
         case "comment":
           this.addComment = true;
           break;
+        case "book":
+          this.addBook = true;
+          break;
       }
     },
     init() {
@@ -159,6 +167,7 @@ export default {
       }
       this.$root.eventHub.$emit("showArticleEvent");
       this.$root.eventHub.$emit("showCommentEvent");
+      this.$root.eventHub.$emit("showBookEvent");
     },
     closeDialog() {
       this.$emit("closeDetailDialog");
@@ -166,8 +175,6 @@ export default {
     openDialog() {
       this.$emit("openDetailDialog");
     },
-
-    openAddArticleDialog() {}
   }
 };
 </script>
