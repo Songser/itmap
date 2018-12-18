@@ -10,6 +10,8 @@ class Comment(db.Model):
     title = db.Column(db.String(64), nullable=True)
     node_id = db.Column(db.Integer, db.ForeignKey('nodes.id'))
     owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    owner = db.relationship('User',
+        backref=db.backref('comments', lazy='dynamic'))
     description = db.Column(db.String(2048))
 
     def __repr__(self):
@@ -21,6 +23,6 @@ class Comment(db.Model):
             'node_id': self.node_id,
             'title': self.title,
             'owner_id': self.owner_id,
-            'owner_name': self.owner_id.name,
+            'owner_name': self.owner.name,
             'description': self.description,
         }

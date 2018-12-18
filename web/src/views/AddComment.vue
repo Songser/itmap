@@ -32,7 +32,8 @@ export default {
   },
   computed: {
     ...mapState({
-      node: state => state.node
+      node: state => state.node,
+      user: state => state.user,
     }),
   },
   methods: {
@@ -43,7 +44,8 @@ export default {
     onSubmit() {
       let data = {
         title: this.title,
-        description: this.desc
+        description: this.desc,
+        owner_name: this.user.name,
       }
       addCommentApi(this.node.id, data).then(response => {
         this.$root.eventHub.$emit('addCommentEvent', data)

@@ -24,7 +24,7 @@ comment_fields = {
     'node_id': fields.Integer,
     'description': fields.String,
     'owner_id': fields.Integer,
-    'owner_name': fields.String,
+    'owner_name': fields.String(attribute='owner.name'),
 }
 
 class CommentListApi(Resource):
@@ -38,7 +38,7 @@ class CommentListApi(Resource):
             .limit(limit)\
             .all()
         return [
-            marshal(a.to_dict(), comment_fields)
+            marshal(a, comment_fields)
             for a in comments
         ]
 

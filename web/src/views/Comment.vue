@@ -16,7 +16,7 @@
           >
             <v-card
               hover
-              color="blue-grey darken-1"
+              color="brown lighten-2"
               class="white--text elevation-6"
               @mouseenter="selectStyle(index)"
               @mouseleave="outStyle(index)"
@@ -32,7 +32,7 @@
                 <span
                   class="grey--text"
                   style="margin-right:5px"
-                >作者: </span> {{item.author}}
+                >作者: </span> {{item.owner_name}}
                 <v-spacer></v-spacer>
                 <v-icon v-show="active == index">edit</v-icon>
                 <v-icon v-show="active == index">delete</v-icon>
