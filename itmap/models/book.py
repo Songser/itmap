@@ -17,3 +17,7 @@ class Book(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow,
                         onupdate=datetime.utcnow)
+
+    @property
+    def pic(self):
+        return '{}.jpg'.format(self.id)

@@ -13,17 +13,13 @@
                 <v-flex xs7>
               <v-card-title primary-title>
                 <div>
-                  <div class="headline">{{item.title}}</div>
+                  <div class="headline">{{item.name}}</div>
                   <div>{{item.description}}</div>
                 </div>
               </v-card-title>
                </v-flex>
                <v-flex xs5>
-                 <v-img
-                    src="https://cdn.vuetifyjs.com/images/cards/halcyon.png"
-                    height="125px"
-                    contain
-                  ></v-img>
+                 <img :src="image + item.pic" alt="trevor" :onerror="defaultImage" height="100px" width="80%"/>
                </v-flex>
                </v-layout>
               <v-divider light></v-divider>
@@ -51,18 +47,21 @@
       max-width="600px"
       persistent
     >
-      <!-- <add-book
+      <add-book
         @closeAddBookDialog="closeAddBookDialog"
-      /> -->
+      />
     </v-dialog>
   </v-card>
 </template>
 <script>
 import { mapState } from "vuex";
-// import AddComment from "@/views/AddComment";
+import AddBook from "@/views/AddBook";
 import { getBooksApi } from "@/api/book";
 export default {
   name: 'app-book',
+  components: {
+    AddBook,
+  },
   props: ['addBook'],
   data() {
     return {
@@ -72,6 +71,8 @@ export default {
       offsetTop: 0,
       active: -1,
       showDialogModel: false,
+      image: BASE_URL + "/book_pics/",
+      defaultImage: 'this.src="' + require('../assets/logo.png') + '"',
     };
   },
   computed: {

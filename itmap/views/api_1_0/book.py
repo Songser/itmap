@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, current_app
 from flask_restful import (
     Resource,
     fields,
@@ -15,7 +15,7 @@ from itmap.models.graph import Node
 from itmap.ext import db
 
 parser = reqparse.RequestParser(bundle_errors=True)
-parser.add_argument('title', trim=True)
+parser.add_argument('name', trim=True)
 parser.add_argument('url')
 parser.add_argument('author')
 parser.add_argument('source')
@@ -23,12 +23,13 @@ parser.add_argument('description')
 
 book_fields = {
     'id': fields.Integer,
-    'title': fields.String,
+    'name': fields.String,
     'node_id': fields.Integer,
     'url': fields.String,
     'author': fields.String,
     'source': fields.String,
     'description': fields.String,
+    'pic': fields.String,
 }
 
 
@@ -62,3 +63,22 @@ class BookListApi(Resource):
         db.session.add(book)
         db.session.commit()
         return book.id, 201
+
+class BookPicApi(Resource):
+    
+    method_decorators = [jwt_required]
+
+    def post(self, bid):
+        """
+        file: swagger/book_pic_put.yml
+        """
+        current_uid = get_jwt_identity()
+        book = Book.query.get(bid)
+        if not book:
+            return {'msg': 'Invalid args'}, 400
+        if book.owner_id != current_uid:
+            return {'msg': 'Not allowed'}, 400
+        path = current_app.config['ABSOLUTE_BOOK_PICTURE_DIR'] + book.pic
+        f = request.files['book_pic']
+        f.save(path)
+        return '', 201

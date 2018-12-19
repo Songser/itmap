@@ -9,7 +9,7 @@ from .relation import NodeRelationApi
 from .user import UserApi, UserAvatarApi
 from .article import ArticleListApi
 from .comment import CommentListApi
-from .book import BookListApi
+from .book import BookListApi, BookPicApi
 from .errors import errors
 
 bp = Blueprint('api', __name__, url_prefix='/api/v1_0')
@@ -26,3 +26,4 @@ api.add_resource(UserAvatarApi, '/users/<int:uid>/avatar')
 api.add_resource(ArticleListApi, '/nodes/<int:nid>/articles')
 api.add_resource(CommentListApi, '/nodes/<int:nid>/comments')
 api.add_resource(BookListApi, '/nodes/<int:nid>/books')
+api.add_resource(BookPicApi, '/books/<int:bid>/pic')

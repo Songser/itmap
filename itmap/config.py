@@ -35,3 +35,6 @@ ABSOLUTE_AVATAR_DIR = '/itmap/avatars/'
 # -- node picture dir --
 NODE_PICTURE_DIR = 'node_pictures'
 ABSOLUTE_NODE_PICTURE_DIR = '/itmap/node_pictures/'
+
+BOOK_PICTURE_DIR = 'book_pictures'
+ABSOLUTE_BOOK_PICTURE_DIR = '/itmap/book_pictures/'

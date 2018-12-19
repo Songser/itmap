@@ -13,3 +13,7 @@ def send_avatar(path):
 @bp.route('/node_pics/<path:path>', methods=['GET'])
 def send_node_pic(path):
     return send_from_directory(current_app.config['NODE_PICTURE_DIR'], path)
+
+@bp.route('/book_pics/<path:path>', methods=['GET'])
+def send_book_pic(path):
+    return send_from_directory(current_app.config['BOOK_PICTURE_DIR'], path)

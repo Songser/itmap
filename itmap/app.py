@@ -17,6 +17,7 @@ from itmap.ext import db, mail, redis, login_manager, jwt
 from itmap.models.user import Role, User
 from itmap.models.graph import NodeRelation, Node, Graph
 from itmap.models.article import Article
+from itmap.models.book import Book
 import itmap.config as _config
 
 
@@ -46,6 +47,7 @@ def create_app():
     admin.add_view(ModelView(Graph, db.session))
     
     admin.add_view(ModelView(Article, db.session))
+    admin.add_view(ModelView(Book, db.session))
 
     admin.add_view(rediscli.RedisCli(redis._redis_client))
 
