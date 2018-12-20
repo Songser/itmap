@@ -1,30 +1,52 @@
 <template>
-<v-card>
-    <v-container fluid grid-list-lg mx-0>
+  <v-card>
+    <v-container
+      fluid
+      grid-list-lg
+      mx-0
+    >
       <!-- <v-list three-line subheader> -->
-      <v-layout row wrap>
+      <v-layout
+        row
+        wrap
+      >
         <template v-for="(item, index) in items">
-          <v-flex xs12 :key="item.id">
-            <v-card hover color="blue-grey darken-1"
+          <v-flex
+            xs12
+            :key="item.id"
+          >
+            <v-card
+              hover
+              color="indigo lighten-5"
               class="white--text elevation-6"
               @mouseenter="selectStyle(index)"
-              @mouseleave="outStyle(index)">
+              @mouseleave="outStyle(index)"
+            >
               <v-layout row>
-                <v-flex xs7>
-              <v-card-title primary-title>
-                <div>
-                  <div class="headline">{{item.name}}</div>
-                  <div>{{item.description}}</div>
-                </div>
-              </v-card-title>
-               </v-flex>
-               <v-flex xs5>
-                 <img :src="image + item.pic" alt="trevor" :onerror="defaultImage" height="100px" width="80%"/>
-               </v-flex>
-               </v-layout>
+                <v-flex xs8>
+                  <v-card-title primary-title>
+                    <div>
+                      <div class="headline black--text">{{item.name}}</div>
+                      <div class="black--text">{{item.description}}</div>
+                    </div>
+                  </v-card-title>
+                </v-flex>
+                <v-flex xs4>
+                  <img
+                    :src="image + item.pic"
+                    alt="trevor"
+                    :onerror="defaultImage"
+                    height="150px"
+                    width="100px"
+                  />
+                </v-flex>
+              </v-layout>
               <v-divider light></v-divider>
               <v-card-actions class="pa-3">
-                <span class="grey--text" style="margin-right:5px">作者: </span> {{item.author}}
+                <span
+                  class="grey--text"
+                  style="margin-right:5px"
+                >作者: </span> <p class="black--text"> {{item.author}}</p>
                 <v-spacer></v-spacer>
                 <v-icon v-show="active == index">edit</v-icon>
                 <v-icon v-show="active == index">delete</v-icon>
@@ -36,10 +58,18 @@
         </template>
       </v-layout>
       <!-- </v-list> -->
-      <v-card-actions v-show="items.length > 0">
-        <v-btn flat color="orange" @click="prePage">上一页</v-btn>
+      <v-card-actions v-show="items.length >= 20 && page > 0">
+        <v-btn
+          flat
+          color="orange"
+          @click="prePage"
+        >上一页</v-btn>
         <v-spacer></v-spacer>
-        <v-btn flat color="orange" @click="nextPage">下一页</v-btn>
+        <v-btn
+          flat
+          color="orange"
+          @click="nextPage"
+        >下一页</v-btn>
       </v-card-actions>
     </v-container>
     <v-dialog
@@ -47,9 +77,7 @@
       max-width="600px"
       persistent
     >
-      <add-book
-        @closeAddBookDialog="closeAddBookDialog"
-      />
+      <add-book @closeAddBookDialog="closeAddBookDialog" />
     </v-dialog>
   </v-card>
 </template>
@@ -58,11 +86,11 @@ import { mapState } from "vuex";
 import AddBook from "@/views/AddBook";
 import { getBooksApi } from "@/api/book";
 export default {
-  name: 'app-book',
+  name: "app-book",
   components: {
-    AddBook,
+    AddBook
   },
-  props: ['addBook'],
+  props: ["addBook"],
   data() {
     return {
       nodeId: 0,
@@ -72,7 +100,7 @@ export default {
       active: -1,
       showDialogModel: false,
       image: BASE_URL + "/book_pics/",
-      defaultImage: 'this.src="' + require('../assets/logo.png') + '"',
+      defaultImage: 'this.src="' + require("../assets/logo.png") + '"'
     };
   },
   computed: {
@@ -80,7 +108,7 @@ export default {
       node: state => state.node
     }),
     showDialog() {
-      return this.addBook
+      return this.addBook;
     }
   },
   created() {
@@ -111,8 +139,8 @@ export default {
       this.getBook();
     },
     nextPage() {
-      if (this.items.length < 20){
-        return
+      if (this.items.length < 20) {
+        return;
       }
       this.page += 1;
       this.getBook();
@@ -121,16 +149,16 @@ export default {
       this.offsetTop = e.target.scrollTop;
     },
     selectStyle(index) {
-      this.active = index
+      this.active = index;
     },
     outStyle(index) {
-      this.active = -1
+      this.active = -1;
     },
     closeAddBookDialog(data) {
-      this.$emit('closeDialog')
-    },
+      this.$emit("closeDialog");
+    }
   }
-}
+};
 </script>
 <style scoped>
 .v-card {
@@ -138,6 +166,9 @@ export default {
 }
 .container {
   padding: 0px;
+}
+img {
+  margin-top: 30px;
 }
 </style>
 
