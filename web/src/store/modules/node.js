@@ -26,9 +26,9 @@ const mutations = {
         label: value.name,
         desc: value.description,
         create_date: value.create_date,
-        index: 1,
+        index: 1
       }
-      if (value.size === 'L'){
+      if (value.size === 'L') {
         node['size'] = [65, 65]
       } else if (value.size === 'M') {
         node['size'] = [45, 45]

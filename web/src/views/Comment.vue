@@ -69,81 +69,81 @@
   </v-card>
 </template>
 <script>
-import { mapState } from "vuex";
-import AddComment from "@/views/AddComment";
-import { getCommentsApi } from "@/api/comment";
+import { mapState } from 'vuex'
+import AddComment from '@/views/AddComment'
+import { getCommentsApi } from '@/api/comment'
 export default {
-  name: "app-comment",
+  name: 'app-comment',
   components: {
-    AddComment,
+    AddComment
   },
   props: ['addComment'],
-  data() {
+  data () {
     return {
       nodeId: 0,
       items: [],
       page: 0,
       offsetTop: 0,
       active: -1
-    };
+    }
   },
   computed: {
     ...mapState({
       node: state => state.node
     }),
-    showDialog() {
+    showDialog () {
       return this.addComment
     }
   },
-  created() {
-    this.$root.eventHub.$on("showCommentEvent", () => {
+  created () {
+    this.$root.eventHub.$on('showCommentEvent', () => {
       if (this.nodeId != this.node.id) {
-        this.getComment();
+        this.getComment()
       }
-    });
-    this.$root.eventHub.$on("addCommentEvent", data => {
-      this.items.push(data);
-    });
+    })
+    this.$root.eventHub.$on('addCommentEvent', data => {
+      this.items.push(data)
+    })
   },
   methods: {
-    getComment() {
+    getComment () {
       getCommentsApi(this.node.id, this.page).then(response => {
-        this.nodeId = this.node.id;
-        let items = response.data;
+        this.nodeId = this.node.id
+        let items = response.data
         console.log(response.data)
         if (items.length > 0) {
-          this.items = response.data;
+          this.items = response.data
         }
-      });
+      })
     },
-    prePage() {
+    prePage () {
       if (this.page <= 0) {
-        return;
-      }
-      this.page -= 1;
-      this.getComment();
-    },
-    nextPage() {
-      if (this.items.length < 20){
         return
       }
-      this.page += 1;
-      this.getComment();
+      this.page -= 1
+      this.getComment()
     },
-    onScroll(e) {
-      this.offsetTop = e.target.scrollTop;
+    nextPage () {
+      if (this.items.length < 20) {
+        return
+      }
+      this.page += 1
+      this.getComment()
     },
-    selectStyle(index) {
+    onScroll (e) {
+      this.offsetTop = e.target.scrollTop
+    },
+    selectStyle (index) {
       this.active = index
     },
-    outStyle(index) {
+    outStyle (index) {
       this.active = -1
     },
-    closeAddCommentDialog() {
+    closeAddCommentDialog () {
       this.$emit('closeDialog')
     }
   }
-};
+}
 </script>
 <style scoped>
 .v-card {

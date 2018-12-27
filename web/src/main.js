@@ -8,8 +8,7 @@ import router from './router'
 import store from './store'
 import './icons'
 
-import ViserGraphVue from 'viser-graph-vue';
-
+// import ViserGraphVue from 'viser-graph-vue'
 
 import 'vuetify/dist/vuetify.css'
 

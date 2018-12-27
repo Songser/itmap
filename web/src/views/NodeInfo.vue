@@ -99,82 +99,82 @@
   </v-card>
 </template>
 <script>
-import AppArticle from "@/views/Article";
-import AppComment from "@/views/Comment";
-import AppBook from "@/views/Book";
+import AppArticle from '@/views/Article'
+import AppComment from '@/views/Comment'
+import AppBook from '@/views/Book'
 
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 export default {
-  name: "node-info",
+  name: 'node-info',
   components: {
     AppArticle,
     AppComment,
-    AppBook,
+    AppBook
   },
-  data() {
+  data () {
     return {
-      model: "",
-      tabs: "article",
+      model: '',
+      tabs: 'article',
       fab: false,
       addArticle: false,
       addComment: false,
       addBook: false,
-      nodeId: 0,
-    };
+      nodeId: 0
+    }
   },
-  created() {
-    this.$root.eventHub.$on("showDetailDialog", target => {
-      this.openDialog();
-      this.init();
-    });
+  created () {
+    this.$root.eventHub.$on('showDetailDialog', target => {
+      this.openDialog()
+      this.init()
+    })
   },
   computed: {
     ...mapState({
       node: state => state.node
     }),
-    activeFab() {
+    activeFab () {
       switch (this.tabs) {
-        case "article":
-          return { color: "indigo", icon: "add" };
-        case "comment":
-          return { color: "red", icon: "chat" };
-        case "user":
-          return { color: "green", icon: "edit" };
-        case "book":
-          return { color: "blue", icon: "book" };
+        case 'article':
+          return { color: 'indigo', icon: 'add' }
+        case 'comment':
+          return { color: 'red', icon: 'chat' }
+        case 'user':
+          return { color: 'green', icon: 'edit' }
+        case 'book':
+          return { color: 'blue', icon: 'book' }
         default:
-          return {};
+          return {}
       }
     }
   },
   methods: {
-    add() {
+    add () {
       switch (this.tabs) {
-        case "article":
-          this.addArticle = true;
-          break;
-        case "comment":
-          this.addComment = true;
-          break;
-        case "book":
-          this.addBook = true;
-          break;
+        case 'article':
+          this.addArticle = true
+          break
+        case 'comment':
+          this.addComment = true
+          break
+        case 'book':
+          this.addBook = true
+          break
       }
     },
-    init() {
-      if (this.nodeId == this.node.id){
+    init () {
+      if (this.nodeId == this.node.id) {
         return
       }
-      this.$root.eventHub.$emit("showArticleEvent");
-      this.$root.eventHub.$emit("showCommentEvent");
-      this.$root.eventHub.$emit("showBookEvent");
+      this.$root.eventHub.$emit('showArticleEvent')
+      this.$root.eventHub.$emit('showCommentEvent')
+      this.$root.eventHub.$emit('showBookEvent')
     },
-    closeDialog() {
-      this.$emit("closeDetailDialog");
+    closeDialog () {
+      this.$emit('closeDetailDialog')
     },
-    openDialog() {
-      this.$emit("openDetailDialog");
-    },
+    openDialog () {
+      this.$emit('openDetailDialog')
+    }
   }
-};
+}
 </script>

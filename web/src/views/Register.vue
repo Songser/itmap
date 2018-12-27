@@ -62,7 +62,6 @@
 <script>
 import { validationMixin } from 'vuelidate'
 import { required, minLength, email, sameAs } from 'vuelidate/lib/validators'
-import { setToken } from '@/utils/auth'
 import { register } from '@/api/user'
 
 export default {

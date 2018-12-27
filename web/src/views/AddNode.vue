@@ -46,10 +46,10 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { getToken } from "@/utils/auth";
-import data2blob from "@/utils/data2blob.js";
-import { Chrome } from "vue-color";
+import { mapState } from 'vuex'
+import { getToken } from '@/utils/auth'
+import data2blob from '@/utils/data2blob.js'
+import { Chrome } from 'vue-color'
 
 import {
   addNodeApi,
@@ -58,64 +58,64 @@ import {
   delNodeApi,
   uploadNodePicApi,
   updateNodeApi,
-  updateLinkApi,
-} from "@/api/graph";
-import UploadFile from "@/components/UploadFile";
-import ImageCropper from "@/components/ImageCropper";
-import PanThumb from "@/components/PanThumb";
+  updateLinkApi
+} from '@/api/graph'
+import UploadFile from '@/components/UploadFile'
+import ImageCropper from '@/components/ImageCropper'
+import PanThumb from '@/components/PanThumb'
 
 export default {
-  name: "add-node",
+  name: 'add-node',
   components: {
     UploadFile,
     ImageCropper,
     PanThumb,
-    "chrome-picker": Chrome
+    'chrome-picker': Chrome
   },
 
-  data: function() {
+  data: function () {
     return {
-      name: "",
-      desc: "",
-      info: "",
-      color: "#c23531",
-      size: "M",
-      image: "",
-      shape: "circle",
+      name: '',
+      desc: '',
+      info: '',
+      color: '#c23531',
+      size: 'M',
+      image: '',
+      shape: 'circle',
       newNodeId: 0,
-      oldLink: "",
+      oldLink: '',
       source: '',
       imagecropperShow: false,
-      field: "node_pic",
+      field: 'node_pic',
       update: false
-    };
+    }
   },
-  created() {
-    this.$root.eventHub.$on("addNodeEvent", () => {
+  created () {
+    this.$root.eventHub.$on('addNodeEvent', () => {
       this.init()
-      this.$emit("openAddNodeDialog");
-    });
-    this.$root.eventHub.$on("updateNodeEvent", () => {
-      this.update = true;
-      this.name = this.node.name;
-      this.desc = this.node.desc;
-      this.color = this.node.color;
-      this.size = this.node.size;
-      this.shape = this.node.shape;
-      this.info = this.node.info;
+      this.$emit('openAddNodeDialog')
+    })
+    this.$root.eventHub.$on('updateNodeEvent', () => {
+      this.update = true
+      this.name = this.node.name
+      this.desc = this.node.desc
+      this.color = this.node.color
+      this.size = this.node.size
+      this.shape = this.node.shape
+      this.info = this.node.info
       this.sourceName = this.node.source
       if (this.node.pic) {
-        this.image = BASE_URL + "/node_pics/" + this.node.pic;
+        this.image = BASE_URL + '/node_pics/' + this.node.pic
       }
-      this.$emit("openAddNodeDialog");
-    });
+      this.$emit('openAddNodeDialog')
+    })
   },
   computed: {
     sourceName: {
-      get() {
+      get () {
         this.source = this.$store.state.node.name
       },
-      set( value ) {
+      set (value) {
         this.source = value
       }
 
@@ -123,25 +123,25 @@ export default {
     ...mapState({
       node: state => state.node,
       user: state => state.user,
-      graph: state => state.graph,
-    }),
+      graph: state => state.graph
+    })
   },
   methods: {
-    init() {
-      this.name = "";
-      this.desc = "";
-      this.info = "";
-      this.color = "#c23531";
-      this.size = "M";
-      this.image = "";
-      this.shape = "circle";
-      this.newNodeId = 0;
-      this.imagecropperShow = false;
+    init () {
+      this.name = ''
+      this.desc = ''
+      this.info = ''
+      this.color = '#c23531'
+      this.size = 'M'
+      this.image = ''
+      this.shape = 'circle'
+      this.newNodeId = 0
+      this.imagecropperShow = false
     },
-    onSubmit() {
-      let color = this.color.hex;
+    onSubmit () {
+      let color = this.color.hex
       if (!color) {
-        color = "#c23531";
+        color = '#c23531'
       }
       let data = {
         graphId: this.graph.id,
@@ -151,40 +151,40 @@ export default {
         shape: this.shape,
         size: this.size,
         desc: this.desc
-      };
+      }
       if (this.update) {
-        this.updateNode(data);
+        this.updateNode(data)
       } else {
-        this.addNode(data);
+        this.addNode(data)
       }
-      this.$emit("closeAddNodeDialog");
+      this.$emit('closeAddNodeDialog')
     },
-    cancle() {
-      this.$emit("closeAddNodeDialog");
+    cancle () {
+      this.$emit('closeAddNodeDialog')
     },
-    cropSuccess(createImgUrl, field, mime, ki) {
-      this.image = createImgUrl;
-      this.mime = mime;
+    cropSuccess (createImgUrl, field, mime, ki) {
+      this.image = createImgUrl
+      this.mime = mime
     },
-    handlerUpload() {
+    handlerUpload () {
       if (!this.image) {
-        return;
-      }
-      let index = this.image.indexOf('data:image')
-      if (index != 0){
         return
       }
-      let form = new FormData();
-      form.append(this.field, data2blob(this.image, this.mime));
-      uploadNodePicApi(form, this.newNodeId);
+      let index = this.image.indexOf('data:image')
+      if (index != 0) {
+        return
+      }
+      let form = new FormData()
+      form.append(this.field, data2blob(this.image, this.mime))
+      uploadNodePicApi(form, this.newNodeId)
     },
-    close() {
-      this.imagecropperShow = false;
+    close () {
+      this.imagecropperShow = false
     },
-    updateNode(data) {
+    updateNode (data) {
       updateNodeApi(data).then(response => {
-        this.handlerUpload();
-        if (this.node.name && this.name && this.oldLink != this.info){
+        this.handlerUpload()
+        if (this.node.name && this.name && this.oldLink != this.info) {
           updateLinkApi({
             source_id: this.node.source_id,
             target_id: this.node.id,
@@ -193,21 +193,19 @@ export default {
           }).then(response => {
             data['value'] = this.info
             this.$root.eventHub.$emit('updateNode', data)
-            this.init();
+            this.init()
           })
-        }
-        else {
+        } else {
           this.$root.eventHub.$emit('updateNode', data)
         }
-
-      });
+      })
     },
-    addNode(data) {
+    addNode (data) {
       addNodeApi(data).then(response => {
-        this.newNodeId = response.data;
-        data["target_id"] = this.newNodeId;
-        this.handlerUpload();
-        this.$root.eventHub.$emit("addNode", data);
+        this.newNodeId = response.data
+        data['target_id'] = this.newNodeId
+        this.handlerUpload()
+        this.$root.eventHub.$emit('addNode', data)
         if (this.node.name && this.name) {
           addLinkApi({
             source_id: this.node.id,
@@ -215,18 +213,18 @@ export default {
             graphId: this.graph.id,
             value: this.info
           }).then(response => {
-            this.$root.eventHub.$emit("addLink", {
+            this.$root.eventHub.$emit('addLink', {
               source: this.node.name,
               target: this.name,
               value: this.info
-            });
-            this.init();
-          });
+            })
+            this.init()
+          })
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .input-group {

@@ -25,8 +25,7 @@ import ECharts from 'vue-echarts/components/ECharts'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/chart/graph'
 import 'echarts/lib/component/tooltip'
-import { addNodeApi, addLinkApi, getNodesApi, delNodeApi } from "@/api/graph";
-
+import { addNodeApi, addLinkApi, getNodesApi, delNodeApi } from '@/api/graph'
 
 export default {
   name: 'graph',
@@ -39,16 +38,16 @@ export default {
       node: state => state.node
     })
   },
-  created() {
-    this.$root.eventHub.$on('addNode',(target) => {
+  created () {
+    this.$root.eventHub.$on('addNode', (target) => {
       this.addNode(target)
-    });
+    })
     this.$root.eventHub.$on('addLink', (target) => {
       this.addLink(target)
-    });
+    })
     this.$root.eventHub.$on('delNode', (target) => {
       this.delNode(target)
-    });
+    })
     this.$root.eventHub.$on('updateNode', (target) => {
       this.updateNode(target)
     })
@@ -128,17 +127,17 @@ export default {
     }
   },
   watch: {
-    graphId(value) {
+    graphId (value) {
       if (value) {
-        if (this.oldGraphId == value){
+        if (this.oldGraphId == value) {
           return
         }
         this.oldGraphId = value
         getNodesApi(value).then(response => {
-          const data = response.data;
-          if (data.nodes.length == 0){
+          const data = response.data
+          if (data.nodes.length == 0) {
             this.updateGraph([], [])
-            this.$root.eventHub.$emit('addNodeEvent', '');
+            this.$root.eventHub.$emit('addNodeEvent', '')
             return
           }
 
@@ -155,7 +154,7 @@ export default {
               tid: value.tid,
               source: value.source,
               target: value.target,
-              value: value.value,
+              value: value.value
             }
             links.push(link)
           })
@@ -168,13 +167,11 @@ export default {
     clickNode (params) {
       let data = params.data
       let size = ''
-      if (data.symbolSize[0] == 35){
+      if (data.symbolSize[0] == 35) {
         size = 'S'
-      }
-      else if (data.symbolSize[0] == 45){
+      } else if (data.symbolSize[0] == 45) {
         size = 'M'
-      }
-      else if (data.symbolSize[0] == 65){
+      } else if (data.symbolSize[0] == 65) {
         size = 'L'
       }
       let info = ''
@@ -183,7 +180,7 @@ export default {
       let graph = this.$refs.graph
       let links = graph.options.series[0].links
       links.forEach((value, index, array) => {
-        if (value.tid == data.nid){
+        if (value.tid == data.nid) {
           info = value.value
           source = value.source
           source_id = value.sid
@@ -208,14 +205,14 @@ export default {
       })
       this.$root.eventHub.$emit('openRightDrawer')
     },
-    updateGraph(nodes, links) {
+    updateGraph (nodes, links) {
       let graph = this.$refs.graph
       let options = graph.options
       options.series[0].data = nodes
       options.series[0].links = links
       graph.mergeOptions(options)
     },
-    addNode(data) {
+    addNode (data) {
       let node = this.genNode(date.nid, data.name, data.desc, '',
         data.color, data.size, data.shape)
       let graph = this.$refs.graph
@@ -223,22 +220,22 @@ export default {
       options.series[0].data.push(node)
       graph.mergeOptions(options)
     },
-    updateNode(data) {
+    updateNode (data) {
       let node = this.genNode(data.nid, data.name, data.desc, '',
         data.color, data.size, data.shape)
       let graph = this.$refs.graph
       let options = graph.options
       let nodes = options.series[0].data
-      for (let i = 0; i < nodes.length; i++){
-        if (nodes[i].nid == data.nid){
+      for (let i = 0; i < nodes.length; i++) {
+        if (nodes[i].nid == data.nid) {
           nodes[i] = node
           break
         }
       }
       let links = options.series[0].links
       if (data.value) {
-        for (let i = 0; i< links.length; i++) {
-          if (links[i].sid == this.node.source_id && links[i].value != data.value){
+        for (let i = 0; i < links.length; i++) {
+          if (links[i].sid === this.node.source_id && links[i].value !== data.value) {
             links[i].value = data.value
             break
           }
@@ -246,31 +243,30 @@ export default {
       }
       graph.mergeOptions(options)
     },
-    delNode(nodeId) {
+    delNode (nodeId) {
       let graph = this.$refs.graph
       let options = graph.options
       let data = options.series[0].data
       data.forEach((value, index, array) => {
-        if (value.nid == nodeId){
+        if (value.nid === nodeId) {
           array.splice(index, 1)
           graph.mergeOptions(options)
-          return
         }
       })
     },
-    addLink(data) {
+    addLink (data) {
       let graph = this.$refs.graph
       let options = graph.options
       options.series[0].links.push(data)
       graph.mergeOptions(options)
     },
-    genNode(nid, name, desc, create_date, color, size, shape, pic) {
+    genNode (nid, name, desc, createDate, color, size, shape, pic) {
       let node = {
         name: name,
         nid: nid,
         desc: desc,
         pic: pic,
-        create_date: create_date,
+        create_date: createDate
       }
       if (color) {
         node['itemStyle'] = { 'color': color }

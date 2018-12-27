@@ -41,28 +41,26 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import AddGraph from "@/views/AddGraph";
-import DelGraph from "@/views/DelGraph";
+import { mapState } from 'vuex'
+import AddGraph from '@/views/AddGraph'
+import DelGraph from '@/views/DelGraph'
 
 import {
   getFashionGraphs,
   getGraphList,
-  updateGraphApi,
-  deleteGraphApi
-} from "@/api/graph";
+} from '@/api/graph'
 
 export default {
-  name: "graph-list",
+  name: 'graph-list',
   components: {
     AddGraph,
     DelGraph
   },
-  data() {
+  data () {
     return {
       fashionList: [],
       graphList: []
-    };
+    }
   },
   computed: {
     ...mapState({
@@ -72,35 +70,35 @@ export default {
       gid: state => state.graph.id
     })
   },
-  created() {
+  created () {
     getFashionGraphs().then(response => {
-      this.fashionList = response.data;
+      this.fashionList = response.data
       console.log(this.fashionList)
       if (this.fashionList.length > 0) {
-        this.selectedGraph = this.fashionList[0];
-        this.$store.commit("setGraph", this.fashionList[0]);
+        this.selectedGraph = this.fashionList[0]
+        this.$store.commit('setGraph', this.fashionList[0])
         // this.$store.dispatch("getNodesByGraph", {
         //   gid: this.fashionList[0].id
         // });
       }
-    });
+    })
     if (this.userId) {
       getGraphList(this.userId).then(response => {
-        this.graphList = response.data;
-      });
+        this.graphList = response.data
+      })
     }
   },
   methods: {
-    clickGraph(graph) {
-      this.selectedGraph = graph;
-      this.$store.commit("setGraph", { graph });
-      this.$store.dispatch("getNodesByGraph", { gid: graph.id });
+    clickGraph (graph) {
+      this.selectedGraph = graph
+      this.$store.commit('setGraph', { graph })
+      this.$store.dispatch('getNodesByGraph', { gid: graph.id })
     },
-    addGraph(graph) {
-      this.graphList.push(graph);
+    addGraph (graph) {
+      this.graphList.push(graph)
     }
   }
-};
+}
 </script>
 <style scoped>
 .content {

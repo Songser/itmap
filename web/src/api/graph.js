@@ -52,11 +52,11 @@ export function uploadNodePicApi (form, nodeId) {
   return request.post('/api/v1_0/nodes/' + nodeId + '/pic', form)
 }
 
-export function get_picture(path) {
+export function get_picture (path) {
   return BASE_URL + '/node_pics/' + path
 }
 
-export function updateNodeApi(data) {
+export function updateNodeApi (data) {
   return request.put('/api/v1_0/nodes/' + data.nid, {
     graph_id: data.graphId,
     name: data.name,
@@ -67,7 +67,7 @@ export function updateNodeApi(data) {
   })
 }
 
-export function updateLinkApi(data) {
+export function updateLinkApi (data) {
   return request.put('/api/v1_0/node_rels', {
     source_node_id: data.source_id,
     target_node_id: data.target_id,

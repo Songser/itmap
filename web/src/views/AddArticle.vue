@@ -20,36 +20,36 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 import {
   addArticleApi
 } from '@/api/article'
 
 export default {
-  name: "add-article",
-  data() {
+  name: 'add-article',
+  data () {
     return {
-      title: "",
-      url: "",
-      author: "",
-      source: "",
-      desc: ""
-    };
+      title: '',
+      url: '',
+      author: '',
+      source: '',
+      desc: ''
+    }
   },
   computed: {
     ...mapState({
       node: state => state.node
-    }),
+    })
   },
   methods: {
-    init() {
-      this.title="",
-      this.url="",
-      this.author="",
-      this.source="",
-      this.desc=""
+    init () {
+      this.title = '',
+      this.url = '',
+      this.author = '',
+      this.source = '',
+      this.desc = ''
     },
-    onSubmit() {
+    onSubmit () {
       let data = {
         title: this.title,
         url: this.url,
@@ -63,10 +63,10 @@ export default {
         this.init()
       })
     },
-    cancle() {
+    cancle () {
       this.$emit('closeAddArticleDialog')
       this.init()
     }
   }
-};
+}
 </script>

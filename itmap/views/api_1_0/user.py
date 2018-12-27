@@ -9,7 +9,15 @@ from flask_jwt_extended import (
 )
 
 from itmap.models.user import User
+from itmap.utils import update
+from itmap.ext import db
 
+parser = reqparse.RequestParser(bundle_errors=True)
+parser.add_argument('name', trim=True)
+parser.add_argument('email', trim=True)
+parser.add_argument('phone')
+parser.add_argument('gender', choices=('female', 'male'))
+parser.add_argument('birthday')
 
 class UserApi(Resource):
 
@@ -24,6 +32,17 @@ class UserApi(Resource):
             return {'msg': 'Invalid args'}, 400
         return user.to_dict, 200
 
+    @jwt_required
+    def put(self, uid):
+        current_uid = get_jwt_identity()
+        if current_uid != uid:
+            return {'msg': 'Not allowed'}, 400
+        user = User.query.get(uid)
+        data = dict(parser.parse_args())
+        update(user, data)
+        db.session.add(user)
+        db.session.commit()
+        return user.id, 201
 
 class UserAvatarApi(Resource):
 

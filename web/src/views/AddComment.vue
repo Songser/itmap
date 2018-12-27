@@ -17,35 +17,35 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 import {
   addCommentApi
 } from '@/api/comment'
 
 export default {
-  name: "add-comment",
-  data() {
+  name: 'add-comment',
+  data () {
     return {
-      title: "",
-      desc: ""
-    };
+      title: '',
+      desc: ''
+    }
   },
   computed: {
     ...mapState({
       node: state => state.node,
-      user: state => state.user,
-    }),
+      user: state => state.user
+    })
   },
   methods: {
-    init() {
-      this.title="",
-      this.desc=""
+    init () {
+      this.title = '',
+      this.desc = ''
     },
-    onSubmit() {
+    onSubmit () {
       let data = {
         title: this.title,
         description: this.desc,
-        owner_name: this.user.name,
+        owner_name: this.user.name
       }
       addCommentApi(this.node.id, data).then(response => {
         this.$root.eventHub.$emit('addCommentEvent', data)
@@ -53,10 +53,10 @@ export default {
         this.init()
       })
     },
-    cancle() {
+    cancle () {
       this.$emit('closeAddCommentDialog')
       this.init()
     }
   }
-};
+}
 </script>

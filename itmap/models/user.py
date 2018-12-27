@@ -61,6 +61,9 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, index=True, nullable=True)
     password = db.Column(db.String(255))
+    phone = db.Column(db.String(32))
+    gender = db.Column(db.String(8))
+    birthday = db.Column(db.DateTime)
 
     email = db.Column(db.String(120), unique=True)
     has_verified = db.Column(db.Boolean, default=False)
@@ -98,8 +101,11 @@ class User(db.Model, UserMixin):
             'active': self.active,
             'current_sign_in_time': arrow.get(self.current_sign_in_time).to('Asia/Shanghai').format('YYYY-MM-DD HH:mm:ss'),
             'last_sign_in_time': arrow.get(self.last_sign_in_time).to('Asia/Shanghai').format('YYYY-MM-DD HH:mm:ss'),
-            'own_graphs': [{'id':g.id, 'name':g.name, 'owner_id': self.id} for g in self.own_graphs],
+            # 'own_graphs': [{'id':g.id, 'name':g.name, 'owner_id': self.id} for g in self.own_graphs],
             'avatar': self.avatar,
+            'phone': self.phone,
+            'gender': self.gender,
+            'birthday': self.birthday,
         }
 
     #@property

@@ -14,3 +14,7 @@ export function register (username, pwd, email) {
 export function getUserApi (userId) {
   return request.get('/api/v1_0/users/' + userId)
 }
+
+export function updateUserApi (userId, data) {
+  return request.put('/api/v1_0/users/' + userId, data)
+}

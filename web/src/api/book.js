@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 export function getBooksApi (nid, page) {
-  return request.get('/api/v1_0/nodes/'+ nid+'/books?page=' + page)
+  return request.get('/api/v1_0/nodes/' + nid + '/books?page=' + page)
 }
 
 export function addBookApi (nid, data) {

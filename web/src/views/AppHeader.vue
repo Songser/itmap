@@ -22,15 +22,23 @@
     <!-- <v-btn icon @click="openRightDrawer">
       <v-icon>more_vert</v-icon>
     </v-btn> -->
+    <v-dialog  v-model="userDialog" max-width="600px" persistent>
+      <user @closeUserDialog="closeUserDialog" @openUserDialog="openUserDialog" />
+    </v-dialog>
   </v-toolbar>
 </template>
 <script>
 import { mapState } from 'vuex'
+import User from '@/views/User'
 export default {
   name: 'app-header',
+  components: {
+    User
+  },
   data () {
     return {
-      defaultImage: 'this.src="' + require('../assets/logo.png') + '"'
+      defaultImage: 'this.src="' + require('../assets/logo.png') + '"',
+      userDialog: false
     }
   },
   computed: {
@@ -51,16 +59,18 @@ export default {
     showUser () {
       if (!this.user_id) {
         this.$router.push('login')
+      } else {
+        this.userDialog = true
       }
     },
     logout () {
       console.log('fffff')
     },
-    showDetail () {
-      this.detailDialog = true
+    openUserDialog () {
+      this.userDialog = true
     },
-    closeDetailDialog () {
-      this.detailDialog = false
+    closeUserDialog () {
+      this.userDialog = false
     }
 
   }

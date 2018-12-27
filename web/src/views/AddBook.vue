@@ -31,51 +31,51 @@
   </v-card>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 // import UploadFile from "@/components/UploadFile";
-import ImageCropper from "@/components/ImageCropper";
-import data2blob from "@/utils/data2blob.js";
+import ImageCropper from '@/components/ImageCropper'
+import data2blob from '@/utils/data2blob.js'
 // import PanThumb from "@/components/PanThumb";
 import {
   addBookApi,
-  uploadBookPicApi,
+  uploadBookPicApi
 } from '@/api/book'
 
 export default {
-  name: "add-book",
+  name: 'add-book',
   components: {
     // UploadFile,
-    ImageCropper,
+    ImageCropper
     // PanThumb,
   },
-  data() {
+  data () {
     return {
-      title: "",
-      url: "",
-      author: "",
-      source: "",
-      desc: "",
-      image: "",
-      field: "book_pic",
-      imagecropperShow: false,
+      title: '',
+      url: '',
+      author: '',
+      source: '',
+      desc: '',
+      image: '',
+      field: 'book_pic',
+      imagecropperShow: false
 
-    };
+    }
   },
   computed: {
     ...mapState({
       node: state => state.node
-    }),
+    })
   },
   methods: {
-    init() {
-      this.title="";
-      this.url="";
-      this.author="";
-      this.source="";
-      this.desc="";
-      this.image="";
+    init () {
+      this.title = ''
+      this.url = ''
+      this.author = ''
+      this.source = ''
+      this.desc = ''
+      this.image = ''
     },
-    onSubmit() {
+    onSubmit () {
       let data = {
         name: this.title,
         url: this.url,
@@ -86,38 +86,38 @@ export default {
       addBookApi(this.node.id, data).then(response => {
         console.log(response)
         let bookId = response.data
-        this.handlerUpload(bookId);
-        data["id"] = bookId
+        this.handlerUpload(bookId)
+        data['id'] = bookId
         this.$root.eventHub.$emit('addArticleEvent', data)
         this.$emit('closeAddBookDialog')
         this.init()
       })
     },
-    cancle() {
+    cancle () {
       this.$emit('closeAddBookDialog')
       this.init()
     },
-    cropSuccess(createImgUrl, field, mime, ki) {
-      this.image = createImgUrl;
-      this.mime = mime;
+    cropSuccess (createImgUrl, field, mime, ki) {
+      this.image = createImgUrl
+      this.mime = mime
     },
-    handlerUpload(bookId) {
+    handlerUpload (bookId) {
       if (!this.image) {
-        return;
-      }
-      let index = this.image.indexOf('data:image')
-      if (index != 0){
         return
       }
-      let form = new FormData();
-      form.append(this.field, data2blob(this.image, this.mime));
-      uploadBookPicApi(form, bookId);
+      let index = this.image.indexOf('data:image')
+      if (index != 0) {
+        return
+      }
+      let form = new FormData()
+      form.append(this.field, data2blob(this.image, this.mime))
+      uploadBookPicApi(form, bookId)
     },
-    close() {
-      this.imagecropperShow = false;
-    },
+    close () {
+      this.imagecropperShow = false
+    }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .input-group {

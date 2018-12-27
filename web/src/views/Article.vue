@@ -46,81 +46,81 @@
   </v-card>
 </template>
 <script>
-import { mapState } from "vuex";
-import { getArticlesApi } from "@/api/article";
-import AddArticle from "@/views/AddArticle";
+import { mapState } from 'vuex'
+import { getArticlesApi } from '@/api/article'
+import AddArticle from '@/views/AddArticle'
 export default {
-  name: "app-article",
+  name: 'app-article',
   components: {
-    AddArticle,
+    AddArticle
   },
   props: ['addArticle'],
-  data() {
+  data () {
     return {
       nodeId: 0,
       items: [],
       page: 0,
       offsetTop: 0,
       active: -1,
-      showDialogModel: false,
-    };
+      showDialogModel: false
+    }
   },
   computed: {
     ...mapState({
       node: state => state.node
     }),
-    showDialog() {
+    showDialog () {
       return this.addArticle
     }
   },
-  created() {
-    this.$root.eventHub.$on("showArticleEvent", () => {
+  created () {
+    this.$root.eventHub.$on('showArticleEvent', () => {
       if (this.nodeId != this.node.id) {
-        this.getArticle();
+        this.getArticle()
       }
-    });
-    this.$root.eventHub.$on("addArticleEvent", data => {
-      this.items.push(data);
-    });
+    })
+    this.$root.eventHub.$on('addArticleEvent', data => {
+      this.items.push(data)
+    })
   },
   methods: {
-    getArticle() {
+    getArticle () {
       getArticlesApi(this.node.id, this.page).then(response => {
-        this.nodeId = this.node.id;
-        let items = response.data;
+        this.nodeId = this.node.id
+        let items = response.data
         if (items.length > 0) {
-          this.items = response.data;
+          this.items = response.data
         }
-      });
+      })
     },
-    prePage() {
+    prePage () {
       if (this.page <= 0) {
-        return;
-      }
-      this.page -= 1;
-      this.getArticle();
-    },
-    nextPage() {
-      if (this.items.length < 20){
         return
       }
-      this.page += 1;
-      this.getArticle();
+      this.page -= 1
+      this.getArticle()
     },
-    onScroll(e) {
-      this.offsetTop = e.target.scrollTop;
+    nextPage () {
+      if (this.items.length < 20) {
+        return
+      }
+      this.page += 1
+      this.getArticle()
     },
-    selectStyle(index) {
+    onScroll (e) {
+      this.offsetTop = e.target.scrollTop
+    },
+    selectStyle (index) {
       this.active = index
     },
-    outStyle(index) {
+    outStyle (index) {
       this.active = -1
     },
-    closeAddArticleDialog(data) {
+    closeAddArticleDialog (data) {
       this.$emit('closeDialog')
-    },
+    }
   }
-};
+}
 </script>
 <style scoped>
 .v-card {

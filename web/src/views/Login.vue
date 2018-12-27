@@ -37,7 +37,6 @@
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
 import SocialSign from '@/components/SocialSignin'
 import { setToken } from '@/utils/auth'
 import { login } from '@/api/user'

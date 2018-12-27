@@ -11,7 +11,6 @@
       <v-spacer></v-spacer>
       <v-card-actions>
         <v-btn flat color="purple" @click="showMore">更多</v-btn>
-        <v-spacer></v-spacer>
       </v-card-actions>
     </v-container>
     <v-speed-dial v-model="fab" :top="false" :bottom="true" :right="true" :left="false" :open-on-hover="true" transition="slide-x-reverse-transition">
@@ -57,28 +56,28 @@
 </style>
 
 <script>
-import { mapState } from "vuex";
-import { delNodeApi } from "@/api/graph";
+import { mapState } from 'vuex'
+import { delNodeApi } from '@/api/graph'
 export default {
-  name: "app-right",
-  data() {
+  name: 'app-right',
+  data () {
     return {
       fab: false,
-      defaultImage: 'this.src="' + require("../assets/logo.png") + '"',
-      delNodeDialog: false,
-    };
+      defaultImage: 'this.src="' + require('../assets/logo.png') + '"',
+      delNodeDialog: false
+    }
   },
   computed: {
-    activeFab() {
+    activeFab () {
       switch (this.tabs) {
-        case "one":
-          return { class: "purple", icon: "account_circle" };
-        case "two":
-          return { class: "red", icon: "edit" };
-        case "three":
-          return { class: "green", icon: "keyboard_arrow_up" };
+        case 'one':
+          return { class: 'purple', icon: 'account_circle' }
+        case 'two':
+          return { class: 'red', icon: 'edit' }
+        case 'three':
+          return { class: 'green', icon: 'keyboard_arrow_up' }
         default:
-          return {};
+          return {}
       }
     },
     ...mapState({
@@ -87,33 +86,33 @@ export default {
       desc: state => state.node.desc,
       image: state => {
         if (state.node.pic) {
-          return BASE_URL + "/node_pics/" + state.node.pic;
+          return BASE_URL + '/node_pics/' + state.node.pic
         }
-        return require("../assets/logo.png");
+        return require('../assets/logo.png')
       },
       create_date: state => state.node.create_date
     })
   },
   methods: {
-    addNode() {
+    addNode () {
       this.$emit('closeRightDrawer')
-      this.$root.eventHub.$emit("addNodeEvent", true);
+      this.$root.eventHub.$emit('addNodeEvent', true)
     },
     delNode () {
       delNodeApi(this.nodeId).then(response => {
         this.delNodeDialog = false
-        this.$root.eventHub.$emit("delNode", this.nodeId);
+        this.$root.eventHub.$emit('delNode', this.nodeId)
       })
       this.$emit('closeRightDrawer')
     },
-    updateNode() {
+    updateNode () {
       this.$emit('closeRightDrawer')
-      this.$root.eventHub.$emit("updateNodeEvent", true)
+      this.$root.eventHub.$emit('updateNodeEvent', true)
     },
     showMore () {
       this.$root.eventHub.$emit('showDetailDialog', true)
       this.$emit('closeRightDrawer')
     }
   }
-};
+}
 </script>

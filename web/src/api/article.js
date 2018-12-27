@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 export function getArticlesApi (nid, page) {
-  return request.get('/api/v1_0/nodes/'+ nid+'/articles?page=' + page)
+  return request.get('/api/v1_0/nodes/' + nid + '/articles?page=' + page)
 }
 
 export function addArticleApi (nid, data) {

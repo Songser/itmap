@@ -6,7 +6,7 @@ import Graph from '@/views/Graph'
 export default {
   name: 'app-main',
   components: {
-    Graph,
+    Graph
   }
 }
 </script>

@@ -82,16 +82,16 @@
   </v-card>
 </template>
 <script>
-import { mapState } from "vuex";
-import AddBook from "@/views/AddBook";
-import { getBooksApi } from "@/api/book";
+import { mapState } from 'vuex'
+import AddBook from '@/views/AddBook'
+import { getBooksApi } from '@/api/book'
 export default {
-  name: "app-book",
+  name: 'app-book',
   components: {
     AddBook
   },
-  props: ["addBook"],
-  data() {
+  props: ['addBook'],
+  data () {
     return {
       nodeId: 0,
       items: [],
@@ -99,66 +99,66 @@ export default {
       offsetTop: 0,
       active: -1,
       showDialogModel: false,
-      image: BASE_URL + "/book_pics/",
-      defaultImage: 'this.src="' + require("../assets/logo.png") + '"'
-    };
+      image: BASE_URL + '/book_pics/',
+      defaultImage: 'this.src="' + require('../assets/logo.png') + '"'
+    }
   },
   computed: {
     ...mapState({
       node: state => state.node
     }),
-    showDialog() {
-      return this.addBook;
+    showDialog () {
+      return this.addBook
     }
   },
-  created() {
-    this.$root.eventHub.$on("showBookEvent", () => {
+  created () {
+    this.$root.eventHub.$on('showBookEvent', () => {
       if (this.nodeId != this.node.id) {
-        this.getBook();
+        this.getBook()
       }
-    });
-    this.$root.eventHub.$on("addBookEvent", data => {
-      this.items.push(data);
-    });
+    })
+    this.$root.eventHub.$on('addBookEvent', data => {
+      this.items.push(data)
+    })
   },
   methods: {
-    getBook() {
+    getBook () {
       getBooksApi(this.node.id, this.page).then(response => {
-        this.nodeId = this.node.id;
-        let items = response.data;
+        this.nodeId = this.node.id
+        let items = response.data
         if (items.length > 0) {
-          this.items = response.data;
+          this.items = response.data
         }
-      });
+      })
     },
-    prePage() {
+    prePage () {
       if (this.page <= 0) {
-        return;
+        return
       }
-      this.page -= 1;
-      this.getBook();
+      this.page -= 1
+      this.getBook()
     },
-    nextPage() {
+    nextPage () {
       if (this.items.length < 20) {
-        return;
+        return
       }
-      this.page += 1;
-      this.getBook();
+      this.page += 1
+      this.getBook()
     },
-    onScroll(e) {
-      this.offsetTop = e.target.scrollTop;
+    onScroll (e) {
+      this.offsetTop = e.target.scrollTop
     },
-    selectStyle(index) {
-      this.active = index;
+    selectStyle (index) {
+      this.active = index
     },
-    outStyle(index) {
-      this.active = -1;
+    outStyle (index) {
+      this.active = -1
     },
-    closeAddBookDialog(data) {
-      this.$emit("closeDialog");
+    closeAddBookDialog (data) {
+      this.$emit('closeDialog')
     }
   }
-};
+}
 </script>
 <style scoped>
 .v-card {
@@ -171,5 +171,3 @@ img {
   margin-top: 30px;
 }
 </style>
-
-
