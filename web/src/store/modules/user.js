@@ -16,6 +16,9 @@ const mutations = {
     state.email = data.email
     state.active = data.active
     state.avatar = BASE_URL + '/avatars/' + data.avatar
+  },
+  setUserAvatar (state, avatar) {
+    state.avatar = BASE_URL + '/avatars/' + avatar
   }
 }
 

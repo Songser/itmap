@@ -63,7 +63,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(255))
     phone = db.Column(db.String(32))
     gender = db.Column(db.String(8))
-    birthday = db.Column(db.DateTime)
+    birthday = db.Column(db.Date)
 
     email = db.Column(db.String(120), unique=True)
     has_verified = db.Column(db.Boolean, default=False)
@@ -105,7 +105,7 @@ class User(db.Model, UserMixin):
             'avatar': self.avatar,
             'phone': self.phone,
             'gender': self.gender,
-            'birthday': self.birthday,
+            'birthday': self.birthday.strftime('%Y-%m-%d'),
         }
 
     #@property

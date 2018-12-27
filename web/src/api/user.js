@@ -18,3 +18,7 @@ export function getUserApi (userId) {
 export function updateUserApi (userId, data) {
   return request.put('/api/v1_0/users/' + userId, data)
 }
+
+export function uploadUserPicApi (form, userId) {
+  return request.put('/api/v1_0/users/' + userId + '/avatar', form)
+}
