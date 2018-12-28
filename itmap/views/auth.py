@@ -60,8 +60,12 @@ def login():
     refresh_jti = get_jti(encoded_token=refresh_token)
     redis.set(access_jti, 'false', current_app.config['JWT_ACCESS_TOKEN_EXPIRES'] * 1.2)
     redis.set(refresh_jti, 'false', current_app.config['JWT_REFRESH_TOKEN_EXPIRES'] * 1.2)
-
-    return jsonify(access_token=access_token, refresh_token=refresh_token), 200
+    data = user.to_dict
+    data.update(
+        access_token=access_token,
+        refresh_token=refresh_token
+    )
+    return jsonify(data), 200
 
 
 @bp.route('/refresh_login', methods=['POST'])
@@ -147,6 +151,8 @@ def logout2():
 @jwt_optional
 def current_user():
     uid = get_jwt_identity()
+    if not uid:
+        return jsonify({"msg": "Invalid User"}), 400
     user = User.query.get(uid)
     if user:
         return jsonify(

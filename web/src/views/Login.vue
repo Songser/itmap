@@ -65,14 +65,10 @@ export default {
       this.loading = true
       login(this.username, this.password).then(response => {
         let data = response.data
+        console.log('######', data)
         setToken(data.access_token)
-        this.$store.commit('setUser', {
-          name: data.name,
-          id: data.user_id,
-          email: data.email,
-          active: data.active,
-          token: data.access_token
-        })
+
+        this.$store.commit('setUser', data)
         this.$router.push('index')
         this.loading = false
       }, response => {

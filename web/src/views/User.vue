@@ -57,11 +57,14 @@
     <v-card-actions>
       <v-btn color="primary" @click="onSubmit">更新</v-btn>
       <v-btn color="primary" @click="cancel">关闭</v-btn>
+      <v-spacer></v-spacer>
+      <v-btn color="primary" @click="logout">注销</v-btn>
     </v-card-actions>
   </v-card>
 </template>
 <script>
 import { mapState } from 'vuex'
+import { removeToken } from '@/utils/auth'
 import {
   getUserApi,
   updateUserApi,
@@ -146,6 +149,10 @@ export default {
       form.append(this.field, data2blob(this.avatar, this.mime))
       uploadUserPicApi(form, this.userId)
     },
+    logout () {
+      removeToken()
+      window.location.reload();
+    }
   }
 }
 </script>

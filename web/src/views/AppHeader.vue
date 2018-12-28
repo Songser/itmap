@@ -12,7 +12,7 @@
       <span @click.stop="showDetail">{{node}}</span>
     </v-chip> -->
     <v-spacer></v-spacer>
-    <v-chip close @click="showUser" @input="logout">
+    <v-chip  @click="showUser" @input="logout">
       <v-avatar>
         <img :src="avatar" alt="trevor" :onerror="defaultImage">
       </v-avatar>
