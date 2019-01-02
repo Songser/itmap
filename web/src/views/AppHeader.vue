@@ -38,7 +38,8 @@ export default {
   data () {
     return {
       defaultImage: 'this.src="' + require('../assets/logo.png') + '"',
-      userDialog: false
+      userDialog: false,
+      show:true,
     }
   },
   computed: {

@@ -21,6 +21,7 @@
   </main>
 </template>
 <script>
+import { mapState } from 'vuex'
 import {
   addGraphApi
 } from '@/api/graph'
@@ -34,13 +35,22 @@ export default {
       isPrivate: false
     }
   },
+  computed: {
+    ...mapState({
+      userId: state => state.user.id,
+    })
+  },
   methods: {
     openDialog () {
-      this.showDialog = true
+      if (this.userId){
+        this.showDialog = true
+      }
+      else {
+        this.$root.eventHub.$emit("snackbar", "请先登录")
+      }
     },
     addGraph () {
-      let userId = this.$store.state.user.id
-      addGraphApi(userId, this.name, this.isPrivate).then(response => {
+      addGraphApi(this.userId, this.name, this.isPrivate).then(response => {
         this.$emit('addGraph', { id: response.data, name: this.name })
         this.name = ''
         this.showDialog = false

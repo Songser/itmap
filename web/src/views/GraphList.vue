@@ -15,9 +15,9 @@
             <v-list-tile-content>
               <v-list-tile-title v-html="item.name"></v-list-tile-title>
             </v-list-tile-content>
-            <v-list-tile-action>
+            <!-- <v-list-tile-action>
               <del-graph v-bind:graph="item" />
-            </v-list-tile-action>
+            </v-list-tile-action> -->
           </v-list-tile>
           <v-divider :key="item.name"></v-divider>
         </template>
@@ -29,7 +29,7 @@
             <v-list-tile-content>
               <v-list-tile-title v-html="item.name"></v-list-tile-title>
             </v-list-tile-content>
-            <v-list-tile-action>
+            <v-list-tile-action v-if="item.owner_id == userId">
               <del-graph v-bind:graph="item" />
             </v-list-tile-action>
           </v-list-tile>
@@ -73,7 +73,6 @@ export default {
   created () {
     getFashionGraphs().then(response => {
       this.fashionList = response.data
-      console.log(this.fashionList)
       if (this.fashionList.length > 0) {
         this.selectedGraph = this.fashionList[0]
         this.$store.commit('setGraph', this.fashionList[0])
