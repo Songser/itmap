@@ -31,6 +31,7 @@ aritcle_fields = {
     'author': fields.String,
     'source': fields.String,
     'description': fields.String,
+    'owner_id': fields.Integer,
 }
 
 class ArticleListApi(Resource):

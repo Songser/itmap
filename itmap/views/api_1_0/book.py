@@ -30,6 +30,7 @@ book_fields = {
     'source': fields.String,
     'description': fields.String,
     'pic': fields.String,
+    'owner_id': fields.Integer,
 }
 
 

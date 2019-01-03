@@ -1,4 +1,4 @@
-FROM node:9.9.0-alpine
+FROM node:9.9.0
 
 RUN mkdir /web
 WORKDIR /web
