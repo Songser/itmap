@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+<div>
     <v-container
       fluid
       grid-list-lg
@@ -43,7 +43,7 @@
         </template>
       </v-layout>
       <!-- </v-list> -->
-      <v-card-actions v-show="items.length > 0">
+      <v-card-actions v-show="(page == 0 && items.length == 20) || (page > 0)">
         <v-btn
           flat
           color="orange"
@@ -66,7 +66,7 @@
         @closeAddCommentDialog="closeAddCommentDialog"
       />
     </v-dialog>
-  </v-card>
+</div>
 </template>
 <script>
 import { mapState } from 'vuex'

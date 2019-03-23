@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <div>
     <v-container
       fluid
       grid-list-lg
@@ -17,7 +17,7 @@
           >
             <v-card
               hover
-              color="indigo lighten-5"
+              color="light-blue lighten-2"
               class="white--text elevation-6"
               @mouseenter="selectStyle(index)"
               @mouseleave="outStyle(index)"
@@ -52,7 +52,6 @@
                 <v-icon v-show="active == index">delete</v-icon>
                 <v-icon>star_border</v-icon>
               </v-card-actions>
-
             </v-card>
           </v-flex>
         </template>
@@ -79,7 +78,7 @@
     >
       <add-book @closeAddBookDialog="closeAddBookDialog" />
     </v-dialog>
-  </v-card>
+  </div>
 </template>
 <script>
 import { mapState } from 'vuex'

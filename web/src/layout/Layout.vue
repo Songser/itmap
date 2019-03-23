@@ -109,11 +109,6 @@ export default {
       this.snackbarContent = target;
     });
   },
-  computed: {
-    ...mapState({
-      snackbar: state => state.snackbar
-    })
-  },
   methods: {
     openLeftDrawer() {
       this.leftDrawer = !this.leftDrawer;

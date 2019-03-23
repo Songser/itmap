@@ -48,13 +48,13 @@
     <v-card-text style="height:100%">
       <v-layout row>
         <v-flex
-          xs12
-          sm3
+          sm1
+          md3
         >
         </v-flex>
         <v-flex
-          xs12
-          sm6
+          sm10
+          md6
         >
           <v-tabs-items v-model="tabs">
             <v-tab-item

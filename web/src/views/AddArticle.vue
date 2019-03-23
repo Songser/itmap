@@ -27,9 +27,6 @@ import {
 
 export default {
   name: 'add-article',
-  props: [
-    item
-  ],
   data () {
     return {
       title: '',
