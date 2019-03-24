@@ -3,17 +3,18 @@ version: '2'
 services:
   server:
     build:
-      context: itmap
+      context: server
     volumes:
-      - "${PWD}/itmap:/itmap"
+      - "${PWD}/server:/itmap"
     ports:
       - "0.0.0.0:5000:5000"
     networks:
       - itmap-network
     environment:
       FLASK_APP: app.py
-    #command: ["flask", "run", "--host=0.0.0.0"]
-    command: ["gunicorn", "--workers=3", "--chdir", "/", "itmap.app:app", "-b", "0.0.0.0:5000"]
+      FLASK_ENV: development
+    command: ["flask", "run", "--host=0.0.0.0", "--port=5000"]
+    # command: ["gunicorn", "--workers=3", "--chdir", "/", "itmap.app:app", "-b", "0.0.0.0:5000"]
 
   web:
     build: 

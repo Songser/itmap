@@ -55,7 +55,6 @@ def create_app():
     mkdir(app)
 
     CORS(app)
-    app.debug = True
 
     return app
 
@@ -73,7 +72,6 @@ def mkdir(app):
 
 
 app = create_app()
-
 
 @app.cli.command(with_appcontext=True)
 def initdb():
