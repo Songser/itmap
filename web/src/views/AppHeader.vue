@@ -39,7 +39,7 @@ export default {
     return {
       defaultImage: 'this.src="' + require('../assets/logo.png') + '"',
       userDialog: false,
-      show:true,
+      show: true
     }
   },
   computed: {

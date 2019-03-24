@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import logo from '@/assets/logo.png'
 export default {
   name: 'PanThumb',
   props: {
@@ -31,7 +30,7 @@ export default {
       default: '150px'
     }
   },
-  data() {
+  data () {
     return {
       defaultImage: 'this.src="' + require('../assets/logo.png') + '"'
     }

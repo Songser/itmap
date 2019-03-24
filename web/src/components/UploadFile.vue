@@ -4,24 +4,24 @@
 </template>
 
 <script>
-  export default {
-    name: 'upload-file',
-    props: {
-      selectedCallback: Function,
-      title: String
-    },
-    methods: {
-      fileSelected(e) {
-        if (this.selectedCallback) {
-          if (e.target.files[0]) {
-            this.selectedCallback(e.target.files[0]);
-          } else {
-            this.selectedCallback(null);
-          }
+export default {
+  name: 'upload-file',
+  props: {
+    selectedCallback: Function,
+    title: String
+  },
+  methods: {
+    fileSelected (e) {
+      if (this.selectedCallback) {
+        if (e.target.files[0]) {
+          this.selectedCallback(e.target.files[0])
+        } else {
+          this.selectedCallback(null)
         }
       }
     }
   }
+}
 </script>
 
 <style scoped>

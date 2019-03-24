@@ -13,29 +13,28 @@
 <script>
 import G6 from '@antv/g6'
 import * as d3 from 'd3'
-import { registerNode, registerEdge, Layouts } from 'viser-graph-vue'
 import { mapState } from 'vuex'
-import { addNodeApi, addLinkApi, getNodesApi, delNodeApi } from '@/api/graph'
+import { getNodesApi } from '@/api/graph'
 
-let Mapper = G6.Plugins['tool.d3.mapper']
-let _d = d3,
-  forceSimulation = _d.forceSimulation,
-  forceLink = _d.forceLink,
-  forceManyBody = _d.forceManyBody,
-  forceX = _d.forceX,
-  forceY = _d.forceY,
-  forceCollide = _d.forceCollide
-let nodeMap = {}
+// let Mapper = G6.Plugins['tool.d3.mapper']
+let _d = d3
+let forceSimulation = _d.forceSimulation
+let forceLink = _d.forceLink
+let forceManyBody = _d.forceManyBody
+let forceX = _d.forceX
+let forceY = _d.forceY
+let forceCollide = _d.forceCollide
+// let nodeMap = {}
 // let nodeSizeMapper = new Mapper('node', 'degree', 'size', [8, 48], {
 //     legendCfg: null
 //   });
 // let nodeColorMapper = new Mapper('node', 'type', 'color', ['#e18826', '#002a67']);
-let G = G6.G
+// let G = G6.G
 let simulation = void 0
 
-let data = {
-  nodes: []
-}
+// let data = {
+//   nodes: []
+// }
 let graph = new G6.Graph({
   container: 'mountNode',
   height: window.innerHeight,
@@ -144,7 +143,7 @@ export default {
   data () {
     return {
       // graph,
-      node,
+      // node,
       edge
     }
   },

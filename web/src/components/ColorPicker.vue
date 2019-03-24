@@ -27,9 +27,9 @@
 </template>
 <script>
 export default {
-  name: "color-picker",
-  props: ["change", "initial"],
-  data: function() {
+  name: 'color-picker',
+  props: ['change', 'initial'],
+  data: function () {
     return {
       isVisible: true,
       h: 265,
@@ -38,81 +38,81 @@ export default {
     }
   },
   computed: {
-    color: function() {
+    color: function () {
       var hsl = hsb2hsl(parseFloat(this.h) / 360, parseFloat(this.s) / 100, parseFloat(this.l) / 100)
 
-      var c = hsl.h + ", " + hsl.s + "%, " + hsl.l + "%";
+      var c = hsl.h + ', ' + hsl.s + '%, ' + hsl.l + '%'
 
-      var s = "hsl(" + c + ")";
+      var s = 'hsl(' + c + ')'
       this.change({
         color: s
-      });
-      return s;
+      })
+      return s
     },
-    colorString: function() {
-      var c = this.h + ", " + this.s + "%, " + this.l + "%"
-      return c;
+    colorString: function () {
+      var c = this.h + ', ' + this.s + '%, ' + this.l + '%'
+      return c
     },
-    gradientH: function() {
-      var stops = [];
+    gradientH: function () {
+      var stops = []
       for (var i = 0; i < 7; i++) {
-        var h = i * 60;
+        var h = i * 60
 
         var hsl = hsb2hsl(parseFloat(h / 360), parseFloat(this.s) / 100, parseFloat(this.l / 100))
 
-        var c = hsl.h + ", " + hsl.s + "%, " + hsl.l + "%"
-        stops.push("hsl(" + c + ")")
+        var c = hsl.h + ', ' + hsl.s + '%, ' + hsl.l + '%'
+        stops.push('hsl(' + c + ')')
       }
 
       return {
-        backgroundImage: "linear-gradient(to right, " + stops.join(', ') + ")"
+        backgroundImage: 'linear-gradient(to right, ' + stops.join(', ') + ')'
       }
     },
-    gradientS: function() {
-      var stops = [];
-      var c;
+    gradientS: function () {
+      var stops = []
+      var c
       var hsl = hsb2hsl(parseFloat(this.h / 360), 0, parseFloat(this.l / 100))
-      c = hsl.h + ", " + hsl.s + "%, " + hsl.l + "%"
-      stops.push("hsl(" + c + ")")
+      c = hsl.h + ', ' + hsl.s + '%, ' + hsl.l + '%'
+      stops.push('hsl(' + c + ')')
 
-      var hsl = hsb2hsl(parseFloat(this.h / 360), 1, parseFloat(this.l / 100))
-      c = hsl.h + ", " + hsl.s + "%, " + hsl.l + "%"
-      stops.push("hsl(" + c + ")")
+      var hslt = hsb2hsl(parseFloat(this.h / 360), 1, parseFloat(this.l / 100))
+      c = hslt.h + ', ' + hslt.s + '%, ' + hslt.l + '%'
+      stops.push('hslt(' + c + ')')
 
       return {
-        backgroundImage: "linear-gradient(to right, " + stops.join(', ') + ")"
+        backgroundImage: 'linear-gradient(to right, ' + stops.join(', ') + ')'
       }
     },
 
-    gradientL: function() {
-      var stops = [];
-      var c;
+    gradientL: function () {
+      var stops = []
+      var c
 
       var hsl = hsb2hsl(parseFloat(this.h / 360), 0, 0)
-      c = hsl.h + ", " + hsl.s + "%, " + hsl.l + "%"
-      stops.push("hsl(" + c + ")")
+      c = hsl.h + ', ' + hsl.s + '%, ' + hsl.l + '%'
+      stops.push('hsl(' + c + ')')
 
-      var hsl = hsb2hsl(parseFloat(this.h / 360), parseFloat(this.s / 100), 1)
+      var hslt = hsb2hsl(parseFloat(this.h / 360), parseFloat(this.s / 100), 1)
 
-      c = hsl.h + ", " + hsl.s + "%, " + hsl.l + "%"
-      stops.push("hsl(" + c + ")")
+      c = hslt.h + ', ' + hslt.s + '%, ' + hslt.l + '%'
+      stops.push('hslt(' + c + ')')
 
       return {
-        backgroundImage: "linear-gradient(to right, " + stops.join(', ') + ")"
+        backgroundImage: 'linear-gradient(to right, ' + stops.join(', ') + ')'
 
       }
     }
   },
   methods: {
 
-    show: function() {
-      this.isVisible = true;
+    show: function () {
+      this.isVisible = true
     },
-    hide: function() {
-      this.isVisible = false;
+    hide: function () {
+      this.isVisible = false
     },
-    toggle: function() {
-      this.isVisible = !this.isVisible;
+    toggle: function () {
+      this.isVisible = !this.isVisible
     }
   },
 
@@ -120,33 +120,32 @@ export default {
     this.h = parseInt(Math.random() * 360)
   }
 }
-function hsb2hsl(h, s, b) {
+function hsb2hsl (h, s, b) {
   var hsl = {
     h: h
-  };
-  hsl.l = (2 - s) * b;
-  hsl.s = s * b;
+  }
+  hsl.l = (2 - s) * b
+  hsl.s = s * b
 
   if (hsl.l <= 1 && hsl.l > 0) {
-    hsl.s /= hsl.l;
+    hsl.s /= hsl.l
   } else {
-    hsl.s /= 2 - hsl.l;
+    hsl.s /= 2 - hsl.l
   }
 
-  hsl.l /= 2;
+  hsl.l /= 2
 
   if (hsl.s > 1) {
-    hsl.s = 1;
+    hsl.s = 1
   }
 
   if (!hsl.s > 0) hsl.s = 0
 
+  hsl.h *= 360
+  hsl.s *= 100
+  hsl.l *= 100
 
-  hsl.h *= 360;
-  hsl.s *= 100;
-  hsl.l *= 100;
-
-  return hsl;
+  return hsl
 }
 </script>
 <style scoped>
@@ -295,4 +294,3 @@ body {
   transform: scale(0);
 }
 </style>
-

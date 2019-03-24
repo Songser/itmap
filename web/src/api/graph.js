@@ -52,10 +52,6 @@ export function uploadNodePicApi (form, nodeId) {
   return request.post('/api/v1_0/nodes/' + nodeId + '/pic', form)
 }
 
-export function get_picture (path) {
-  return BASE_URL + '/node_pics/' + path
-}
-
 export function updateNodeApi (data) {
   return request.put('/api/v1_0/nodes/' + data.nid, {
     graph_id: data.graphId,

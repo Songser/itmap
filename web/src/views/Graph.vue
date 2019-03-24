@@ -25,7 +25,7 @@ import ECharts from 'vue-echarts/components/ECharts'
 import 'echarts/lib/chart/line'
 import 'echarts/lib/chart/graph'
 import 'echarts/lib/component/tooltip'
-import { addNodeApi, addLinkApi, getNodesApi, delNodeApi } from '@/api/graph'
+import {getNodesApi} from '@/api/graph'
 
 export default {
   name: 'graph',
@@ -129,13 +129,13 @@ export default {
   watch: {
     graphId (value) {
       if (value) {
-        if (this.oldGraphId == value) {
+        if (this.oldGraphId === value) {
           return
         }
         this.oldGraphId = value
         getNodesApi(value).then(response => {
           const data = response.data
-          if (data.nodes.length == 0) {
+          if (data.nodes.length === 0) {
             this.updateGraph([], [])
             this.$root.eventHub.$emit('addNodeEvent', '')
             return
@@ -167,23 +167,23 @@ export default {
     clickNode (params) {
       let data = params.data
       let size = ''
-      if (data.symbolSize[0] == 35) {
+      if (data.symbolSize[0] === 35) {
         size = 'S'
-      } else if (data.symbolSize[0] == 45) {
+      } else if (data.symbolSize[0] === 45) {
         size = 'M'
-      } else if (data.symbolSize[0] == 65) {
+      } else if (data.symbolSize[0] === 65) {
         size = 'L'
       }
       let info = ''
       let source = ''
-      let source_id = 0
+      let sourceId = 0
       let graph = this.$refs.graph
       let links = graph.options.series[0].links
       links.forEach((value, index, array) => {
-        if (value.tid == data.nid) {
+        if (value.tid === data.nid) {
           info = value.value
           source = value.source
-          source_id = value.sid
+          sourceId = value.sid
         }
       })
       let color = '#c23531'
@@ -200,7 +200,7 @@ export default {
         info: info,
         pic: data.pic,
         source: source,
-        source_id: source_id,
+        source_id: sourceId,
         create_date: data.create_date
       })
       this.$root.eventHub.$emit('openRightDrawer')
@@ -213,7 +213,7 @@ export default {
       graph.mergeOptions(options)
     },
     addNode (data) {
-      let node = this.genNode(date.nid, data.name, data.desc, '',
+      let node = this.genNode(data.nid, data.name, data.desc, '',
         data.color, data.size, data.shape)
       let graph = this.$refs.graph
       let options = graph.options
@@ -227,7 +227,7 @@ export default {
       let options = graph.options
       let nodes = options.series[0].data
       for (let i = 0; i < nodes.length; i++) {
-        if (nodes[i].nid == data.nid) {
+        if (nodes[i].nid === data.nid) {
           nodes[i] = node
           break
         }

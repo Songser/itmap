@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     init () {
-      this.title = '',
+      this.title = ''
       this.desc = ''
     },
     onSubmit () {

@@ -108,7 +108,7 @@ export default {
       this.phone = data.phone
       this.gender = data.gender
       this.birthday = data.birthday
-      this.avatar = BASE_URL + '/avatars/' + data.avatar
+      this.avatar = process.env.BASE_API + '/avatars/' + data.avatar
     })
   },
   methods: {
@@ -142,7 +142,7 @@ export default {
         return
       }
       let index = this.avatar.indexOf('data:image')
-      if (index != 0) {
+      if (index !== 0) {
         return
       }
       let form = new FormData()
@@ -151,7 +151,7 @@ export default {
     },
     logout () {
       removeToken()
-      window.location.reload();
+      window.location.reload()
     }
   }
 }

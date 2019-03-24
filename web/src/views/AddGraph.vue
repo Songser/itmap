@@ -37,16 +37,15 @@ export default {
   },
   computed: {
     ...mapState({
-      userId: state => state.user.id,
+      userId: state => state.user.id
     })
   },
   methods: {
     openDialog () {
-      if (this.userId){
+      if (this.userId) {
         this.showDialog = true
-      }
-      else {
-        this.$root.eventHub.$emit("snackbar", "请先登录")
+      } else {
+        this.$root.eventHub.$emit('snackbar', '请先登录')
       }
     },
     addGraph () {

@@ -53,13 +53,10 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import { getToken } from '@/utils/auth'
 import {
   addNodeApi,
   addLinkApi,
-  getNodesApi,
-  delNodeApi,
-  uploadNodePicApi,
+  uploadNodePicApi
 } from '@/api/graph'
 
 export default {
@@ -75,7 +72,7 @@ export default {
       dialogImageUrl: '',
       dialogVisible: false,
       action: '',
-      newNodeId: 0,
+      newNodeId: 0
     }
   },
   methods: {
@@ -86,43 +83,43 @@ export default {
         color: this.color,
         shape: this.shape,
         size: this.size,
-        desc: this.desc,
-        
+        desc: this.desc
+
       }
       addNodeApi(data).then(response => {
         this.newNodeId = response.data
         data['target_id'] = this.newNodeId
         this.$store.commit('addNode', data)
         this.$refs.upload.submit()
-        if (this.node.name && this.name){
+        if (this.node.name && this.name) {
           addLinkApi({
             source_id: this.node.id,
             target_id: this.newNodeId,
-            graphId:  this.graph.id,
+            graphId: this.graph.id,
             value: this.info
           }).then(response => {
             this.$store.commit('addLink', {
-            source: this.node.name,
-            target: this.name,
-            value: this.info,
-          })
+              source: this.node.name,
+              target: this.name,
+              value: this.info
+            })
           })
         }
       })
-      
+
       this.$emit('closeAddNodeDialog')
     },
     cancle () {
       this.$emit('closeAddNodeDialog')
     },
-    handleRemove(file, fileList) {
-      
+    handleRemove (file, fileList) {
+
     },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
+    handlePictureCardPreview (file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
     },
-    handlerUpload(options){
+    handlerUpload (options) {
       console.log(options)
       let form = new FormData()
       form.append(options.filename, options.file)
@@ -132,7 +129,7 @@ export default {
   computed: mapState({
     node: state => state.node,
     user: state => state.user,
-    graph: state => state.graph,
+    graph: state => state.graph
   })
 }
 </script>

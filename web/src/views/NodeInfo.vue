@@ -162,7 +162,7 @@ export default {
       }
     },
     init () {
-      if (this.nodeId == this.node.id) {
+      if (this.nodeId === this.node.id) {
         return
       }
       this.$root.eventHub.$emit('showArticleEvent')

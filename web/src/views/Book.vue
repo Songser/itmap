@@ -98,7 +98,7 @@ export default {
       offsetTop: 0,
       active: -1,
       showDialogModel: false,
-      image: BASE_URL + '/book_pics/',
+      image: process.env.BASE_URL + '/book_pics/',
       defaultImage: 'this.src="' + require('../assets/logo.png') + '"'
     }
   },
@@ -112,7 +112,7 @@ export default {
   },
   created () {
     this.$root.eventHub.$on('showBookEvent', () => {
-      if (this.nodeId != this.node.id) {
+      if (this.nodeId !== this.node.id) {
         this.getBook()
       }
     })

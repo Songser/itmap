@@ -43,10 +43,10 @@ export default {
   },
   methods: {
     init () {
-      this.title = '',
-      this.url = '',
-      this.author = '',
-      this.source = '',
+      this.title = ''
+      this.url = ''
+      this.author = ''
+      this.source = ''
       this.desc = ''
     },
     onSubmit () {

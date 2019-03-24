@@ -68,7 +68,7 @@ export default {
       },
       addNodeDialog: false,
       delNodeDialog: false,
-      defaultImg: logo,
+      defaultImg: logo
     }
   },
   computed: mapState({
@@ -78,7 +78,7 @@ export default {
     desc: state => state.node.desc,
     create_date: state => state.node.create_date,
     graph: state => state.graph.name,
-    image: state => BASE_URL + '/node_pics/'+ state.node.id +'.jpg'
+    image: state => process.env.BASE_API + '/node_pics/' + state.node.id + '.jpg'
   }),
   methods: {
     showAddNodeDialog () {

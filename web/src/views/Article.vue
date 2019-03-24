@@ -73,16 +73,16 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
-import { getArticlesApi } from "@/api/article";
-import AddArticle from "@/views/AddArticle";
+import { mapState } from 'vuex'
+import { getArticlesApi } from '@/api/article'
+import AddArticle from '@/views/AddArticle'
 export default {
-  name: "app-article",
+  name: 'app-article',
   components: {
     AddArticle
   },
-  props: ["addArticle"],
-  data() {
+  props: ['addArticle'],
+  data () {
     return {
       nodeId: 0,
       items: [],
@@ -90,69 +90,69 @@ export default {
       offsetTop: 0,
       active: -1,
       showDialogModel: false
-    };
+    }
   },
   computed: {
     ...mapState({
       node: state => state.node,
       user: state => state.user
     }),
-    showDialog() {
-      return this.addArticle;
+    showDialog () {
+      return this.addArticle
     }
   },
-  created() {
-    this.$root.eventHub.$on("showArticleEvent", () => {
-      if (this.nodeId != this.node.id) {
-        this.getArticle();
+  created () {
+    this.$root.eventHub.$on('showArticleEvent', () => {
+      if (this.nodeId !== this.node.id) {
+        this.getArticle()
       }
-    });
-    this.$root.eventHub.$on("addArticleEvent", data => {
-      this.items.push(data);
-    });
+    })
+    this.$root.eventHub.$on('addArticleEvent', data => {
+      this.items.push(data)
+    })
   },
   methods: {
-    getArticle() {
+    getArticle () {
       getArticlesApi(this.node.id, this.page).then(response => {
-        this.nodeId = this.node.id;
-        let items = response.data;
-        console.log(items);
+        this.nodeId = this.node.id
+        let items = response.data
+        console.log(items)
         if (items.length > 0) {
-          this.items = items;
+          this.items = items
         }
-      });
+      })
     },
-    prePage() {
+    prePage () {
       if (this.page <= 0) {
-        return;
+        return
       }
-      this.page -= 1;
-      this.getArticle();
+      this.page -= 1
+      this.getArticle()
     },
-    nextPage() {
+    nextPage () {
       if (this.items.length < 20) {
-        return;
+        return
       }
-      this.page += 1;
-      this.getArticle();
+      this.page += 1
+      this.getArticle()
     },
-    onScroll(e) {
-      this.offsetTop = e.target.scrollTop;
+    onScroll (e) {
+      this.offsetTop = e.target.scrollTop
     },
-    selectStyle(index) {
-      this.active = index;
+    selectStyle (index) {
+      this.active = index
     },
-    outStyle(index) {
-      this.active = -1;
+    outStyle (index) {
+      this.active = -1
     },
-    closeAddArticleDialog(data) {
-      this.$emit("closeDialog");
+    closeAddArticleDialog (data) {
+      this.$emit('closeDialog')
     },
-    editArticle(item){
+    editArticle (item) {
 
     }
   }
-};
+}
 </script>
 <style scoped>
 .v-card {

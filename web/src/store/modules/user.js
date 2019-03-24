@@ -15,10 +15,10 @@ const mutations = {
     state.name = data.name
     state.email = data.email
     state.active = data.active
-    state.avatar = BASE_URL + '/avatars/' + data.avatar
+    state.avatar = process.env.BASE_API + '/avatars/' + data.avatar
   },
   setUserAvatar (state, avatar) {
-    state.avatar = BASE_URL + '/avatars/' + avatar
+    state.avatar = process.env.BASE_API + '/avatars/' + avatar
   }
 }
 

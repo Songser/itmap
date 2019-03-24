@@ -86,7 +86,7 @@ export default {
       desc: state => state.node.desc,
       image: state => {
         if (state.node.pic) {
-          return BASE_URL + '/node_pics/' + state.node.pic
+          return process.env.BASE_API + '/node_pics/' + state.node.pic
         }
         return require('../assets/logo.png')
       },

@@ -54,10 +54,10 @@ export default {
         birthday: '',
         mobile: '',
         wechat: '',
-        avatar: '',
+        avatar: ''
       },
       imagecropperKey: 0,
-      imagecropperShow: false,
+      imagecropperShow: false
     }
   },
   computed: {
@@ -67,21 +67,21 @@ export default {
     })
   },
   created () {
-      getUserApi(this.userId).then(response => {
-          console.log(response.data)
-          let data = response.data
-          this.form.name = data.name
-          this.form.email = data.email
-          this.form.avatar = BASE_URL + '/avatars/'+ data.avatar
-      })
+    getUserApi(this.userId).then(response => {
+      console.log(response.data)
+      let data = response.data
+      this.form.name = data.name
+      this.form.email = data.email
+      this.form.avatar = process.env.BASE_API + '/avatars/' + data.avatar
+    })
   },
   methods: {
-      close() {
-          this.imagecropperShow = false
-      },
-      cropSuccess () {
+    close () {
+      this.imagecropperShow = false
+    },
+    cropSuccess () {
 
-      }
+    }
   }
 }
 </script>

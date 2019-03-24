@@ -47,7 +47,7 @@ import DelGraph from '@/views/DelGraph'
 
 import {
   getFashionGraphs,
-  getGraphList,
+  getGraphList
 } from '@/api/graph'
 
 export default {

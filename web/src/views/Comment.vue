@@ -97,7 +97,7 @@ export default {
   },
   created () {
     this.$root.eventHub.$on('showCommentEvent', () => {
-      if (this.nodeId != this.node.id) {
+      if (this.nodeId !== this.node.id) {
         this.getComment()
       }
     })

@@ -106,7 +106,7 @@ export default {
         return
       }
       let index = this.image.indexOf('data:image')
-      if (index != 0) {
+      if (index !== 0) {
         return
       }
       let form = new FormData()

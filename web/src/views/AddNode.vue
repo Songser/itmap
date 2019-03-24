@@ -47,15 +47,12 @@
 
 <script>
 import { mapState } from 'vuex'
-import { getToken } from '@/utils/auth'
 import data2blob from '@/utils/data2blob.js'
 import { Chrome } from 'vue-color'
 
 import {
   addNodeApi,
   addLinkApi,
-  getNodesApi,
-  delNodeApi,
   uploadNodePicApi,
   updateNodeApi,
   updateLinkApi
@@ -103,23 +100,13 @@ export default {
       this.size = this.node.size
       this.shape = this.node.shape
       this.info = this.node.info
-      this.sourceName = this.node.source
       if (this.node.pic) {
-        this.image = BASE_URL + '/node_pics/' + this.node.pic
+        this.image = process.env.BASE_API + '/node_pics/' + this.node.pic
       }
       this.$emit('openAddNodeDialog')
     })
   },
   computed: {
-    sourceName: {
-      get () {
-        this.source = this.$store.state.node.name
-      },
-      set (value) {
-        this.source = value
-      }
-
-    },
     ...mapState({
       node: state => state.node,
       user: state => state.user,
@@ -171,7 +158,7 @@ export default {
         return
       }
       let index = this.image.indexOf('data:image')
-      if (index != 0) {
+      if (index !== 0) {
         return
       }
       let form = new FormData()
@@ -184,7 +171,7 @@ export default {
     updateNode (data) {
       updateNodeApi(data).then(response => {
         this.handlerUpload()
-        if (this.node.name && this.name && this.oldLink != this.info) {
+        if (this.node.name && this.name && this.oldLink !== this.info) {
           updateLinkApi({
             source_id: this.node.source_id,
             target_id: this.node.id,

@@ -69,15 +69,13 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
-import AppHeader from "@/views/AppHeader";
-import AppLeft from "@/views/AppLeft";
-import AppRight from "@/views/AppRight";
-import AddNode from "@/views/AddNode";
-import NodeInfo from "@/views/NodeInfo";
+import AppHeader from '@/views/AppHeader'
+import AppLeft from '@/views/AppLeft'
+import AppRight from '@/views/AppRight'
+import AddNode from '@/views/AddNode'
+import NodeInfo from '@/views/NodeInfo'
 export default {
-  name: "layout",
+  name: 'layout',
   components: {
     AppHeader,
     AppLeft,
@@ -85,7 +83,7 @@ export default {
     AddNode,
     NodeInfo
   },
-  data() {
+  data () {
     return {
       leftDrawer: true,
       rightDrawer: false,
@@ -94,45 +92,45 @@ export default {
       mini: false,
       show: true,
       snackbar: false,
-      snackbarContent: ""
-    };
+      snackbarContent: ''
+    }
   },
-  created() {
-    this.$root.eventHub.$on("openLeftDrawer", () => {
-      this.openLeftDrawer();
-    });
-    this.$root.eventHub.$on("openRightDrawer", target => {
-      this.openRightDrawer();
-    });
-    this.$root.eventHub.$on("snackbar", target => {
-      this.snackbar = true;
-      this.snackbarContent = target;
-    });
+  created () {
+    this.$root.eventHub.$on('openLeftDrawer', () => {
+      this.openLeftDrawer()
+    })
+    this.$root.eventHub.$on('openRightDrawer', target => {
+      this.openRightDrawer()
+    })
+    this.$root.eventHub.$on('snackbar', target => {
+      this.snackbar = true
+      this.snackbarContent = target
+    })
   },
   methods: {
-    openLeftDrawer() {
-      this.leftDrawer = !this.leftDrawer;
+    openLeftDrawer () {
+      this.leftDrawer = !this.leftDrawer
     },
-    openRightDrawer() {
-      this.rightDrawer = true;
+    openRightDrawer () {
+      this.rightDrawer = true
     },
-    closeAddNodeDialog() {
-      this.addNodeDialog = false;
+    closeAddNodeDialog () {
+      this.addNodeDialog = false
     },
-    openAddNodeDialog() {
-      this.addNodeDialog = true;
+    openAddNodeDialog () {
+      this.addNodeDialog = true
     },
-    closeDetailDialog() {
-      this.detailDialog = false;
+    closeDetailDialog () {
+      this.detailDialog = false
     },
-    closeRightDrawer() {
-      this.rightDrawer = false;
+    closeRightDrawer () {
+      this.rightDrawer = false
     },
-    openDetailDialog() {
-      this.detailDialog = true;
+    openDetailDialog () {
+      this.detailDialog = true
     }
   }
-};
+}
 </script>
 <style scoped>
 .v-tooltip {
