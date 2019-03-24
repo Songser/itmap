@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  server:
+    build:
+      context: server
+    volumes:
+      - "data:/itmap/avatars"
+      - "data:/itmap/node_pictures"
+    ports:
+      - "0.0.0.0:5000:5000"
+    environment:
+      DB_USER: 'itmap_admin'
+      DB_PASSWORD: 'Itmap@678#com'
+    networks:
+      - itmap-network
+    command: ["gunicorn", "--workers=3", "--chdir", "/", "itmap.app:app", "-b", "0.0.0.0:5000"]
+
+  web:
+    build: 
+      context: web
+    volumes:
+      - "data:/web/dist"
+    command: ["npm", "run", "build"]
+
+  postgres:
+    image: postgres:10
+    ports:
+      - "127.0.0.1:5437:5432"
+    volumes:
+      - "data:/db/data"
+    environment:
+      POSTGRES_USER: 'itmap_admin'
+      POSTGRES_PASSWORD: 'Itmap@678#com'
+      PGDATA: '/db/data'
+    restart: always
+    networks:
+      - itmap-network
+
+  redis:
+    image: redis:4.0
+    ports:
+      - "127.0.0.1:6378:6379"
+    restart: always
+    networks:
+      - itmap-network
+
+networks:
+  itmap-network:
+    driver: bridge
+
+volumes:
+  data:
