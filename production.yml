@@ -6,14 +6,14 @@ services:
     volumes: 
       - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
       - "./nginx/itmap-site.conf:/etc/nginx/conf.d/itmap-site.conf"
-      - "data:/etc/nginx"
+      - "data/nginx:/etc/nginx/conf.d"
     command: ["nginx"]
   server:
     build:
       context: server
     volumes:
-      - "data:/itmap/avatars"
-      - "data:/itmap/node_pictures"
+      - "data/itmap:/itmap/avatars"
+      - "data/itmap:/itmap/node_pictures"
     ports:
       - "0.0.0.0:5000:5000"
     environment:
@@ -27,7 +27,7 @@ services:
     build: 
       context: web
     volumes:
-      - "data:/web/dist"
+      - "data/web:/web/dist"
     command: ["npm", "run", "build"]
 
   postgres:
@@ -35,7 +35,7 @@ services:
     ports:
       - "127.0.0.1:5437:5432"
     volumes:
-      - "data:/db/data"
+      - "data/db:/db/data"
     environment:
       POSTGRES_USER: 'itmap_admin'
       POSTGRES_PASSWORD: 'Itmap@678#com'
