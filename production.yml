@@ -6,7 +6,7 @@ services:
     volumes: 
       - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
       - "./nginx/itmap-site.conf:/etc/nginx/conf.d/itmap-site.conf"
-      - "config:/etc/nginx/conf.d"
+      - "html:/etc/nginx/conf.d"
     command: ["nginx"]
   server:
     build:
