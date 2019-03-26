@@ -9,6 +9,8 @@ services:
       - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
       - "./nginx/itmap-site.conf:/etc/nginx/conf.d/itmap-site.conf"
       - "html:/etc/nginx/conf.d"
+    networks:
+      - itmap-network
     command: ["nginx"]
   server:
     build:
