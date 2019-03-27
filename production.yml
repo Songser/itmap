@@ -5,7 +5,6 @@ services:
     image: nginx
     ports:
       - "80:80"
-    restart: always
     volumes: 
       - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
       - "./nginx/itmap-site.conf:/etc/nginx/conf.d/itmap-site.conf"
@@ -53,7 +52,6 @@ services:
     image: redis:4.0
     ports:
       - "127.0.0.1:6378:6379"
-    restart: always
     networks:
       - itmap-network
 
@@ -76,9 +74,4 @@ volumes:
     driver_opts:
       type: none
       device: /data/static
-      o: bind
-  config:
-    driver_opts:
-      type: none
-      device: /data/config
       o: bind
