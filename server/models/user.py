@@ -105,7 +105,6 @@ class User(db.Model, UserMixin):
             'avatar': self.avatar,
             'phone': self.phone,
             'gender': self.gender,
-            'birthday': self.birthday.strftime('%Y-%m-%d'),
         }
 
     #@property
