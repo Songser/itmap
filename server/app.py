@@ -9,8 +9,10 @@ from flask import Flask
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib import rediscli
+from flask_admin import helpers as admin_helpers
 from flask_cors import CORS
 from flask_migrate import Migrate
+from flask_security import Security, SQLAlchemyUserDatastore
 from flasgger import Swagger
 
 from itmap.ext import db, mail, redis, login_manager, jwt
@@ -30,6 +32,9 @@ def create_app():
     redis.init_app(app)
     login_manager.init_app(app)
     jwt.init_app(app)
+
+    user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+    security = Security(app, user_datastore)
 
     Migrate(app, db)
     app.config['SWAGGER'] = {
@@ -51,6 +56,14 @@ def create_app():
 
     admin.add_view(rediscli.RedisCli(redis._redis_client))
 
+    @security.context_processor
+    def security_context_processor():
+        return dict(
+            admin_base_template=admin.base_template,
+            admin_view=admin.index_view,
+            h=admin_helpers,
+            get_url=url_for
+        )
     register_blueprints(app)
     mkdir(app)
 

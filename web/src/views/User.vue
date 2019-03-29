@@ -100,7 +100,7 @@ export default {
     })
   },
   created () {
-    if (this.userId > 0){
+    if (this.userId > 0) {
       getUserApi(this.userId).then(response => {
         console.log(response.data)
         let data = response.data
