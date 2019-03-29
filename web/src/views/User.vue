@@ -100,16 +100,18 @@ export default {
     })
   },
   created () {
-    getUserApi(this.userId).then(response => {
-      console.log(response.data)
-      let data = response.data
-      this.name = data.name
-      this.email = data.email
-      this.phone = data.phone
-      this.gender = data.gender
-      this.birthday = data.birthday
-      this.avatar = process.env.BASE_API + '/avatars/' + data.avatar
-    })
+    if (this.userId > 0){
+      getUserApi(this.userId).then(response => {
+        console.log(response.data)
+        let data = response.data
+        this.name = data.name
+        this.email = data.email
+        this.phone = data.phone
+        this.gender = data.gender
+        this.birthday = data.birthday
+        this.avatar = process.env.BASE_API + '/avatars/' + data.avatar
+      })
+    }
   },
   methods: {
     close () {
