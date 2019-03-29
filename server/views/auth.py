@@ -23,7 +23,6 @@ def user_identity_lookup(user):
 def add_claims_to_access_token(user):
     return {'role': user.role.name}
 
-
 @jwt.token_in_blacklist_loader
 def check_if_token_is_revoked(decrypted_token):
     jti = decrypted_token['jti']
