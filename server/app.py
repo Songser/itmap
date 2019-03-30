@@ -5,7 +5,7 @@ import code
 import os
 import sys
 
-from flask import Flask
+from flask import Flask, render_template, url_for
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.contrib import rediscli
@@ -16,7 +16,7 @@ from flask_security import Security, SQLAlchemyUserDatastore
 from flasgger import Swagger
 
 from itmap.ext import db, mail, redis, login_manager, jwt
-from itmap.models.user import Role, User
+from itmap.models.user import Role, User, MyModelView
 from itmap.models.graph import NodeRelation, Node, Graph
 from itmap.models.article import Article
 from itmap.models.book import Book
@@ -30,7 +30,7 @@ def create_app():
     db.init_app(app)
     mail.init_app(app)
     redis.init_app(app)
-    login_manager.init_app(app)
+    # login_manager.init_app(app)
     jwt.init_app(app)
 
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
@@ -43,18 +43,18 @@ def create_app():
     }
     Swagger(app)
 
-    admin = Admin(app, name='itmap', template_mode='bootstrap3')
-    admin.add_view(ModelView(User, db.session))
-    admin.add_view(ModelView(Role, db.session))
+    admin = Admin(app, name='itmap', base_template='my_master.html', template_mode='bootstrap3')
+    admin.add_view(MyModelView(User, db.session))
+    admin.add_view(MyModelView(Role, db.session))
 
-    admin.add_view(ModelView(NodeRelation, db.session))
-    admin.add_view(ModelView(Node, db.session))
-    admin.add_view(ModelView(Graph, db.session))
+    admin.add_view(MyModelView(NodeRelation, db.session))
+    admin.add_view(MyModelView(Node, db.session))
+    admin.add_view(MyModelView(Graph, db.session))
     
-    admin.add_view(ModelView(Article, db.session))
-    admin.add_view(ModelView(Book, db.session))
+    admin.add_view(MyModelView(Article, db.session))
+    admin.add_view(MyModelView(Book, db.session))
 
-    admin.add_view(rediscli.RedisCli(redis._redis_client))
+    # admin.add_view(rediscli.RedisCli(redis._redis_client))
 
     @security.context_processor
     def security_context_processor():
@@ -83,8 +83,8 @@ def mkdir(app):
         if not os.path.exists(path):
             os.mkdir(path)
 
-
 app = create_app()
+
 
 @app.cli.command(with_appcontext=True)
 def initdb():
@@ -217,4 +217,4 @@ Instance: %s''' % (sys.version,
 
 @app.route('/', methods=['GET'])
 def index():
-    return '<h1>Hello World</h1>', 200
+    return render_template('index.html')

@@ -1,18 +1,27 @@
 # coding=utf-8
 
 import arrow
+import logging
+
 from datetime import datetime
 import hashlib
 from threading import Thread
 from werkzeug import security
 
-from flask import url_for, current_app
+from flask import url_for, current_app, abort
+from flask_admin.contrib import sqla
 from flask_mail import Message
-from flask_security import UserMixin, RoleMixin, AnonymousUser
+from flask_security import (
+    UserMixin,
+    RoleMixin,
+    AnonymousUser,
+    current_user,
+)
 
 from itmap.ext import db, redis, login_manager, mail
 from itmap.utils import send_async_email
 
+logger = logging.getLogger(__name__)
 
 class Permission(object):
     OPERATE_MAPS = 0x01
@@ -21,6 +30,11 @@ class Permission(object):
     DELETE = 0x08
     ADMINISTER = 0x80
 
+roles_users = db.Table(
+    'roles_users',
+    db.Column('user_id', db.Integer(), db.ForeignKey('users.id')),
+    db.Column('role_id', db.Integer(), db.ForeignKey('roles.id'))
+)
 
 class Role(db.Model, RoleMixin):
     __tablename__ = 'roles'
@@ -29,7 +43,6 @@ class Role(db.Model, RoleMixin):
     default = db.Column(db.Boolean, default=False)
     name = db.Column(db.String(80), unique=True, index=True, nullable=True)
     permissions = db.Column(db.Integer)
-    users = db.relationship('User', backref='role')
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now,
                         onupdate=datetime.now)
@@ -50,6 +63,10 @@ class Role(db.Model, RoleMixin):
                 db.session.add(role)
         else:  # then
             db.session.commit()
+    
+    @staticmethod
+    def get(name):
+        return Role.query.filter_by(name=name).first()
 
     def __repr__(self):
         return '<Role {!r}>'.format(self.name)
@@ -68,7 +85,8 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True)
     has_verified = db.Column(db.Boolean, default=False)
 
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    roles = db.relationship('Role', secondary=roles_users,
+                            backref=db.backref('users', lazy='dynamic'))
     own_graphs = db.relationship('Graph', backref='owner')
 
     active = db.Column(db.Boolean, default=True)
@@ -81,15 +99,15 @@ class User(db.Model, UserMixin):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow,
                         onupdate=datetime.utcnow)
     def __repr__(self):
-        return '<User {!r}>'.format(self.name)
+        return '<User {!r}>'.format(self.name or self.email)
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
-        if self.role is None:
-            if self.email in current_app.config['ITMAP_ADMINS']:
-                self.role = Role.query.filter_by(permissions=0xff).first()
-            else:
-                self.role = Role.query.filter_by(default=True).first()
+        # if self.role is None:
+        #     if self.email in current_app.config['ITMAP_ADMINS']:
+        #         self.role = Role.query.filter_by(permissions=0xff).first()
+        #     else:
+        #         self.role = Role.query.filter_by(default=True).first()
 
     @property
     def to_dict(self):
@@ -97,7 +115,7 @@ class User(db.Model, UserMixin):
             'name': self.name,
             'email': self.email,
             'has_verified': self.has_verified,
-            'role': self.role.name,
+            # 'role': self.role.name,
             'active': self.active,
             # 'current_sign_in_time': arrow.get(self.current_sign_in_time).to('Asia/Shanghai').format('YYYY-MM-DD HH:mm:ss'),
             # 'last_sign_in_time': arrow.get(self.last_sign_in_time).to('Asia/Shanghai').format('YYYY-MM-DD HH:mm:ss'),
@@ -121,6 +139,10 @@ class User(db.Model, UserMixin):
     @property
     def avatar(self):
         return '{}.jpg'.format(self.email_md5)
+
+    @staticmethod
+    def get(id):
+        return User.query.get(id)
 
     @staticmethod
     def generate_password(password):
@@ -188,7 +210,7 @@ class User(db.Model, UserMixin):
         redis.set(key, token)
         redis.expire(key, 3600)
         msg = Message(subject=u'验证邮箱',
-                      body='http://127.0.0.1:5000/auth/verified_by_email?token={}'.format(token),  # need modify
+                      body='http://www.songcser.com/auth/verified_by_email?token={}'.format(token),  # need modify
                       recipients=[self.email])
         # thread = Thread(target=send_async_email, args=[current_app, msg])
         # thread.start()
@@ -209,12 +231,12 @@ class User(db.Model, UserMixin):
     def by_email(cls, email):
         return cls.query.filter_by(email=email).first()
 
-    def can(self, permissions):
-        return self.role is not None and \
-            (self.role.permissions & permissions) == permissions
+    # def can(self, permissions):
+    #     return self.role is not None and \
+    #         (self.role.permissions & permissions) == permissions
 
-    def is_administrator(self):
-        return self.can(Permission.ADMINISTER)
+    # def is_administrator(self):
+    #     return self.can(Permission.ADMINISTER)
 
     def sign_stamp(self):
         self.last_sign_in_time = self.current_sign_in_time
@@ -238,3 +260,23 @@ class AnonymousUser(AnonymousUser):
 
 
 login_manager.anonymous_user = AnonymousUser
+
+
+class MyModelView(sqla.ModelView):
+    def is_accessible(self):
+        return (current_user.is_active and
+                current_user.is_authenticated and
+                current_user.has_role('Administrator')
+        )
+
+    def _handle_view(self, name, **kwargs):
+        """
+        Override builtin _handle_view in order to redirect users when a view is not accessible.
+        """
+        if not self.is_accessible():
+            if current_user.is_authenticated:
+                # permission denied
+                abort(403)
+            else:
+                # login
+                return redirect(url_for('security.login', next=request.url))
