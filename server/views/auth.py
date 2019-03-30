@@ -8,7 +8,7 @@ from flask_jwt_extended import (
 )
 
 from itmap.ext import db, redis, jwt
-from itmap.models.user import User
+from itmap.models.user import User, Role
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 logger = logging.getLogger(__name__)
@@ -21,7 +21,7 @@ def user_identity_lookup(user):
 
 @jwt.user_claims_loader
 def add_claims_to_access_token(user):
-    return {'role': user.role.name}
+    return {'role': user.roles and user.roles[0].name}
 
 @jwt.token_in_blacklist_loader
 def check_if_token_is_revoked(decrypted_token):
@@ -110,10 +110,12 @@ def register():
     if email is None:
         return jsonify({"msg": "Missing email parameter"}), 400
 
+    role = Role.get('User')
     user = User.query.filter_by(name=username).first()
     if user is not None:
         return jsonify({"msg": "Already exists username"}), 400
-    user = User.create_user(username=username, email=email, password=password)
+    user = User.create_user(username=username, email=email, password=password, 
+                            roles=[role])
 
     return jsonify(userid=user.id), 200
 
