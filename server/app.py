@@ -20,6 +20,7 @@ from itmap.models.user import Role, User, MyModelView
 from itmap.models.graph import NodeRelation, Node, Graph
 from itmap.models.article import Article
 from itmap.models.book import Book
+from itmap.models.comment import Comment
 import itmap.config as _config
 
 
@@ -53,6 +54,7 @@ def create_app():
     
     admin.add_view(MyModelView(Article, db.session))
     admin.add_view(MyModelView(Book, db.session))
+    admin.add_view(MyModelView(Comment, db.session))
 
     # admin.add_view(rediscli.RedisCli(redis._redis_client))
 
