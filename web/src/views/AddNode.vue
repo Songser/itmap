@@ -81,7 +81,6 @@ export default {
       shape: 'circle',
       newNodeId: 0,
       oldLink: '',
-      source: '',
       imagecropperShow: false,
       field: 'node_pic',
       update: false
@@ -110,7 +109,8 @@ export default {
     ...mapState({
       node: state => state.node,
       user: state => state.user,
-      graph: state => state.graph
+      graph: state => state.graph,
+      source: state => state.node.name,
     })
   },
   methods: {
