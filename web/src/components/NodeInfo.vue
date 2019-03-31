@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import logo from '@/assets/logo.png'
+import logo from '@/assets/it.jpg'
 import PanThumb from '@/components/PanThumb'
 import AddNode from '@/components/AddNode'
 import { mapState } from 'vuex'

@@ -88,7 +88,7 @@ export default {
         if (state.node.pic) {
           return process.env.BASE_API + '/node_pics/' + state.node.pic
         }
-        return require('../assets/logo.png')
+        return require('../assets/it.jpg')
       },
       create_date: state => state.node.create_date
     })

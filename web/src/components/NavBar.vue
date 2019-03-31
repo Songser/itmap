@@ -59,7 +59,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import logo from '@/assets/logo.png'
+import logo from '@/assets/it.jpg'
 import PanThumb from '@/components/PanThumb'
 import User from '@/components/User'
 
