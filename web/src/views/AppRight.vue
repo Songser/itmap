@@ -63,7 +63,7 @@ export default {
   data () {
     return {
       fab: false,
-      defaultImage: 'this.src="' + require('../assets/logo.png') + '"',
+      defaultImage: 'this.src="' + require('../assets/it.jpg') + '"',
       delNodeDialog: false
     }
   },

@@ -77,7 +77,7 @@ export default {
       showQuestionDialog: false,
       showUserDialog: false,
       logo: logo,
-      defaultImage: 'this.src="' + require('../assets/logo.png') + '"'
+      defaultImage: 'this.src="' + require('../assets/it.jpg') + '"'
     }
   },
   computed: {

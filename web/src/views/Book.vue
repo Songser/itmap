@@ -99,7 +99,7 @@ export default {
       active: -1,
       showDialogModel: false,
       image: process.env.BASE_URL + '/book_pics/',
-      defaultImage: 'this.src="' + require('../assets/logo.png') + '"'
+      defaultImage: 'this.src="' + require('../assets/it.jpg') + '"'
     }
   },
   computed: {

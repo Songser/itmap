@@ -37,7 +37,7 @@ export default {
   },
   data () {
     return {
-      defaultImage: 'this.src="' + require('../assets/logo.png') + '"',
+      defaultImage: 'this.src="' + require('../assets/it.jpg') + '"',
       userDialog: false,
       show: true
     }

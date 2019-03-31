@@ -90,7 +90,7 @@ export default {
       genders: [{state: 'male', abbr: '男'}, {state: 'female', abbr: '女'}],
       field: 'avatar',
       imagecropperShow: false,
-      defaultImage: 'this.src="' + require('../assets/logo.png') + '"'
+      defaultImage: 'this.src="' + require('../assets/it.jpg') + '"'
     }
   },
   computed: {
