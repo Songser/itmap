@@ -19,7 +19,7 @@ class Comment(db.Model):
 
 
     def __repr__(self):
-        return '<Comment {!r}>'.format(self.title)
+        return '{}'.format(self.title)
 
     def to_dict(self):
         return {

@@ -69,7 +69,7 @@ class Role(db.Model, RoleMixin):
         return Role.query.filter_by(name=name).first()
 
     def __repr__(self):
-        return '<Role {!r}>'.format(self.name)
+        return '{}'.format(self.name)
 
 
 class User(db.Model, UserMixin):
@@ -99,7 +99,7 @@ class User(db.Model, UserMixin):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow,
                         onupdate=datetime.utcnow)
     def __repr__(self):
-        return '<User {!r}>'.format(self.name or self.email)
+        return '{}'.format(self.name or self.email)
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)

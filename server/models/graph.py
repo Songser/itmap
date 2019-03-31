@@ -72,7 +72,7 @@ class Node(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow,
                         onupdate=datetime.utcnow)
     def __repr__(self):
-        return '<Node {!r}>'.format(self.name)
+        return '{}'.format(self.name)
 
     @property
     def pic(self):
@@ -95,4 +95,4 @@ class Graph(db.Model):
                         onupdate=datetime.utcnow)
 
     def __repr__(self):
-        return '<Graph {!r}>'.format(self.name)
+        return '{}'.format(self.name)
