@@ -192,6 +192,7 @@ export default {
       addNodeApi(data).then(response => {
         this.newNodeId = response.data
         data['target_id'] = this.newNodeId
+        data['nid'] = this.newNodeId
         this.handlerUpload()
         this.$root.eventHub.$emit('addNode', data)
         if (this.node.name && this.name) {

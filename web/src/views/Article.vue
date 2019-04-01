@@ -116,7 +116,6 @@ export default {
       getArticlesApi(this.node.id, this.page).then(response => {
         this.nodeId = this.node.id
         let items = response.data
-        console.log(items)
         if (items.length > 0) {
           this.items = items
         }

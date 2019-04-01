@@ -65,7 +65,6 @@ export default {
       }
     },
     logout () {
-      console.log('fffff')
     },
     openUserDialog () {
       this.userDialog = true

@@ -80,7 +80,6 @@ export default {
         legend: {
           x: 'center',
           show: false,
-          data: ['朋友', '战友', '亲戚']
         },
         series: [
           {

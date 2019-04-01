@@ -102,7 +102,6 @@ export default {
   created () {
     if (this.userId > 0) {
       getUserApi(this.userId).then(response => {
-        console.log(response.data)
         let data = response.data
         this.name = data.name
         this.email = data.email
@@ -132,9 +131,7 @@ export default {
         gender: this.gender,
         birthday: this.birthday
       }
-      console.log(data)
       updateUserApi(this.userId, data).then(response => {
-        console.log(response)
         this.$emit('closeUserDialog')
         this.handlerUpload()
       })

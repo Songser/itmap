@@ -120,7 +120,6 @@ export default {
       this.dialogVisible = true
     },
     handlerUpload (options) {
-      console.log(options)
       let form = new FormData()
       form.append(options.filename, options.file)
       uploadNodePicApi(form, this.newNodeId)

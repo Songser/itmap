@@ -149,7 +149,6 @@ export default {
   },
   created () {
     this.$root.eventHub.$on('addNode', target => {
-      console.log('addNode')
     })
   },
   computed: {
@@ -160,10 +159,8 @@ export default {
   watch: {
     graphId (value) {
       if (value) {
-        console.log(value)
         getNodesApi(value).then(response => {
           const data = response.data
-          console.log(data)
           let nodes = []
           data.nodes.forEach((value, index, array) => {
             let node = {

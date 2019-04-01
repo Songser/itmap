@@ -110,7 +110,6 @@ export default {
       getCommentsApi(this.node.id, this.page).then(response => {
         this.nodeId = this.node.id
         let items = response.data
-        console.log(response.data)
         if (items.length > 0) {
           this.items = response.data
         }
