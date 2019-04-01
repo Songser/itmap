@@ -111,7 +111,7 @@ export default {
       node: state => state.node,
       user: state => state.user,
       graph: state => state.graph,
-      source: state => state.node.name,
+      source: state => state.node.name
     })
   },
   methods: {

@@ -79,7 +79,7 @@ export default {
         },
         legend: {
           x: 'center',
-          show: false,
+          show: false
         },
         series: [
           {
