@@ -88,6 +88,7 @@ export default {
   },
   created () {
     this.$root.eventHub.$on('addNodeEvent', () => {
+      this.update = false
       this.init()
       this.$emit('openAddNodeDialog')
     })
