@@ -203,8 +203,8 @@ export default {
             value: this.info
           }).then(response => {
             this.$root.eventHub.$emit('addLink', {
-              source: this.node.name,
-              target: this.name,
+              source: this.node.id,
+              target: this.newNodeId,
               value: this.info
             })
             this.init()

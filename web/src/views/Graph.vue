@@ -151,8 +151,8 @@ export default {
             let link = {
               sid: value.sid,
               tid: value.tid,
-              source: value.source,
-              target: value.target,
+              source: value.sid,
+              target: value.tid,
               value: value.value
             }
             links.push(link)
