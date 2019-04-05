@@ -6,8 +6,10 @@
 *.swp
 local_settings.py
 *.rdb
-itmap/avatars/*
-itmap/node_pictures/*
+server/avatars/*
+server/node_pictures/*
+server/book_pictures/*
 .DS_Store
 node_modules
 *.lock
+server/
