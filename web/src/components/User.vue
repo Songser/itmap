@@ -68,7 +68,6 @@ export default {
   },
   created () {
     getUserApi(this.userId).then(response => {
-      console.log(response.data)
       let data = response.data
       this.form.name = data.name
       this.form.email = data.email

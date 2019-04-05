@@ -113,6 +113,7 @@ export default {
   },
   methods: {
     getArticle () {
+      this.items = []
       getArticlesApi(this.node.id, this.page).then(response => {
         this.nodeId = this.node.id
         let items = response.data

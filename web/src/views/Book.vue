@@ -98,7 +98,7 @@ export default {
       offsetTop: 0,
       active: -1,
       showDialogModel: false,
-      image: process.env.BASE_URL + '/book_pics/',
+      image: process.env.BASE_API + '/book_pics/',
       defaultImage: 'this.src="' + require('../assets/it.jpg') + '"'
     }
   },
@@ -122,9 +122,11 @@ export default {
   },
   methods: {
     getBook () {
+      this.items = []
       getBooksApi(this.node.id, this.page).then(response => {
         this.nodeId = this.node.id
         let items = response.data
+        console.log(items)
         if (items.length > 0) {
           this.items = response.data
         }

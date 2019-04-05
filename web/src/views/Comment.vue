@@ -107,6 +107,7 @@ export default {
   },
   methods: {
     getComment () {
+      this.items = []
       getCommentsApi(this.node.id, this.page).then(response => {
         this.nodeId = this.node.id
         let items = response.data

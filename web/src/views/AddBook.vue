@@ -84,7 +84,6 @@ export default {
         description: this.desc
       }
       addBookApi(this.node.id, data).then(response => {
-        console.log(response)
         let bookId = response.data
         this.handlerUpload(bookId)
         data['id'] = bookId
